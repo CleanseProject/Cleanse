@@ -15,7 +15,7 @@
         android:layout_centerHorizontal="true">
 
         <ImageView
-            android:id="@+id/imghoja"
+            android:id="@+id/imgHoja"
             android:layout_width="207dp"
             android:layout_height="178dp"
             android:layout_marginLeft="8dp"
@@ -24,7 +24,7 @@
             app:srcCompat="@drawable/hoja_vector" />
 
         <ImageView
-            android:id="@+id/imggota"
+            android:id="@+id/imgGota"
             android:layout_width="100dp"
             android:layout_height="79dp"
 
