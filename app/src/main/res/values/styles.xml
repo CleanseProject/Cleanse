@@ -11,7 +11,7 @@
     <style name="WelcomeButton" parent="Base.Widget.AppCompat.Button">
         <item name="android:background">@drawable/welcome_button</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:fontFamily">@font/comfortaa</item>
+        <item name="android:fontFamily">@font/montserrat</item>
         <item name="android:textColor">#000</item>
     </style>
 
