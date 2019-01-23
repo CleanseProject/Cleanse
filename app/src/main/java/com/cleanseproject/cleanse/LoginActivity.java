@@ -19,12 +19,7 @@ public class LoginActivity extends AppCompatActivity {
         btnGoogle = findViewById(R.id.btn_google);
         btnFacebook = findViewById(R.id.btn_facebook);
         btnEmail = findViewById(R.id.btn_email);
-        btnEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(LoginActivity.this, EMailLoginActivity.class));
-            }
-        });
+        btnEmail.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, EMailLoginActivity.class)));
     }
-    
+
 }

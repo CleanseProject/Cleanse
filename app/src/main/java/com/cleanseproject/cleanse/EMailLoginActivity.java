@@ -19,12 +19,7 @@ public class EMailLoginActivity extends AppCompatActivity {
         btnLogIn = findViewById(R.id.btn_login);
         txtEMail = findViewById(R.id.txt_email);
         txtPassword = findViewById(R.id.txt_pswd);
-        btnLogIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                logIn(txtEMail.getText().toString(), txtPassword.getText().toString());
-            }
-        });
+        btnLogIn.setOnClickListener(v -> logIn(txtEMail.getText().toString(), txtPassword.getText().toString()));
     }
 
     private void logIn(String email, String password) {
