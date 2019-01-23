@@ -6,4 +6,7 @@
     <string name="google_login" translatable="false">Google Sign In</string>
     <string name="facebook_login" translatable="false">Facebook Sign In</string>
     <string name="email_login" translatable="false">E-Mail Sign In</string>
+    <string name="log_in">Log In</string>
+    <string name="password">Password</string>
+    <string name="e_mail">E-Mail</string>
 </resources>
