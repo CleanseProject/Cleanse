@@ -17,6 +17,5 @@ public class MainActivity extends AppCompatActivity {
 
         Animation myanim = AnimationUtils.loadAnimation(this, R.anim.animation_abajo);
         imagenGota.startAnimation(myanim);
-
     }
 }
