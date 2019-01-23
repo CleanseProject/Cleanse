@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">Cleanse</string>
+    <string name="app_name" translatable="false">Cleanse</string>
+    <string name="app_name_lower" translatable="false">CleanSe</string>
+    <string name="welcome_button">Comenzar</string>
 </resources>
