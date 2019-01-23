@@ -10,7 +10,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ImageView imagenhoja = (ImageView)findViewById(R.id.imghoja);
-        ImageView imagengota = (ImageView)findViewById(R.id.imggota);
     }
+
 }
