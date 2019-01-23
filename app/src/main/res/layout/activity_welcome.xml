@@ -4,29 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".WelcomeActivity"
-    android:background="@drawable/background">
+    android:background="@drawable/background"
+    tools:context=".WelcomeActivity">
 
     <TextView
         android:id="@+id/lbl_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
         android:fontFamily="@font/comfortaa"
         android:text="@string/app_name_lower"
         android:textColor="#fff"
-        android:textSize="40sp"
-        android:layout_centerHorizontal="true"/>
+        android:textSize="60sp" />
 
     <Button
+        style="@style/WelcomeButton"
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/welcome_button"
-        android:layout_marginBottom="100dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@drawable/welcome_button"
-        android:textAllCaps="false"
-        />
+        android:layout_marginBottom="100dp"
+        android:onClick="next"
+        android:text="@string/welcome_button" />
 </RelativeLayout>
