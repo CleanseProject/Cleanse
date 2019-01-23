@@ -28,4 +28,5 @@
         android:layout_marginBottom="100dp"
         android:onClick="next"
         android:text="@string/welcome_button" />
+
 </RelativeLayout>
