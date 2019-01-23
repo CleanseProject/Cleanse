@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:background="@mipmap/background"
     tools:context=".WelcomeActivity">
 
     <TextView
@@ -28,4 +28,5 @@
         android:layout_marginBottom="100dp"
         android:onClick="next"
         android:text="@string/welcome_button" />
+
 </RelativeLayout>
