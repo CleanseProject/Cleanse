@@ -30,7 +30,7 @@
         <Button
             android:id="@+id/btn_google"
             style="@style/WelcomeButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
             android:text="@string/google_login" />
@@ -38,7 +38,7 @@
         <Button
             android:id="@+id/btn_facebook"
             style="@style/WelcomeButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
             android:text="@string/facebook_login" />
@@ -46,7 +46,7 @@
         <Button
             android:id="@+id/btn_email"
             style="@style/WelcomeButton"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/email_login" />
 
