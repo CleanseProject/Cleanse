@@ -7,10 +7,12 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 public class EMailLoginActivity extends AppCompatActivity {
 
     private Button btnLogIn;
+    private TextView lblNewAccount;
     private EditText txtEMail;
     private EditText txtPassword;
     private boolean emailCorrecto;
@@ -27,7 +29,9 @@ public class EMailLoginActivity extends AppCompatActivity {
         btnLogIn = findViewById(R.id.btn_login);
         txtEMail = findViewById(R.id.txt_email);
         txtPassword = findViewById(R.id.txt_pswd);
+        lblNewAccount = findViewById(R.id.lbl_new_account);
         btnLogIn.setOnClickListener(v -> logIn(txtEMail.getText().toString(), txtPassword.getText().toString()));
+        lblNewAccount.setOnClickListener(v -> newAccount());
         txtEMail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -72,6 +76,10 @@ public class EMailLoginActivity extends AppCompatActivity {
 
     private void actualizarBoton() {
         btnLogIn.setEnabled(emailCorrecto && pswdCorrecta);
+    }
+
+    private void newAccount() {
+
     }
 
     private void logIn(String email, String password) {

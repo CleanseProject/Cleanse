@@ -55,12 +55,20 @@
 
         </LinearLayout>
 
+        <TextView
+            android:id="@+id/lbl_new_account"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/no_account"
+            android:layout_marginTop="25dp"
+            android:textColor="#fff"/>
+
         <Button
             android:id="@+id/btn_login"
             style="@style/WelcomeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="25dp"
             android:text="@string/log_in"
             android:enabled="false"/>
 
