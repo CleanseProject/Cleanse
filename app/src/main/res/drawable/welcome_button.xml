@@ -11,7 +11,6 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <corners android:radius="50dip" />
-            <stroke android:width="1dip" android:color="#FFF" />
             <solid android:color="#DDD" />
             <padding android:bottom="20dp" android:left="50dp" android:right="50dp" android:top="20dp" />
         </shape>
@@ -19,7 +18,6 @@
     <item>
         <shape android:shape="rectangle">
             <corners android:radius="50dip" />
-            <stroke android:width="1dip" android:color="#FFF" />
             <solid android:color="#FFF" />
             <padding android:bottom="20dp" android:left="50dp" android:right="50dp" android:top="20dp" />
         </shape>
