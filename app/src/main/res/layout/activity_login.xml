@@ -42,23 +42,16 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_google"
-            style="@style/WelcomeButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp"
-            android:text="@string/google_login" />
-
         <com.google.android.gms.common.SignInButton
             android:id="@+id/google_sign_in"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="25dp" />
 
         <Button
             android:id="@+id/btn_facebook"
             style="@style/WelcomeButton"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
             android:text="@string/facebook_login" />
