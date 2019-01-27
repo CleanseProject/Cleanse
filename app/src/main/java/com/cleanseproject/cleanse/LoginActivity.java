@@ -2,6 +2,7 @@ package com.cleanseproject.cleanse;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
@@ -13,8 +14,15 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private FirebaseAuth firebaseAuth;
+    private final int RC_GOOGLE_SIGN_IN = 9001;
 
     private SignInButton btnGoogle;
     private Button btnFacebook;
@@ -30,6 +38,7 @@ public class LoginActivity extends AppCompatActivity {
         btnEmail = findViewById(R.id.btn_email);
         btnEmail.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, EMailLoginActivity.class)));
         btnGoogle.setOnClickListener(v -> googleSignIn());
+        firebaseAuth = FirebaseAuth.getInstance();
     }
 
     private void googleSignIn() {
@@ -39,22 +48,45 @@ public class LoginActivity extends AppCompatActivity {
                 .build();
         GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, googleSignInOptions);
         Intent signInIntent = googleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, 9001);
+        startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 9001) {
+        if (requestCode == RC_GOOGLE_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthGoogle(account);
                 Log.d("mail", account.getEmail());
             } catch (ApiException e) {
+                errorInicioSesion();
                 e.printStackTrace();
             }
 
         }
+    }
+
+    private void firebaseAuthGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        iniciarSesion(firebaseAuth.getCurrentUser());
+                    } else {
+                        errorInicioSesion();
+                    }
+                });
+    }
+
+    private void iniciarSesion(FirebaseUser user) {
+        Log.d("mail", user.getDisplayName() + " " + user.getPhoneNumber());
+    }
+
+    private void errorInicioSesion() {
+        // TODO: Error en el inicio de sesión
+        // Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
     }
 
 }
