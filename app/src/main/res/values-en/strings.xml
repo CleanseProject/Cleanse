@@ -4,4 +4,5 @@
     <string name="log_in">Log In</string>
     <string name="no_account">I don\'t have an account</string>
     <string name="password">Password</string>
+    <string name="logo">logo</string>
 </resources>

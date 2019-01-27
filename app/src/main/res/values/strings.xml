@@ -10,4 +10,5 @@
     <string name="e_mail" translatable="false">E-Mail</string>
     <string name="no_account">Crear cuenta</string>
     <string name="password">Contraseña</string>
+    <string name="logo">logo</string>
 </resources>

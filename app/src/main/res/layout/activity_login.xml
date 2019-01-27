@@ -20,7 +20,7 @@
             android:layout_width="80dp"
             android:layout_height="80dp"
             app:srcCompat="@drawable/logo_vector"
-            android:contentDescription="logo" />
+            android:contentDescription="@string/logo" />
 
         <TextView
             android:id="@+id/lbl_title"
@@ -49,6 +49,11 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
             android:text="@string/google_login" />
+
+        <com.google.android.gms.common.SignInButton
+            android:id="@+id/google_sign_in"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/btn_facebook"
