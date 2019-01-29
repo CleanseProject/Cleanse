@@ -11,4 +11,5 @@
     <string name="no_account">Crear cuenta</string>
     <string name="password">Contraseña</string>
     <string name="logo">logo</string>
+    <string name="google_sign_in_error">No se ha podido iniciar sesión con Google</string>
 </resources>

@@ -2,10 +2,10 @@ package com.cleanseproject.cleanse;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -81,12 +81,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void iniciarSesion(FirebaseUser user) {
+        // TODO: Iniciar sesión con Google
         Log.d("mail", user.getDisplayName() + " " + user.getPhoneNumber());
     }
 
     private void errorInicioSesion() {
         // TODO: Error en el inicio de sesión
         // Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, getString(R.string.google_sign_in_error), Toast.LENGTH_SHORT).show();
     }
 
 }
