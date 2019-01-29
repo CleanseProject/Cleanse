@@ -124,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Iniciar sesión a través de teléfono
+     *
      * @param phoneNumber Número de teléfono en formato E.164
      */
     private void phoneSignIn(String phoneNumber) {
@@ -137,6 +138,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Inicia sesión con Firebase
+     *
      * @param credential Credenciales obtenidas
      */
     private void authWithPhone(PhoneAuthCredential credential) {
@@ -145,10 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("phone", "signInWithCredential:success");
-
-                        FirebaseUser user = task.getResult().getUser();
-                        // ...
-                        Log.d("phone", user.getPhoneNumber());
+                        iniciarSesion(task.getResult().getUser());
                     } else {
                         // Sign in failed, display a message and update the UI
                         Log.w("phone", "signInWithCredential:failure", task.getException());
@@ -181,6 +180,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Iniciar sesión en Firebase con la cuenta de Google
+     *
      * @param account Cuenta de Google
      */
     private void firebaseAuthGoogle(GoogleSignInAccount account) {
@@ -198,7 +198,13 @@ public class LoginActivity extends AppCompatActivity {
     private void iniciarSesion(FirebaseUser user) {
         // TODO: Iniciar sesión con Google
         Log.d("mail", user.getDisplayName() + " " + user.getPhoneNumber());
-
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        if (user.getEmail() != null) {
+            intent.putExtra("username", user.getEmail());
+        } else if (user.getPhoneNumber() != null) {
+            intent.putExtra("username", user.getPhoneNumber());
+        }
+        startActivity(intent);
     }
 
     private void errorInicioSesion() {
