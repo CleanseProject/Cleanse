@@ -1,13 +1,275 @@
 package com.cleanseproject.cleanse;
 
-import android.support.v7.app.AppCompatActivity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
+
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class LoginActivity extends AppCompatActivity {
+
+    private FirebaseAuth firebaseAuth;
+    private final int RC_GOOGLE_SIGN_IN = 9001;
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks callBacks;
+
+    private String phoneVerificationId;
+    private PhoneAuthProvider.ForceResendingToken phoneToken;
+
+    private SignInButton btnGoogle;
+    private Button btnPhone;
+    private Button btnEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        btnGoogle = findViewById(R.id.google_sign_in);
+        btnGoogle.setSize(SignInButton.SIZE_STANDARD);
+        btnPhone = findViewById(R.id.btn_phone);
+        btnEmail = findViewById(R.id.btn_email);
+        btnEmail.setOnClickListener(v -> initializeUI());
+        btnGoogle.setOnClickListener(v -> googleSignIn());
+        btnPhone.setOnClickListener(v -> phoneDialog());
+        firebaseAuth = FirebaseAuth.getInstance();
+        callBacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                authWithPhone(phoneAuthCredential);
+            }
+
+            @Override
+            public void onVerificationFailed(FirebaseException e) {
+                e.printStackTrace();
+                Toast.makeText(LoginActivity.this, "Verification failed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
+                phoneVerificationId = verificationId;
+                phoneToken = token;
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
+                View view = inflater.inflate(R.layout.dialog_phone_prompt, null);
+                final EditText txtPhone = view.findViewById(R.id.txt_phone);
+                TextView textView = view.findViewById(R.id.lbl_phone_dialog);
+                textView.setText("Verification code");
+                builder.setTitle("Phone Sign In")
+                        .setView(view)
+                        .setPositiveButton("OK", (dialog, width) -> {
+                            authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString()));
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            }
+        };
     }
+
+    private void googleSignIn() {
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.firebase_web_client_id))
+                .requestEmail()
+                .build();
+        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(LoginActivity.this, googleSignInOptions);
+        Intent signInIntent = googleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
+    }
+
+    private void phoneDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
+        View view = inflater.inflate(R.layout.dialog_phone_prompt, null);
+        final EditText txtPhone = view.findViewById(R.id.txt_phone);
+        builder.setTitle("Phone Sign In")
+                .setView(view)
+                .setPositiveButton("OK", (dialog, width) -> {
+                    phoneSignIn(txtPhone.getText().toString());
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void phoneSignIn(String phoneNumber) {
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                phoneNumber,
+                60,
+                TimeUnit.SECONDS,
+                LoginActivity.this,
+                callBacks);
+    }
+
+    private void authWithPhone(PhoneAuthCredential credential) {
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("phone", "signInWithCredential:success");
+
+                        FirebaseUser user = task.getResult().getUser();
+                        // ...
+                        Log.d("phone", user.getPhoneNumber());
+                    } else {
+                        // Sign in failed, display a message and update the UI
+                        Log.w("phone", "signInWithCredential:failure", task.getException());
+                        if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                            // The verification code entered was invalid
+                        }
+                    }
+                });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_GOOGLE_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                firebaseAuthGoogle(Objects.requireNonNull(account));
+                Log.d("mail", account.getEmail());
+            } catch (ApiException | NullPointerException e) {
+                errorInicioSesion();
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    private void firebaseAuthGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        iniciarSesion(firebaseAuth.getCurrentUser());
+                    } else {
+                        errorInicioSesion();
+                    }
+                });
+    }
+
+    private void iniciarSesion(FirebaseUser user) {
+        // TODO: Iniciar sesión con Google
+        Log.d("mail", user.getDisplayName() + " " + user.getPhoneNumber());
+    }
+
+    private void errorInicioSesion() {
+        // TODO: Error en el inicio de sesión
+        // Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+        Toast.makeText(LoginActivity.this, getString(R.string.google_sign_in_error), Toast.LENGTH_SHORT).show();
+    }
+
+    private Button btnLogIn;
+    private TextView lblNewAccount;
+    private EditText txtEMail;
+    private EditText txtPassword;
+    private boolean emailCorrecto;
+    private boolean pswdCorrecta;
+
+    private void initializeUI() {
+        setContentView(R.layout.activity_email_login);
+        btnLogIn = findViewById(R.id.btn_login);
+        txtEMail = findViewById(R.id.txt_email);
+        txtPassword = findViewById(R.id.txt_pswd);
+        lblNewAccount = findViewById(R.id.lbl_new_account);
+        btnLogIn.setOnClickListener(v -> logIn(txtEMail.getText().toString(), txtPassword.getText().toString()));
+        lblNewAccount.setOnClickListener(v -> newAccount());
+        txtEMail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                emailCorrecto = checkEMail(s);
+                actualizarBoton();
+            }
+
+            private boolean checkEMail(CharSequence email) {
+                if (email == null)
+                    return false;
+                return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+            }
+        });
+        txtPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                pswdCorrecta = !s.toString().equals("");
+                actualizarBoton();
+            }
+        });
+    }
+
+    private void actualizarBoton() {
+        btnLogIn.setEnabled(emailCorrecto && pswdCorrecta);
+    }
+
+    private void newAccount() {
+
+    }
+
+    private void logIn(String email, String password) {
+
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0) {
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        recreate();
+    }
+
+
 }
