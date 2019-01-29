@@ -4,7 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -52,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         btnGoogle.setSize(SignInButton.SIZE_STANDARD);
         btnPhone = findViewById(R.id.btn_phone);
         btnEmail = findViewById(R.id.btn_email);
-        btnEmail.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, EMailLoginActivity.class)));
+        btnEmail.setOnClickListener(v -> initializeUI());
         btnGoogle.setOnClickListener(v -> googleSignIn());
         btnPhone.setOnClickListener(v -> phoneDialog());
         firebaseAuth = FirebaseAuth.getInstance();
@@ -115,7 +118,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void phoneSignIn(String phoneNumber) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
-                "+34" + phoneNumber,
+                phoneNumber,
                 60,
                 TimeUnit.SECONDS,
                 LoginActivity.this,
@@ -181,5 +184,92 @@ public class LoginActivity extends AppCompatActivity {
         // Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
         Toast.makeText(LoginActivity.this, getString(R.string.google_sign_in_error), Toast.LENGTH_SHORT).show();
     }
+
+    private Button btnLogIn;
+    private TextView lblNewAccount;
+    private EditText txtEMail;
+    private EditText txtPassword;
+    private boolean emailCorrecto;
+    private boolean pswdCorrecta;
+
+    private void initializeUI() {
+        setContentView(R.layout.activity_email_login);
+        btnLogIn = findViewById(R.id.btn_login);
+        txtEMail = findViewById(R.id.txt_email);
+        txtPassword = findViewById(R.id.txt_pswd);
+        lblNewAccount = findViewById(R.id.lbl_new_account);
+        btnLogIn.setOnClickListener(v -> logIn(txtEMail.getText().toString(), txtPassword.getText().toString()));
+        lblNewAccount.setOnClickListener(v -> newAccount());
+        txtEMail.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                emailCorrecto = checkEMail(s);
+                actualizarBoton();
+            }
+
+            private boolean checkEMail(CharSequence email) {
+                if (email == null)
+                    return false;
+                return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
+            }
+        });
+        txtPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                pswdCorrecta = !s.toString().equals("");
+                actualizarBoton();
+            }
+        });
+    }
+
+    private void actualizarBoton() {
+        btnLogIn.setEnabled(emailCorrecto && pswdCorrecta);
+    }
+
+    private void newAccount() {
+
+    }
+
+    private void logIn(String email, String password) {
+
+
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK
+                && event.getRepeatCount() == 0) {
+            onBackPressed();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        recreate();
+    }
+
 
 }
