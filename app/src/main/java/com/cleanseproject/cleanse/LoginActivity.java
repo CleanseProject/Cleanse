@@ -25,7 +25,7 @@ public class LoginActivity extends AppCompatActivity {
     private final int RC_GOOGLE_SIGN_IN = 9001;
 
     private SignInButton btnGoogle;
-    private Button btnFacebook;
+    private Button btnPhone;
     private Button btnEmail;
 
     @Override
@@ -34,7 +34,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         btnGoogle = findViewById(R.id.google_sign_in);
         btnGoogle.setSize(SignInButton.SIZE_STANDARD);
-        btnFacebook = findViewById(R.id.btn_facebook);
+        btnPhone = findViewById(R.id.btn_phone);
         btnEmail = findViewById(R.id.btn_email);
         btnEmail.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, EMailLoginActivity.class)));
         btnGoogle.setOnClickListener(v -> googleSignIn());

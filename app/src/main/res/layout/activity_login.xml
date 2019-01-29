@@ -50,12 +50,12 @@
             android:layout_marginBottom="25dp" />
 
         <Button
-            android:id="@+id/btn_facebook"
+            android:id="@+id/btn_phone"
             style="@style/WelcomeButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
-            android:text="@string/facebook_login" />
+            android:text="@string/phone_login" />
 
         <Button
             android:id="@+id/btn_email"
