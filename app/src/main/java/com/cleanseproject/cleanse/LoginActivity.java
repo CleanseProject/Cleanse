@@ -198,6 +198,7 @@ public class LoginActivity extends AppCompatActivity {
     private void iniciarSesion(FirebaseUser user) {
         // TODO: Iniciar sesión con Google
         Log.d("mail", user.getDisplayName() + " " + user.getPhoneNumber());
+
     }
 
     private void errorInicioSesion() {
