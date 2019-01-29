@@ -2,9 +2,14 @@ package com.cleanseproject.cleanse;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -14,15 +19,26 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
+
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
     private final int RC_GOOGLE_SIGN_IN = 9001;
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks callBacks;
+
+    private String phoneVerificationId;
+    private PhoneAuthProvider.ForceResendingToken phoneToken;
 
     private SignInButton btnGoogle;
     private Button btnPhone;
@@ -38,7 +54,39 @@ public class LoginActivity extends AppCompatActivity {
         btnEmail = findViewById(R.id.btn_email);
         btnEmail.setOnClickListener(v -> startActivity(new Intent(LoginActivity.this, EMailLoginActivity.class)));
         btnGoogle.setOnClickListener(v -> googleSignIn());
+        btnPhone.setOnClickListener(v -> phoneDialog());
         firebaseAuth = FirebaseAuth.getInstance();
+        callBacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+            @Override
+            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                authWithPhone(phoneAuthCredential);
+            }
+
+            @Override
+            public void onVerificationFailed(FirebaseException e) {
+                e.printStackTrace();
+                Toast.makeText(LoginActivity.this, "Verification failed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
+                phoneVerificationId = verificationId;
+                phoneToken = token;
+                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
+                View view = inflater.inflate(R.layout.dialog_phone_prompt, null);
+                final EditText txtPhone = view.findViewById(R.id.txt_phone);
+                TextView textView = view.findViewById(R.id.lbl_phone_dialog);
+                textView.setText("Verification code");
+                builder.setTitle("Phone Sign In")
+                        .setView(view)
+                        .setPositiveButton("OK", (dialog, width) -> {
+                            authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString()));
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            }
+        };
     }
 
     private void googleSignIn() {
@@ -51,6 +99,49 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
     }
 
+    private void phoneDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
+        View view = inflater.inflate(R.layout.dialog_phone_prompt, null);
+        final EditText txtPhone = view.findViewById(R.id.txt_phone);
+        builder.setTitle("Phone Sign In")
+                .setView(view)
+                .setPositiveButton("OK", (dialog, width) -> {
+                    phoneSignIn(txtPhone.getText().toString());
+                })
+                .setNegativeButton("Cancel", null)
+                .show();
+    }
+
+    private void phoneSignIn(String phoneNumber) {
+        PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                "+34" + phoneNumber,
+                60,
+                TimeUnit.SECONDS,
+                LoginActivity.this,
+                callBacks);
+    }
+
+    private void authWithPhone(PhoneAuthCredential credential) {
+        firebaseAuth.signInWithCredential(credential)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("phone", "signInWithCredential:success");
+
+                        FirebaseUser user = task.getResult().getUser();
+                        // ...
+                        Log.d("phone", user.getPhoneNumber());
+                    } else {
+                        // Sign in failed, display a message and update the UI
+                        Log.w("phone", "signInWithCredential:failure", task.getException());
+                        if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                            // The verification code entered was invalid
+                        }
+                    }
+                });
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -58,9 +149,9 @@ public class LoginActivity extends AppCompatActivity {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             try {
                 GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthGoogle(account);
+                firebaseAuthGoogle(Objects.requireNonNull(account));
                 Log.d("mail", account.getEmail());
-            } catch (ApiException e) {
+            } catch (ApiException | NullPointerException e) {
                 errorInicioSesion();
                 e.printStackTrace();
             }

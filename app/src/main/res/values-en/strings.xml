@@ -6,4 +6,5 @@
     <string name="password">Password</string>
     <string name="logo">logo</string>
     <string name="google_sign_in_error">Couldn\'t sign in with Google</string>
+    <string name="type_phone">Type your phone number</string>
 </resources>

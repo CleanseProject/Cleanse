@@ -12,4 +12,5 @@
     <string name="password">Contraseña</string>
     <string name="logo">logo</string>
     <string name="google_sign_in_error">No se ha podido iniciar sesión con Google</string>
+    <string name="type_phone">Type your phone number</string>
 </resources>
