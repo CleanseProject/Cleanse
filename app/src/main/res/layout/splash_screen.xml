@@ -17,7 +17,7 @@
             android:id="@+id/imgHoja"
             android:layout_width="207dp"
             android:layout_height="178dp"
-            android:layout_marginLeft="8dp"
+            android:layout_marginLeft="76dp"
             android:layout_marginTop="200dp"
             android:visibility="visible"
             app:srcCompat="@drawable/hoja_vector" />
@@ -26,8 +26,7 @@
             android:id="@+id/imgGota"
             android:layout_width="100dp"
             android:layout_height="79dp"
-
-            android:layout_marginLeft="96dp"
+            android:layout_marginLeft="164dp"
             android:layout_marginTop="295dp"
             android:visibility="visible"
             app:srcCompat="@drawable/gota_vector" />
@@ -36,11 +35,12 @@
             android:id="@+id/txtTitulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cleanse"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="380dp"
-            android:textSize="48sp"
-            />
+            android:fontFamily="@font/comfortaa"
+            android:text="@string/splash_name"
+            android:textColor="@android:color/white"
+            android:textSize="54sp" />
 
     </FrameLayout>
 

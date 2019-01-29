@@ -92,6 +92,9 @@ public class LoginActivity extends AppCompatActivity {
         };
     }
 
+    /**
+     * Comienza el inicio de sesión con la cuenta de Google
+     */
     private void googleSignIn() {
         GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.firebase_web_client_id))
@@ -102,6 +105,9 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
     }
 
+    /**
+     * Crea un AlertDialog para introducir el número de teléfono
+     */
     private void phoneDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
         LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
@@ -116,6 +122,10 @@ public class LoginActivity extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Iniciar sesión a través de teléfono
+     * @param phoneNumber Número de teléfono en formato E.164
+     */
     private void phoneSignIn(String phoneNumber) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 phoneNumber,
@@ -125,6 +135,10 @@ public class LoginActivity extends AppCompatActivity {
                 callBacks);
     }
 
+    /**
+     * Inicia sesión con Firebase
+     * @param credential Credenciales obtenidas
+     */
     private void authWithPhone(PhoneAuthCredential credential) {
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
@@ -145,6 +159,9 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 
+    /**
+     * Override de onActivityResult que será llamado al iniciar sesión con Google
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -162,6 +179,10 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Iniciar sesión en Firebase con la cuenta de Google
+     * @param account Cuenta de Google
+     */
     private void firebaseAuthGoogle(GoogleSignInAccount account) {
         AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         firebaseAuth.signInWithCredential(credential)
