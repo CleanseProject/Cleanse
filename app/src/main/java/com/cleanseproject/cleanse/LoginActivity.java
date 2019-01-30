@@ -275,6 +275,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void actualizarBoton() {
         btnLogIn.setEnabled(emailCorrecto && pswdCorrecta);
+        btnSignUp.setEnabled(emailCorrecto && pswdCorrecta);
     }
 
     private void newAccount() {
@@ -282,16 +283,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void logIn(String email, String password) {
-        firebaseAuth.signInWithEmailAndPassword(email,password)
+        firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        FirebaseUser user=task.getResult().getUser();
-                        if (user.isEmailVerified()){
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = task.getResult().getUser();
+                        if (user.isEmailVerified()) {
                             iniciarSesion(user);
                         } else {
                             user.sendEmailVerification()
                                     .addOnCompleteListener(t -> {
-                                        if (task.isSuccessful()){
+                                        if (task.isSuccessful()) {
                                             Toast.makeText(LoginActivity.this, "Please verify your email",
                                                     Toast.LENGTH_LONG).show();
                                         }
@@ -302,15 +303,15 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signUp(String email, String password) {
-        firebaseAuth.createUserWithEmailAndPassword(email,password)
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()){
-                        FirebaseUser user=task.getResult().getUser();
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = task.getResult().getUser();
                         user.sendEmailVerification()
                                 .addOnCompleteListener(t -> {
-                                    if (task.isSuccessful()){
+                                    if (task.isSuccessful()) {
                                         Toast.makeText(LoginActivity.this, "Verification email sent",
-                                                Toast.LENGTH_LONG).show();
+                                                Toast.LENGTH_SHORT).show();
                                     }
                                 });
                     } else {
