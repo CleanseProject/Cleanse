@@ -282,7 +282,23 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void logIn(String email, String password) {
-        // TODO: check email verification, then sign in user
+        firebaseAuth.signInWithEmailAndPassword(email,password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        FirebaseUser user=task.getResult().getUser();
+                        if (user.isEmailVerified()){
+                            iniciarSesion(user);
+                        } else {
+                            user.sendEmailVerification()
+                                    .addOnCompleteListener(t -> {
+                                        if (task.isSuccessful()){
+                                            Toast.makeText(LoginActivity.this, "Please verify your email",
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        }
+                    }
+                });
     }
 
     private void signUp(String email, String password) {
