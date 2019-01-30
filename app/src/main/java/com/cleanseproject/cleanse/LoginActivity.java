@@ -214,6 +214,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private Button btnLogIn;
+    private Button btnSignUp;
     private TextView lblForgotPassword;
     private EditText txtEMail;
     private EditText txtPassword;
@@ -223,10 +224,12 @@ public class LoginActivity extends AppCompatActivity {
     private void initializeUI() {
         setContentView(R.layout.activity_email_login);
         btnLogIn = findViewById(R.id.btn_login);
+        btnSignUp = findViewById(R.id.btn_sign_up);
         txtEMail = findViewById(R.id.txt_email);
         txtPassword = findViewById(R.id.txt_pswd);
         lblForgotPassword = findViewById(R.id.lbl_forgot_password);
         btnLogIn.setOnClickListener(v -> logIn(txtEMail.getText().toString(), txtPassword.getText().toString()));
+        btnSignUp.setOnClickListener(v -> signUp(txtEMail.getText().toString(), txtPassword.getText().toString()));
         lblForgotPassword.setOnClickListener(v -> newAccount());
         txtEMail.addTextChangedListener(new TextWatcher() {
             @Override
@@ -279,8 +282,26 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void logIn(String email, String password) {
+        // TODO: check email verification, then sign in user
+    }
 
-
+    private void signUp(String email, String password) {
+        firebaseAuth.createUserWithEmailAndPassword(email,password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        FirebaseUser user=task.getResult().getUser();
+                        user.sendEmailVerification()
+                                .addOnCompleteListener(t -> {
+                                    if (task.isSuccessful()){
+                                        Toast.makeText(LoginActivity.this, "Verification email sent",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override
