@@ -214,7 +214,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private Button btnLogIn;
-    private TextView lblNewAccount;
+    private TextView lblForgotPassword;
     private EditText txtEMail;
     private EditText txtPassword;
     private boolean emailCorrecto;
@@ -225,9 +225,9 @@ public class LoginActivity extends AppCompatActivity {
         btnLogIn = findViewById(R.id.btn_login);
         txtEMail = findViewById(R.id.txt_email);
         txtPassword = findViewById(R.id.txt_pswd);
-        lblNewAccount = findViewById(R.id.lbl_new_account);
+        lblForgotPassword = findViewById(R.id.lbl_forgot_password);
         btnLogIn.setOnClickListener(v -> logIn(txtEMail.getText().toString(), txtPassword.getText().toString()));
-        lblNewAccount.setOnClickListener(v -> newAccount());
+        lblForgotPassword.setOnClickListener(v -> newAccount());
         txtEMail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

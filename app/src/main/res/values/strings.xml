@@ -8,7 +8,7 @@
     <string name="email_login" translatable="false">E-Mail Sign In</string>
     <string name="log_in">Log In</string>
     <string name="e_mail" translatable="false">E-Mail</string>
-    <string name="no_account">Crear cuenta</string>
+    <string name="forgot_password">Recordar contraseña</string>
     <string name="password">Contraseña</string>
     <string name="logo">logo</string>
     <string name="google_sign_in_error">No se ha podido iniciar sesión con Google</string>
