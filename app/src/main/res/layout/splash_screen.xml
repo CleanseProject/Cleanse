@@ -47,10 +47,11 @@
         android:text="@string/splash_name"
         android:textColor="@android:color/white"
         android:textSize="54sp"
-        app:layout_constraintVertical_chainStyle="packed"
+        android:visibility="invisible"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/horizontal_guideline" />
+        app:layout_constraintTop_toBottomOf="@id/horizontal_guideline"
+        app:layout_constraintVertical_chainStyle="packed" />
 
     <android.support.constraint.Guideline
         android:id="@+id/horizontal_guideline"
