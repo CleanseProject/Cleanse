@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.ForegroundColorSpan;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -28,10 +29,19 @@ public class SplashScreen extends AppCompatActivity {
         ImageView imagenGota = findViewById(R.id.imgGota);
         Animation myanim = AnimationUtils.loadAnimation(this, R.anim.animation_abajo);
         imagenGota.startAnimation(myanim);
+
+
         new Handler().postDelayed(() -> {
+            Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fadein);
+            txtTituloo.startAnimation(fadeIn);
+         txtTituloo.setVisibility(View.VISIBLE);
+        }, 1000);
+
+       new Handler().postDelayed(() -> {
             Intent intent = new Intent(SplashScreen.this, WelcomeActivity.class);
             startActivity(intent);
             finish();
-        }, 2300);
-    }
+        }, 2000);
+
+}
 }
