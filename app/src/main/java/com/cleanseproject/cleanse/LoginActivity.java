@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         btnGoogle.setSize(SignInButton.SIZE_STANDARD);
         btnPhone = findViewById(R.id.btn_phone);
         btnEmail = findViewById(R.id.btn_email);
-        btnEmail.setOnClickListener(v -> initializeUI());
+        btnEmail.setOnClickListener(v -> initializeEmailUI());
         btnGoogle.setOnClickListener(v -> googleSignIn());
         btnPhone.setOnClickListener(v -> phoneDialog());
         firebaseAuth = FirebaseAuth.getInstance();
@@ -221,7 +221,7 @@ public class LoginActivity extends AppCompatActivity {
     private boolean emailCorrecto;
     private boolean pswdCorrecta;
 
-    private void initializeUI() {
+    private void initializeEmailUI() {
         setContentView(R.layout.activity_email_login);
         btnLogIn = findViewById(R.id.btn_login);
         btnSignUp = findViewById(R.id.btn_sign_up);
