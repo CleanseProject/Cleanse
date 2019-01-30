@@ -49,8 +49,7 @@
                     android:layout_height="wrap_content"
                     android:autofillHints="surname"
                     android:ems="10"
-                    android:hint="Surname"
-                    android:inputType="textPassword" />
+                    android:hint="Surname" />
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
@@ -63,8 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:text="Continue"
-            android:enabled="false"/>
+            android:text="Continue"/>
 
     </LinearLayout>
 
