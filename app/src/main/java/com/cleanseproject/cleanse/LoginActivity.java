@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         btnGoogle.setSize(SignInButton.SIZE_STANDARD);
         btnPhone = findViewById(R.id.btn_phone);
         btnEmail = findViewById(R.id.btn_email);
-        btnEmail.setOnClickListener(v -> initializeUI());
+        btnEmail.setOnClickListener(v -> initializeEmailUI());
         btnGoogle.setOnClickListener(v -> googleSignIn());
         btnPhone.setOnClickListener(v -> phoneDialog());
         firebaseAuth = FirebaseAuth.getInstance();
@@ -124,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Iniciar sesión a través de teléfono
+     *
      * @param phoneNumber Número de teléfono en formato E.164
      */
     private void phoneSignIn(String phoneNumber) {
@@ -137,6 +138,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Inicia sesión con Firebase
+     *
      * @param credential Credenciales obtenidas
      */
     private void authWithPhone(PhoneAuthCredential credential) {
@@ -145,10 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("phone", "signInWithCredential:success");
-
-                        FirebaseUser user = task.getResult().getUser();
-                        // ...
-                        Log.d("phone", user.getPhoneNumber());
+                        iniciarSesion(task.getResult().getUser());
                     } else {
                         // Sign in failed, display a message and update the UI
                         Log.w("phone", "signInWithCredential:failure", task.getException());
@@ -181,6 +180,7 @@ public class LoginActivity extends AppCompatActivity {
 
     /**
      * Iniciar sesión en Firebase con la cuenta de Google
+     *
      * @param account Cuenta de Google
      */
     private void firebaseAuthGoogle(GoogleSignInAccount account) {
@@ -198,6 +198,13 @@ public class LoginActivity extends AppCompatActivity {
     private void iniciarSesion(FirebaseUser user) {
         // TODO: Iniciar sesión con Google
         Log.d("mail", user.getDisplayName() + " " + user.getPhoneNumber());
+        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+        if (user.getEmail() != null) {
+            intent.putExtra("username", user.getEmail());
+        } else if (user.getPhoneNumber() != null) {
+            intent.putExtra("username", user.getPhoneNumber());
+        }
+        startActivity(intent);
     }
 
     private void errorInicioSesion() {
@@ -207,20 +214,23 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private Button btnLogIn;
-    private TextView lblNewAccount;
+    private Button btnSignUp;
+    private TextView lblForgotPassword;
     private EditText txtEMail;
     private EditText txtPassword;
     private boolean emailCorrecto;
     private boolean pswdCorrecta;
 
-    private void initializeUI() {
+    private void initializeEmailUI() {
         setContentView(R.layout.activity_email_login);
         btnLogIn = findViewById(R.id.btn_login);
+        btnSignUp = findViewById(R.id.btn_sign_up);
         txtEMail = findViewById(R.id.txt_email);
         txtPassword = findViewById(R.id.txt_pswd);
-        lblNewAccount = findViewById(R.id.lbl_new_account);
+        lblForgotPassword = findViewById(R.id.lbl_forgot_password);
         btnLogIn.setOnClickListener(v -> logIn(txtEMail.getText().toString(), txtPassword.getText().toString()));
-        lblNewAccount.setOnClickListener(v -> newAccount());
+        btnSignUp.setOnClickListener(v -> signUp(txtEMail.getText().toString(), txtPassword.getText().toString()));
+        lblForgotPassword.setOnClickListener(v -> newAccount());
         txtEMail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -272,8 +282,42 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void logIn(String email, String password) {
+        firebaseAuth.signInWithEmailAndPassword(email,password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        FirebaseUser user=task.getResult().getUser();
+                        if (user.isEmailVerified()){
+                            iniciarSesion(user);
+                        } else {
+                            user.sendEmailVerification()
+                                    .addOnCompleteListener(t -> {
+                                        if (task.isSuccessful()){
+                                            Toast.makeText(LoginActivity.this, "Please verify your email",
+                                                    Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        }
+                    }
+                });
+    }
 
-
+    private void signUp(String email, String password) {
+        firebaseAuth.createUserWithEmailAndPassword(email,password)
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        FirebaseUser user=task.getResult().getUser();
+                        user.sendEmailVerification()
+                                .addOnCompleteListener(t -> {
+                                    if (task.isSuccessful()){
+                                        Toast.makeText(LoginActivity.this, "Verification email sent",
+                                                Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                    } else {
+                        Toast.makeText(LoginActivity.this, "Authentication failed.",
+                                Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override
