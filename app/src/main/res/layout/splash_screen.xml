@@ -2,8 +2,62 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/prueba"
     tools:context=".SplashScreen">
+
+
+    <FrameLayout
+        android:layout_height="0dp"
+        android:layout_width="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/horizontal_guideline"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <ImageView
+            android:id="@+id/imgHoja"
+            android:layout_width="207dp"
+            android:layout_height="178dp"
+            android:layout_marginBottom="0dp"
+            android:visibility="visible"
+            android:layout_gravity="bottom"
+            app:srcCompat="@drawable/hoja_vector" />
+
+        <ImageView
+            android:id="@+id/imgGota"
+            android:layout_width="100dp"
+            android:layout_height="79dp"
+            android:layout_marginLeft="85dp"
+            android:visibility="visible"
+            android:layout_gravity="bottom"
+            app:srcCompat="@drawable/gota_vector" />
+
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/txtTitulo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/comfortaa"
+        android:text="@string/splash_name"
+        android:textColor="@android:color/white"
+        android:textSize="54sp"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/horizontal_guideline" />
+
+    <android.support.constraint.Guideline
+        android:id="@+id/horizontal_guideline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
 
 </android.support.constraint.ConstraintLayout>
