@@ -298,6 +298,8 @@ public class LoginActivity extends AppCompatActivity {
                                         }
                                     });
                         }
+                    } else {
+                        // TODO: credenciales incorrectas
                     }
                 });
     }
