@@ -34,7 +34,7 @@ public class UserDataActivity extends AppCompatActivity {
     private void guardarDatos(String name, String surname) {
         DatabaseReference userReference = firebaseDatabase.getReference("users");
         FirebaseUser user = firebaseAuth.getCurrentUser();
-        userReference.child(user.getUid()).setValue(new User(name, surname));
+        userReference.child(user.getUid()).setValue(new User(name, surname, ""));
     }
 
 }
