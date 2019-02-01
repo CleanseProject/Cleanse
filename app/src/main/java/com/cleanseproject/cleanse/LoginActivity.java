@@ -2,6 +2,7 @@ package com.cleanseproject.cleanse;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -30,6 +31,11 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -37,6 +43,7 @@ import java.util.concurrent.TimeUnit;
 public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
+    private FirebaseDatabase firebaseDatabase;
     private final int RC_GOOGLE_SIGN_IN = 9001;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks callBacks;
 
@@ -59,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
         btnGoogle.setOnClickListener(v -> googleSignIn());
         btnPhone.setOnClickListener(v -> phoneDialog());
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
         callBacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
@@ -75,19 +83,26 @@ public class LoginActivity extends AppCompatActivity {
             public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
                 phoneVerificationId = verificationId;
                 phoneToken = token;
-                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                final EditText txtPhone = findViewById(R.id.txt_phone);
+                btn_Login_phone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString()));
+                    }
+                });
+
+               /* AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                 LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
                 View view = inflater.inflate(R.layout.dialog_phone_prompt, null);
                 final EditText txtPhone = view.findViewById(R.id.txt_phone);
-                TextView textView = view.findViewById(R.id.lbl_phone_dialog);
-                textView.setText("Verification code");
+
                 builder.setTitle("Phone Sign In")
                         .setView(view)
                         .setPositiveButton("OK", (dialog, width) -> {
                             authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString()));
                         })
                         .setNegativeButton("Cancel", null)
-                        .show();
+                        .show();*/
             }
         };
     }
@@ -108,8 +123,27 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Crea un AlertDialog para introducir el número de teléfono
      */
+
+    Button btn_Login_phone;
+    EditText txt_phonee;
+    TextView txtNumeroRegion;
     private void phoneDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        setContentView(R.layout.dialog_phone_prompt);
+        btn_Login_phone = findViewById(R.id.btn_login_phone);
+        txt_phonee = findViewById(R.id.txt_phone);
+        txtNumeroRegion = findViewById(R.id.txt_numero_de_region);
+
+        btn_Login_phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                phoneSignIn(txtNumeroRegion.getText().toString()+txt_phonee.getText().toString());
+                txt_phonee.setText("");
+                txt_phonee.setHint("Type your code");
+                txtNumeroRegion.setText("");
+                btn_Login_phone.setText("Verify");
+            }
+        });
+      /*  AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
         LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
         View view = inflater.inflate(R.layout.dialog_phone_prompt, null);
         final EditText txtPhone = view.findViewById(R.id.txt_phone);
@@ -119,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                     phoneSignIn(txtPhone.getText().toString());
                 })
                 .setNegativeButton("Cancel", null)
-                .show();
+               .show(); */
     }
 
     /**
@@ -196,8 +230,27 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void iniciarSesion(FirebaseUser user) {
-        // TODO: Iniciar sesión con Google
         Log.d("mail", user.getDisplayName() + " " + user.getPhoneNumber());
+        DatabaseReference userReference = firebaseDatabase.getReference("users");
+        userReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.hasChild(user.getUid())) {
+                    cambiarActividad(user);
+                } else {
+                    userReference.child(user.getUid()).setValue(new User());
+                    startActivity(new Intent(LoginActivity.this, UserDataActivity.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    private void cambiarActividad(FirebaseUser user) {
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         if (user.getEmail() != null) {
             intent.putExtra("username", user.getEmail());
