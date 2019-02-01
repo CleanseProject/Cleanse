@@ -83,19 +83,26 @@ public class LoginActivity extends AppCompatActivity {
             public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
                 phoneVerificationId = verificationId;
                 phoneToken = token;
-                AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                final EditText txtPhone = findViewById(R.id.txt_phone);
+                btn_Login_phone.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString()));
+                    }
+                });
+
+               /* AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                 LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
                 View view = inflater.inflate(R.layout.dialog_phone_prompt, null);
                 final EditText txtPhone = view.findViewById(R.id.txt_phone);
-                TextView textView = view.findViewById(R.id.lbl_phone_dialog);
-                textView.setText("Verification code");
+
                 builder.setTitle("Phone Sign In")
                         .setView(view)
                         .setPositiveButton("OK", (dialog, width) -> {
                             authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString()));
                         })
                         .setNegativeButton("Cancel", null)
-                        .show();
+                        .show();*/
             }
         };
     }
@@ -116,8 +123,27 @@ public class LoginActivity extends AppCompatActivity {
     /**
      * Crea un AlertDialog para introducir el número de teléfono
      */
+
+    Button btn_Login_phone;
+    EditText txt_phonee;
+    TextView txtNumeroRegion;
     private void phoneDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        setContentView(R.layout.dialog_phone_prompt);
+        btn_Login_phone = findViewById(R.id.btn_login_phone);
+        txt_phonee = findViewById(R.id.txt_phone);
+        txtNumeroRegion = findViewById(R.id.txt_numero_de_region);
+
+        btn_Login_phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                phoneSignIn(txtNumeroRegion.getText().toString()+txt_phonee.getText().toString());
+                txt_phonee.setText("");
+                txt_phonee.setHint("Type your code");
+                txtNumeroRegion.setText("");
+                btn_Login_phone.setText("Verify");
+            }
+        });
+      /*  AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
         LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
         View view = inflater.inflate(R.layout.dialog_phone_prompt, null);
         final EditText txtPhone = view.findViewById(R.id.txt_phone);
@@ -127,7 +153,7 @@ public class LoginActivity extends AppCompatActivity {
                     phoneSignIn(txtPhone.getText().toString());
                 })
                 .setNegativeButton("Cancel", null)
-                .show();
+               .show(); */
     }
 
     /**
