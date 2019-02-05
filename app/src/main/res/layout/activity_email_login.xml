@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/prueba"
+    android:background="@color/colorPrimary"
     android:gravity="center"
     tools:context=".LoginActivity">
 
@@ -31,11 +31,14 @@
                     android:id="@+id/txt_email"
                     style="@style/CleanseEditText"
                     android:layout_width="match_parent"
+
                     android:layout_height="wrap_content"
                     android:autofillHints="emailAddress"
                     android:ems="10"
                     android:hint="@string/e_mail"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textEmailAddress"
+                    android:drawablePadding="10dp"
+                    android:drawableLeft="@drawable/emaillock_icon"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -50,7 +53,9 @@
                     android:autofillHints="password"
                     android:ems="10"
                     android:hint="@string/password"
-                    android:inputType="textPassword" />
+                    android:inputType="textPassword"
+                    android:drawablePadding="10dp"
+                    android:drawableLeft="@drawable/key_icon"/>
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
@@ -70,6 +75,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:text="@string/log_in"
+
+            android:drawableLeft="@drawable/login_icon"
+            android:drawablePadding="5dp"
             android:enabled="false"/>
 
         <Button
@@ -78,8 +86,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:text="@string/sign_up"
-            android:enabled="false"/>
+            android:drawableLeft="@drawable/signup_icon"
+            android:drawablePadding="5dp"
+            android:enabled="false"
+            android:text="@string/sign_up" />
 
     </LinearLayout>
 
