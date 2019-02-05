@@ -13,9 +13,11 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
@@ -30,6 +32,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 public class HomeActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
+    private RecyclerView rvEventos;
 
     @Override
     public void onStart() {
@@ -97,6 +100,8 @@ public class HomeActivity extends AppCompatActivity {
             drawerLayout.closeDrawers();
             return true;
         });
+
+        rvEventos=findViewById(R.id.rv_Eventos);
         FirebaseInstanceId.getInstance().getInstanceId()
                 .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                     @Override
