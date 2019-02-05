@@ -55,6 +55,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
+
+            android:drawableLeft="@drawable/phone"
+
             android:text="@string/phone_login" />
 
         <Button
