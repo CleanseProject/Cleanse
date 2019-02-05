@@ -13,12 +13,17 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class SplashScreen extends AppCompatActivity {
+
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
+        firebaseAuth = FirebaseAuth.getInstance();
         TextView txtTituloo = findViewById(R.id.txtTitulo);
         SpannableString ss = new SpannableString("C l e a n S e");
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -34,14 +39,19 @@ public class SplashScreen extends AppCompatActivity {
         new Handler().postDelayed(() -> {
             Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fadein);
             txtTituloo.startAnimation(fadeIn);
-         txtTituloo.setVisibility(View.VISIBLE);
+            txtTituloo.setVisibility(View.VISIBLE);
         }, 1000);
 
-       new Handler().postDelayed(() -> {
-            Intent intent = new Intent(SplashScreen.this, WelcomeActivity.class);
-            startActivity(intent);
+        new Handler().postDelayed(() -> {
+            if (firebaseAuth.getCurrentUser() != null) {
+                Intent intent = new Intent(SplashScreen.this, HomeActivity.class);
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(SplashScreen.this, WelcomeActivity.class);
+                startActivity(intent);
+            }
             finish();
         }, 2000);
 
-}
+    }
 }
