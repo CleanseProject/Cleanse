@@ -3,8 +3,10 @@ package com.cleanseproject.cleanse;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 
+import com.cleanseproject.cleanse.adapters.ChatListAdapter;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,17 +32,21 @@ public class ChatListActivity extends AppCompatActivity {
         chatList = findViewById(R.id.chat_list);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
+        getUserChats();
     }
 
     private void getUserChats() {
+        Log.d("id", firebaseUser.getUid());
+
         DatabaseReference userChats = firebaseDatabase.getReference("userChats").child(firebaseUser.getUid());
         userChats.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<User> users = new ArrayList<>();
+                ArrayList<String> users = new ArrayList<>();
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        users.add(dataSnapshot.getValue(User.class));
+                        Log.d("key", snapshot.getKey() + snapshot.getValue());
+                        users.add((String) snapshot.getValue());
                     }
                 }
                 populateList(users);
@@ -53,8 +59,9 @@ public class ChatListActivity extends AppCompatActivity {
         });
     }
 
-    private void populateList(ArrayList<User> users) {
-
+    private void populateList(ArrayList<String> users) {
+        ChatListAdapter chatListAdapter = new ChatListAdapter(ChatListActivity.this, users);
+        chatList.setAdapter(chatListAdapter);
     }
 
 }

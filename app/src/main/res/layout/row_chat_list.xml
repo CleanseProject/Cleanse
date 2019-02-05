@@ -8,14 +8,17 @@
     <ImageView android:id="@+id/chat_row_user_img"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        android:src="@drawable/circle"/>
+        android:src="@drawable/circle"
+        android:maxWidth="70dp"
+        android:maxHeight="70dp"
+        android:adjustViewBounds="true"
+        android:layout_margin="20dp"/>
 
     <TextView android:id="@+id/chat_row_username"
         android:text="Patata"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:textColor="#000"
-        android:textSize="20sp"
-        android:layout_marginStart="20dp"/>
+        android:textSize="20sp"/>
 
 </LinearLayout>
