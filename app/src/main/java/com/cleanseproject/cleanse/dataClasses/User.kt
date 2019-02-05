@@ -1,4 +1,4 @@
-package com.cleanseproject.cleanse
+package com.cleanseproject.cleanse.dataClasses
 
 import com.google.firebase.database.IgnoreExtraProperties
 
