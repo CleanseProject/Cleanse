@@ -21,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class ChatListActivity extends Fragment {
+public class ChatListFragment extends Fragment {
 
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
@@ -31,7 +31,7 @@ public class ChatListActivity extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_chat_list, container, false);
+        return inflater.inflate(R.layout.fragment_chat_list, container, false);
     }
 
     @Override
@@ -56,15 +56,15 @@ public class ChatListActivity extends Fragment {
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Log.d("firebaseUid", snapshot.getKey());
-                        userIds.add((String) snapshot.getKey());
+                        userIds.add(snapshot.getKey());
                         DatabaseReference user = firebaseDatabase.getReference("users");
                         user.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 for (String uid : userIds) {
                                     users.add(dataSnapshot.child(uid).getValue(User.class));
-                                    populateList(users);
                                 }
+                                populateList(users);
                             }
 
                             @Override

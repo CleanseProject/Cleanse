@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
@@ -16,14 +15,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -61,14 +55,6 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Intent intent = getIntent();
-/*        TextView lblHello = findViewById(R.id.lbl_usuario);
-        lblHello.setText(intent.getStringExtra("username"));
-        try {
-            Log.d("user", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName());
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }*/
         initializeUI();
     }
 
@@ -96,7 +82,7 @@ public class HomeActivity extends AppCompatActivity {
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             switch (menuItem.getItemId()) {
                 case R.id.nav_chats:
-                    newFragment = new ChatListActivity();
+                    newFragment = new ChatListFragment();
                     transaction.replace(R.id.content_frame, newFragment);
                     transaction.addToBackStack(null);
                     transaction.commit();
@@ -104,18 +90,6 @@ public class HomeActivity extends AppCompatActivity {
             drawerLayout.closeDrawers();
             return true;
         });
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("MyFirebaseMsgService", "getInstanceId failed", task.getException());
-                            return;
-                        }
-                        String token = task.getResult().getToken();
-                        Log.d("FCMToken", token);
-                    }
-                });
     }
 
 }
