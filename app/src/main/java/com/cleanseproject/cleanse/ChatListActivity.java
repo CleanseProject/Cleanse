@@ -1,9 +1,12 @@
 package com.cleanseproject.cleanse;
 
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
+import android.app.Fragment;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.cleanseproject.cleanse.adapters.ChatListAdapter;
@@ -18,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
-public class ChatListActivity extends AppCompatActivity {
+public class ChatListActivity extends Fragment {
 
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
@@ -26,10 +29,16 @@ public class ChatListActivity extends AppCompatActivity {
     private ListView chatList;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_list);
-        chatList = findViewById(R.id.chat_list);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.activity_chat_list, container, false);
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        View view = getView();
+        chatList = view.findViewById(R.id.chat_list);
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         getUserChats();
@@ -42,14 +51,29 @@ public class ChatListActivity extends AppCompatActivity {
         userChats.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<String> users = new ArrayList<>();
+                ArrayList<String> userIds = new ArrayList<>();
+                ArrayList<User> users = new ArrayList<>();
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Log.d("key", snapshot.getKey() + snapshot.getValue());
-                        users.add((String) snapshot.getValue());
+                        Log.d("firebaseUid", snapshot.getKey());
+                        userIds.add((String) snapshot.getKey());
+                        DatabaseReference user = firebaseDatabase.getReference("users");
+                        user.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                for (String uid : userIds) {
+                                    users.add(dataSnapshot.child(uid).getValue(User.class));
+                                    populateList(users);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                     }
                 }
-                populateList(users);
             }
 
             @Override
@@ -59,8 +83,8 @@ public class ChatListActivity extends AppCompatActivity {
         });
     }
 
-    private void populateList(ArrayList<String> users) {
-        ChatListAdapter chatListAdapter = new ChatListAdapter(ChatListActivity.this, users);
+    private void populateList(ArrayList<User> users) {
+        ChatListAdapter chatListAdapter = new ChatListAdapter(getActivity(), users);
         chatList.setAdapter(chatListAdapter);
     }
 
