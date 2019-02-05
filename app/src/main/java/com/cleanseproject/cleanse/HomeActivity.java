@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
@@ -15,8 +16,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -33,8 +42,17 @@ public class HomeActivity extends AppCompatActivity {
     private BroadcastReceiver onEvent = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent i) {
             //if (i.getAction() != null && i.getAction() != MyFirebaseMessagingService.NOTIFICATION) {
-            Log.d("notification", i.getStringExtra("mensaje"));
-            Snackbar.make(findViewById(R.id.homeCoordinatorLayout), i.getStringExtra("mensaje"),
+            String title = i.getStringExtra("title");
+            String body = i.getStringExtra("body");
+            String mensaje = "";
+            if (body != null && title != null) {
+                mensaje = title + ": " + body;
+            } else if (body != null) {
+                mensaje = body;
+            } else if (title != null) {
+                mensaje = title;
+            }
+            Snackbar.make(findViewById(R.id.homeCoordinatorLayout), mensaje,
                     Snackbar.LENGTH_LONG)
                     .show();
             //}
@@ -79,6 +97,18 @@ public class HomeActivity extends AppCompatActivity {
             drawerLayout.closeDrawers();
             return true;
         });
+        FirebaseInstanceId.getInstance().getInstanceId()
+                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w("MyFirebaseMsgService", "getInstanceId failed", task.getException());
+                            return;
+                        }
+                        String token = task.getResult().getToken();
+                        Log.d("FCMToken", token);
+                    }
+                });
     }
 
 }
