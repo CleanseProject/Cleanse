@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:text="@string/log_in"
-
+            android:drawableTint="@color/colorPrimary"
             android:drawableLeft="@drawable/login_icon"
             android:drawablePadding="5dp"
             android:enabled="false"/>
@@ -86,6 +86,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
+            android:drawableTint="@color/colorPrimary"
             android:drawableLeft="@drawable/signup_icon"
             android:drawablePadding="5dp"
             android:enabled="false"
