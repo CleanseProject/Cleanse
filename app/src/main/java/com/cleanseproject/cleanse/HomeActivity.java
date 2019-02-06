@@ -1,11 +1,12 @@
 package com.cleanseproject.cleanse;
 
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.LocalBroadcastManager;
@@ -13,26 +14,16 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
-import android.widget.ListView;
-import android.widget.Toast;
 
+import com.cleanseproject.cleanse.fragments.ChatListFragment;
+import com.cleanseproject.cleanse.fragments.HomeFragment;
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-import com.google.firebase.messaging.FirebaseMessaging;
 
 public class HomeActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
-    private RecyclerView rvEventos;
 
     @Override
     public void onStart() {
@@ -66,14 +57,6 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Intent intent = getIntent();
-/*        TextView lblHello = findViewById(R.id.lbl_usuario);
-        lblHello.setText(intent.getStringExtra("username"));
-        try {
-            Log.d("user", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getDisplayName());
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-        }*/
         initializeUI();
     }
 
@@ -97,23 +80,29 @@ public class HomeActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
+            Fragment newFragment;
+            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            switch (menuItem.getItemId()) {
+                case R.id.nav_home:
+                    newFragment = new HomeFragment();
+                    transaction.replace(R.id.content_frame, newFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+                case R.id.nav_chats:
+                    newFragment = new ChatListFragment();
+                    transaction.replace(R.id.content_frame, newFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+            }
             drawerLayout.closeDrawers();
             return true;
         });
-
-        rvEventos=findViewById(R.id.rv_Eventos);
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("MyFirebaseMsgService", "getInstanceId failed", task.getException());
-                            return;
-                        }
-                        String token = task.getResult().getToken();
-                        Log.d("FCMToken", token);
-                    }
-                });
+        Fragment newFragment;
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        newFragment = new HomeFragment();
+        transaction.replace(R.id.content_frame, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
 }

@@ -41,7 +41,7 @@ public class ChatListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.row_chat_list, null);
         TextView lblName = view.findViewById(R.id.chat_row_username);
-        lblName.setText(userRows.get(position).getName());
+        lblName.setText(userRows.get(position).getName() + userRows.get(position).getSurname());
         return view;
     }
 
