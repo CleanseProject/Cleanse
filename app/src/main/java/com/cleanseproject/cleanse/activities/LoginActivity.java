@@ -110,6 +110,7 @@ public class LoginActivity extends AppCompatActivity {
     Button btn_Login_phone;
     EditText txt_phonee;
     TextView txtNumeroRegion;
+
     private void phoneDialog() {
         setContentView(R.layout.dialog_phone_prompt);
         btn_Login_phone = findViewById(R.id.btn_login_phone);
@@ -119,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
         btn_Login_phone.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                phoneSignIn(txtNumeroRegion.getText().toString()+txt_phonee.getText().toString());
+                phoneSignIn(txtNumeroRegion.getText().toString() + txt_phonee.getText().toString());
                 txt_phonee.setText("");
                 txt_phonee.setHint("Type your code");
                 txtNumeroRegion.setText("");

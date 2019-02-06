@@ -1,5 +1,6 @@
 package com.cleanseproject.cleanse.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -7,9 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.cleanseproject.cleanse.R;
+import com.cleanseproject.cleanse.activities.ChatActivity;
 import com.cleanseproject.cleanse.activities.HomeActivity;
 import com.cleanseproject.cleanse.adapters.ChatListAdapter;
 import com.cleanseproject.cleanse.dataClasses.User;
@@ -44,6 +47,12 @@ public class ChatListFragment extends Fragment {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         getUserChats();
+        Button btnChat = view.findViewById(R.id.btn_act_chat);
+        btnChat.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), ChatActivity.class);
+            intent.putExtra("chatuid", "4254312");
+            startActivity(intent);
+        });
     }
 
     private void getUserChats() {
