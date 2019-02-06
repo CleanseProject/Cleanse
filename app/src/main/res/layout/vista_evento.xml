@@ -4,8 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:layout_margin="10dp"
+    android:orientation="vertical"
+    android:padding="20dp"
+
+
+    app:cardUseCompatPadding="true"
 
     >
 
@@ -18,7 +22,8 @@
             android:id="@+id/ivEvento"
             android:layout_width="match_parent"
             android:layout_height="250dp"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            />
 
         <LinearLayout
             android:layout_width="match_parent"

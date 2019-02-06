@@ -61,8 +61,9 @@ private ArrayList<Event>listaEventos;
         public void asignarDatos(Event event) {
 
             txtTitulo.setText(event.getName());
-            Uri url= Uri.parse(event.getPhoto());
-            ivFoto.setImageURI(url);
+
+           //Uri url= Uri.parse(event.getPhoto());
+            ivFoto.setBackgroundResource(R.drawable.imagen);
 
             }
     }

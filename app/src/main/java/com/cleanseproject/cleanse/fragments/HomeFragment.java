@@ -59,9 +59,8 @@ public class HomeFragment extends Fragment {
         ArrayList<Event>listaEventos=new ArrayList<>();
 
 
-        listaEventos.add(new Event("Carlos","","https://static3lonelyplanetes.cdnstatics.com/sites/default/files/styles/max_1300x1300/public/blog/PolinesiaFrancesa_playaRangiroa_GettyRF_524891702_Vpommeyrol_Getty%20Images_0.jpg?itok=RxeSU30C","",""));
-        listaEventos.add(new Event("Adrián","","https://static3lonelyplanetes.cdnstatics.com/sites/default/files/styles/max_1300x1300/public/blog/PolinesiaFrancesa_playaRangiroa_GettyRF_524891702_Vpommeyrol_Getty%20Images_0.jpg?itok=RxeSU30C","",""));
-
+        listaEventos.add(new Event("Carlosssssssssssssss","","C:\\Users\\ruizv\\Desktop","",""));
+        listaEventos.add(new Event("Adrián","","C:\\Users\\ruizv\\Desktop","",""));
         return  listaEventos;
     }
 
