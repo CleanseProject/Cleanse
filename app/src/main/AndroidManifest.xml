@@ -10,9 +10,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".UserDataActivity" />
-        <activity android:name=".HomeActivity" />
-        <activity android:name=".SplashScreen">
+        <activity android:name=".activities.UserDataActivity" />
+        <activity android:name=".activities.HomeActivity" />
+        <activity android:name=".activities.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -38,9 +38,9 @@
                     android:scheme="cleanse" />
             </intent-filter>
         </activity>
-        <activity android:name=".WelcomeActivity" />
+        <activity android:name=".activities.WelcomeActivity" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".activities.LoginActivity"
             android:windowSoftInputMode="adjustResize" />
 
         <service android:name=".services.CleanseFirebaseMessagingService">

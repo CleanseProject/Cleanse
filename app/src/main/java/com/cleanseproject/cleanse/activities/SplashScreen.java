@@ -1,4 +1,4 @@
-package com.cleanseproject.cleanse;
+package com.cleanseproject.cleanse.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.cleanseproject.cleanse.R;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SplashScreen extends AppCompatActivity {

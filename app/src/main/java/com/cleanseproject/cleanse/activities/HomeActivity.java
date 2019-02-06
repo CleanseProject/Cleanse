@@ -1,4 +1,4 @@
-package com.cleanseproject.cleanse;
+package com.cleanseproject.cleanse.activities;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.fragments.ChatListFragment;
 import com.cleanseproject.cleanse.fragments.HomeFragment;
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;

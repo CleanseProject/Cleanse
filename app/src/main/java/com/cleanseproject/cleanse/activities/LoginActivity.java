@@ -1,4 +1,4 @@
-package com.cleanseproject.cleanse;
+package com.cleanseproject.cleanse.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -89,19 +90,6 @@ public class LoginActivity extends AppCompatActivity {
                         authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString()));
                     }
                 });
-
-               /* AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
-                View view = inflater.inflate(R.layout.dialog_phone_prompt, null);
-                final EditText txtPhone = view.findViewById(R.id.txt_phone);
-
-                builder.setTitle("Phone Sign In")
-                        .setView(view)
-                        .setPositiveButton("OK", (dialog, width) -> {
-                            authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString()));
-                        })
-                        .setNegativeButton("Cancel", null)
-                        .show();*/
             }
         };
     }
@@ -118,10 +106,6 @@ public class LoginActivity extends AppCompatActivity {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
     }
-
-    /**
-     * Crea un AlertDialog para introducir el número de teléfono
-     */
 
     Button btn_Login_phone;
     EditText txt_phonee;
@@ -142,17 +126,6 @@ public class LoginActivity extends AppCompatActivity {
                 btn_Login_phone.setText("Verify");
             }
         });
-      /*  AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-        LayoutInflater inflater = LayoutInflater.from(LoginActivity.this);
-        View view = inflater.inflate(R.layout.dialog_phone_prompt, null);
-        final EditText txtPhone = view.findViewById(R.id.txt_phone);
-        builder.setTitle("Phone Sign In")
-                .setView(view)
-                .setPositiveButton("OK", (dialog, width) -> {
-                    phoneSignIn(txtPhone.getText().toString());
-                })
-                .setNegativeButton("Cancel", null)
-               .show(); */
     }
 
     /**
