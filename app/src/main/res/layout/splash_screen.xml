@@ -9,31 +9,51 @@
     tools:context=".SplashScreen">
 
 
-    <FrameLayout
-        android:layout_height="0dp"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/background"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        android:scaleY="-1"/>
+
+    <FrameLayout
+        android:id="@+id/frameLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@id/horizontal_guideline"
-        app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_chainStyle="packed">
 
         <ImageView
             android:id="@+id/imgHoja"
             android:layout_width="207dp"
             android:layout_height="178dp"
+            android:layout_gravity="bottom"
             android:layout_marginBottom="0dp"
             android:visibility="visible"
-            android:layout_gravity="bottom"
             app:srcCompat="@drawable/hoja_vector" />
 
         <ImageView
             android:id="@+id/imgGota"
             android:layout_width="100dp"
             android:layout_height="79dp"
+            android:layout_gravity="bottom"
             android:layout_marginLeft="85dp"
             android:visibility="visible"
-            android:layout_gravity="bottom"
             app:srcCompat="@drawable/gota_vector" />
 
 
@@ -46,8 +66,8 @@
         android:fontFamily="@font/comfortaa"
         android:text="@string/splash_name"
         android:textColor="@android:color/white"
-        android:visibility="invisible"
         android:textSize="36sp"
+        android:visibility="invisible"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/horizontal_guideline"

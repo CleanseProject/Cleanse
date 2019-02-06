@@ -3,9 +3,9 @@
     <string name="app_name_lower" translatable="false">CleanSe</string>
     <string name="welcome_button">Comenzar</string>
     <string name="sign_in" translatable="false">sign in</string>
-    <string name="google_login" translatable="false">Google Sign In</string>
-    <string name="phone_login" translatable="false">Phone Sign In</string>
-    <string name="email_login" translatable="false">E-Mail Sign In</string>
+    <string name="google_login" translatable="false">Google</string>
+    <string name="phone_login" translatable="false">Phone</string>
+    <string name="email_login" translatable="false">E-Mail</string>
     <string name="log_in">Log In</string>
     <string name="e_mail" translatable="false">E-Mail</string>
     <string name="forgot_password">Recordar contraseña</string>
