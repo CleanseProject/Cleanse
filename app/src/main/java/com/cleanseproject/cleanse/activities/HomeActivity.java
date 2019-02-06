@@ -7,7 +7,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -64,7 +63,6 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Intent intent = getIntent();
         initializeUI();
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
     @Override
@@ -87,27 +85,24 @@ public class HomeActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
-            Fragment newFragment;
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:
-                    newFragment = new HomeFragment();
-                    transaction.replace(R.id.content_frame, newFragment);
+                    transaction.replace(R.id.content_frame, new HomeFragment());
                     transaction.addToBackStack(null);
                     transaction.commit();
+                    break;
                 case R.id.nav_chats:
-                    newFragment = new ChatListFragment();
-                    transaction.replace(R.id.content_frame, newFragment);
+                    transaction.replace(R.id.content_frame, new ChatListFragment());
                     transaction.addToBackStack(null);
                     transaction.commit();
+                    break;
             }
             drawerLayout.closeDrawers();
             return true;
         });
-        Fragment newFragment;
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        newFragment = new HomeFragment();
-        transaction.replace(R.id.content_frame, newFragment);
+        transaction.replace(R.id.content_frame, new HomeFragment());
         transaction.addToBackStack(null);
         transaction.commit();
     }
