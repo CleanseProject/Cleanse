@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
-            tools:srcCompat="@drawable/id_card" />
+            tools:src="@drawable/id_card" />
 
         <LinearLayout
             android:layout_width="match_parent"
