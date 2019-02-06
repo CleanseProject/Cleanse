@@ -20,8 +20,8 @@
             android:id="@+id/imageView"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            app:srcCompat="@drawable/logo_vector"
-            android:contentDescription="@string/logo" />
+            android:contentDescription="@string/logo"
+            app:srcCompat="@drawable/logo_vector" />
 
         <TextView
             android:id="@+id/lbl_title"
@@ -43,31 +43,32 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <com.google.android.gms.common.SignInButton
-            android:id="@+id/google_sign_in"
-            android:layout_width="match_parent"
+
+        <Button
+            android:id="@+id/google_sign_i"
+            style="@style/ButtonConImagen"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="25dp" />
+            android:layout_marginBottom="25dp"
+            android:drawableStart="@drawable/google_icon"
+            android:text="@string/google_login" />
 
         <Button
             android:id="@+id/btn_phone"
-            style="@style/WelcomeButton"
-            android:layout_width="wrap_content"
+            style="@style/ButtonConImagen"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="25dp"
-
-            android:drawableLeft="@drawable/phone"
-            android:text="@string/phone_login"
-            android:drawablePadding="5dp"/>
+            android:drawableStart="@drawable/phone"
+            android:text="@string/phone_login" />
 
         <Button
             android:id="@+id/btn_email"
-            style="@style/WelcomeButton"
-            android:layout_width="match_parent"
+            style="@style/ButtonConImagen"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:text="@string/email_login"
-            android:drawableLeft="@drawable/email"
-            android:drawablePadding="5dp"/>
+            android:drawableStart="@drawable/email"
+            android:text="@string/email_login" />
 
     </LinearLayout>
 

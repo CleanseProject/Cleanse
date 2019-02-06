@@ -50,7 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     private String phoneVerificationId;
     private PhoneAuthProvider.ForceResendingToken phoneToken;
 
-    private SignInButton btnGoogle;
+    private Button btnGoogle;
     private Button btnPhone;
     private Button btnEmail;
 
@@ -58,8 +58,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        btnGoogle = findViewById(R.id.google_sign_in);
-        btnGoogle.setSize(SignInButton.SIZE_STANDARD);
+        btnGoogle = findViewById(R.id.google_sign_i);
         btnPhone = findViewById(R.id.btn_phone);
         btnEmail = findViewById(R.id.btn_email);
         btnEmail.setOnClickListener(v -> initializeEmailUI());
@@ -125,6 +124,7 @@ public class LoginActivity extends AppCompatActivity {
                 txt_phonee.setHint("Type your code");
                 txtNumeroRegion.setText("");
                 btn_Login_phone.setText("Verify");
+
             }
         });
     }
