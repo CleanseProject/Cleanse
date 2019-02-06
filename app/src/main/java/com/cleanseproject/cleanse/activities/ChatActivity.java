@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -51,6 +52,8 @@ public class ChatActivity extends AppCompatActivity {
         btnSend.setOnClickListener(v -> sendMessage());
         txtMessage = findViewById(R.id.edittext_chatbox);
         messageRecycler = findViewById(R.id.reyclerview_message_list);
+        messageRecycler.setHasFixedSize(true);
+        messageRecycler.setLayoutManager(new GridLayoutManager(this,1));
     }
 
     private void loadData(String chatUid) {
@@ -101,9 +104,10 @@ public class ChatActivity extends AppCompatActivity {
         for (DataSnapshot messageData : dataSnapshot.getChildren()) {
             Message message = messageData.getValue(Message.class);
             messages.add(message);
+            Log.d("message",message.getMessage());
         }
+        Log.d("updated","updated");
         MessageListAdapter messageListAdapter = new MessageListAdapter(this, messages);
-        messageRecycler.setLayoutManager(new LinearLayoutManager(this));
         messageRecycler.setAdapter(messageListAdapter);
     }
 
