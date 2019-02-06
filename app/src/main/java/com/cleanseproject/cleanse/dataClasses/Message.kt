@@ -6,6 +6,6 @@ import com.google.firebase.database.IgnoreExtraProperties
 @IgnoreExtraProperties
 data class Message(
         var message: String? = "",
-        var user: FirebaseUser?,
+        var user: User?,
         var createdAt: Long?
 )
