@@ -8,4 +8,6 @@
     <string name="google_sign_in_error">Couldn\'t sign in with Google</string>
     <string name="type_phone">Type your phone number</string>
     <string name="sign_up">Sign Up</string>
+    <string name="enter_message">Enter message</string>
+    <string name="send">SEND</string>
 </resources>
