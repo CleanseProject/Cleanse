@@ -14,19 +14,16 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 
 import com.cleanseproject.cleanse.fragments.ChatListFragment;
+import com.cleanseproject.cleanse.fragments.HomeFragment;
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
-import com.google.firebase.iid.FirebaseInstanceId;
 
 public class HomeActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
-    private RecyclerView rvEventos;
 
     @Override
     public void onStart() {
@@ -86,6 +83,11 @@ public class HomeActivity extends AppCompatActivity {
             Fragment newFragment;
             FragmentTransaction transaction = getFragmentManager().beginTransaction();
             switch (menuItem.getItemId()) {
+                case R.id.nav_home:
+                    newFragment = new HomeFragment();
+                    transaction.replace(R.id.content_frame, newFragment);
+                    transaction.addToBackStack(null);
+                    transaction.commit();
                 case R.id.nav_chats:
                     newFragment = new ChatListFragment();
                     transaction.replace(R.id.content_frame, newFragment);
@@ -95,17 +97,12 @@ public class HomeActivity extends AppCompatActivity {
             drawerLayout.closeDrawers();
             return true;
         });
-
-        rvEventos=findViewById(R.id.rv_Eventos);
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w("MyFirebaseMsgService", "getInstanceId failed", task.getException());
-                        return;
-                    }
-                    String token = task.getResult().getToken();
-                    Log.d("FCMToken", token);
-                });
+        Fragment newFragment;
+        FragmentTransaction transaction = getFragmentManager().beginTransaction();
+        newFragment = new HomeFragment();
+        transaction.replace(R.id.content_frame, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
 }

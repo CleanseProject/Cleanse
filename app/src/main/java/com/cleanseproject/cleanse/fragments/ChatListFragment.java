@@ -1,6 +1,7 @@
 package com.cleanseproject.cleanse.fragments;
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -26,6 +27,7 @@ public class ChatListFragment extends Fragment {
 
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
+    private ProgressDialog progressDialog;
 
     private ListView chatList;
 
@@ -46,6 +48,11 @@ public class ChatListFragment extends Fragment {
     }
 
     private void getUserChats() {
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setTitle("Chats");
+        progressDialog.setMessage("Cargando...");
+        progressDialog.setIndeterminate(false);
+        progressDialog.show();
         Log.d("id", firebaseUser.getUid());
 
         DatabaseReference userChats = firebaseDatabase.getReference("userChats").child(firebaseUser.getUid());
@@ -53,7 +60,6 @@ public class ChatListFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<String> userIds = new ArrayList<>();
-                ArrayList<User> users = new ArrayList<>();
                 if (dataSnapshot.exists()) {
                     for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                         Log.d("firebaseUid", snapshot.getKey());
@@ -62,6 +68,7 @@ public class ChatListFragment extends Fragment {
                         user.addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                ArrayList<User> users = new ArrayList<>();
                                 for (String uid : userIds) {
                                     users.add(dataSnapshot.child(uid).getValue(User.class));
                                 }
@@ -87,6 +94,7 @@ public class ChatListFragment extends Fragment {
     private void populateList(ArrayList<User> users) {
         ChatListAdapter chatListAdapter = new ChatListAdapter(getActivity(), users);
         chatList.setAdapter(chatListAdapter);
+        progressDialog.dismiss();
     }
 
 }
