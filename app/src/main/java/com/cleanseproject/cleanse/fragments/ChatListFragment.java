@@ -1,4 +1,4 @@
-package com.cleanseproject.cleanse;
+package com.cleanseproject.cleanse.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.adapters.ChatListAdapter;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.google.firebase.auth.FirebaseAuth;
