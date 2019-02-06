@@ -62,6 +62,7 @@ public class HomeActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_home);
+        Intent intent = getIntent();
         initializeUI();
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }

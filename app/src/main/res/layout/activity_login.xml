@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/prueba"
+    android:background="@color/colorPrimary"
     tools:context=".activities.LoginActivity">
 
     <LinearLayout
@@ -18,8 +18,8 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             app:srcCompat="@drawable/logo_vector"
             android:contentDescription="@string/logo" />
 
@@ -57,15 +57,17 @@
             android:layout_marginBottom="25dp"
 
             android:drawableLeft="@drawable/phone"
-
-            android:text="@string/phone_login" />
+            android:text="@string/phone_login"
+            android:drawablePadding="5dp"/>
 
         <Button
             android:id="@+id/btn_email"
             style="@style/WelcomeButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/email_login" />
+            android:text="@string/email_login"
+            android:drawableLeft="@drawable/email"
+            android:drawablePadding="5dp"/>
 
     </LinearLayout>
 

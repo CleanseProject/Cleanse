@@ -2,6 +2,8 @@ package com.cleanseproject.cleanse.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,11 +22,16 @@ private ArrayList<Event>listaEventos;
     @NonNull
     @Override
     public AdaptadorRecyclerViews.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return null;
+        View view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.vista_evento,null,false);
+
+
+        return new MyViewHolder(view);
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder myViewHolder, int i) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int i) {
+        holder.asignarDatos(listaEventos.get(i));
 
     }
 
@@ -39,14 +46,21 @@ private ArrayList<Event>listaEventos;
         // each data item is just a string in this case
         public TextView txtTitulo;
         public ImageView btnLike,btnShare,ivFoto;
-        public MyViewHolder(TextView v, ImageView btnLike,ImageView btnShare, ImageView ivFoto) {
+        public MyViewHolder(View v) {
 
             super(v);
-            this.txtTitulo = v;
-            this.btnLike=btnLike;
-            this.btnShare=btnShare;
-            this.ivFoto=ivFoto;
+            txtTitulo=v.findViewById(R.id.txtTitulo);
+            btnLike=v.findViewById(R.id.btnLike);
+            btnShare=v.findViewById(R.id.btnShare);
+            ivFoto=v.findViewById(R.id.ivFoto);
 
         }
+
+        public void asignarDatos(Event event) {
+
+            txtTitulo.setText(event.getName());
+            //ivFoto.setImage
+
+            }
     }
 }
