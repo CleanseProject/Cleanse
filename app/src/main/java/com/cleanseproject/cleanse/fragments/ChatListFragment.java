@@ -1,6 +1,5 @@
 package com.cleanseproject.cleanse.fragments;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -11,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.cleanseproject.cleanse.R;
+import com.cleanseproject.cleanse.activities.HomeActivity;
 import com.cleanseproject.cleanse.adapters.ChatListAdapter;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,7 +27,6 @@ public class ChatListFragment extends Fragment {
 
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
-    private ProgressDialog progressDialog;
 
     private ListView chatList;
 
@@ -48,11 +47,7 @@ public class ChatListFragment extends Fragment {
     }
 
     private void getUserChats() {
-        progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setTitle("Chats");
-        progressDialog.setMessage("Cargando...");
-        progressDialog.setIndeterminate(false);
-        progressDialog.show();
+        ((HomeActivity) getActivity()).showLoading();
         Log.d("id", firebaseUser.getUid());
 
         DatabaseReference userChats = firebaseDatabase.getReference("userChats").child(firebaseUser.getUid());
@@ -94,7 +89,7 @@ public class ChatListFragment extends Fragment {
     private void populateList(ArrayList<User> users) {
         ChatListAdapter chatListAdapter = new ChatListAdapter(getActivity(), users);
         chatList.setAdapter(chatListAdapter);
-        progressDialog.dismiss();
+        ((HomeActivity) getActivity()).showLoading();
     }
 
 }

@@ -16,11 +16,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.fragments.ChatListFragment;
 import com.cleanseproject.cleanse.fragments.HomeFragment;
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -57,8 +59,11 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_home);
         initializeUI();
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
     }
 
     @Override
@@ -104,6 +109,10 @@ public class HomeActivity extends AppCompatActivity {
         transaction.replace(R.id.content_frame, newFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    public void showLoading(){
+        setProgressBarIndeterminateVisibility(Boolean.TRUE);
     }
 
 }
