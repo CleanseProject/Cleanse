@@ -1,4 +1,4 @@
-package com.cleanseproject.cleanse;
+package com.cleanseproject.cleanse.adapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Event;
 
 import java.util.ArrayList;

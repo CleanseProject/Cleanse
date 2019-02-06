@@ -16,9 +16,9 @@
     </style>
     
     <style name="CleanseEditText" parent="Base.Widget.AppCompat.EditText">
-        <item name="android:colorAccent">@color/prueba</item>
-        <item name="android:colorControlHighlight">@color/prueba</item>
-        <item name="android:colorControlActivated">@color/prueba</item>
+        <item name="android:colorAccent">@color/colorPrimary</item>
+        <item name="android:colorControlHighlight">@color/colorPrimary</item>
+        <item name="android:colorControlActivated">@color/colorPrimary</item>
     </style>
 
 </resources>

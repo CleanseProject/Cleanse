@@ -1,7 +1,5 @@
-package com.cleanseproject.cleanse;
+package com.cleanseproject.cleanse.activities;
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,10 +15,13 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.Window;
 
+import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.fragments.ChatListFragment;
 import com.cleanseproject.cleanse.fragments.HomeFragment;
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -56,7 +58,10 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_home);
+        Intent intent = getIntent();
         initializeUI();
     }
 
@@ -80,29 +85,30 @@ public class HomeActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
-            Fragment newFragment;
-            FragmentTransaction transaction = getFragmentManager().beginTransaction();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:
-                    newFragment = new HomeFragment();
-                    transaction.replace(R.id.content_frame, newFragment);
+                    transaction.replace(R.id.content_frame, new HomeFragment());
                     transaction.addToBackStack(null);
                     transaction.commit();
+                    break;
                 case R.id.nav_chats:
-                    newFragment = new ChatListFragment();
-                    transaction.replace(R.id.content_frame, newFragment);
+                    transaction.replace(R.id.content_frame, new ChatListFragment());
                     transaction.addToBackStack(null);
                     transaction.commit();
+                    break;
             }
             drawerLayout.closeDrawers();
             return true;
         });
-        Fragment newFragment;
-        FragmentTransaction transaction = getFragmentManager().beginTransaction();
-        newFragment = new HomeFragment();
-        transaction.replace(R.id.content_frame, newFragment);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.content_frame, new HomeFragment());
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    public void showLoading(){
+        setProgressBarIndeterminateVisibility(Boolean.TRUE);
     }
 
 }

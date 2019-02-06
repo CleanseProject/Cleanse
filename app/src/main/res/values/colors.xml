@@ -2,8 +2,9 @@
 <resources>
     <color name="colorPrimary">#343890</color>
     <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorSecundario">#81F1B2</color>
+    <color name="colorBlanco">#FFFFFF</color>
     <color name="colorAccent">#D81B60</color>
-    <color name="prueba">#343890</color>
     <color name="verdehojainterno">#00913e</color>
     <color name="verdehojaexterno">#00ce53</color>
 </resources>

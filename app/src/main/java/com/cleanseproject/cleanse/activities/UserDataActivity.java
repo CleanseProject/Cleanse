@@ -1,10 +1,11 @@
-package com.cleanseproject.cleanse;
+package com.cleanseproject.cleanse.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;

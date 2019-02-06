@@ -5,8 +5,8 @@
     android:id="@+id/relativelayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/prueba"
-    tools:context=".SplashScreen">
+    android:background="@color/colorPrimary"
+    tools:context=".activities.SplashScreen">
 
 
     <FrameLayout
