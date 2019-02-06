@@ -16,9 +16,11 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -95,16 +97,13 @@ public class HomeActivity extends AppCompatActivity {
 
         rvEventos=findViewById(R.id.rv_Eventos);
         FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<InstanceIdResult> task) {
-                        if (!task.isSuccessful()) {
-                            Log.w("MyFirebaseMsgService", "getInstanceId failed", task.getException());
-                            return;
-                        }
-                        String token = task.getResult().getToken();
-                        Log.d("FCMToken", token);
+                .addOnCompleteListener(task -> {
+                    if (!task.isSuccessful()) {
+                        Log.w("MyFirebaseMsgService", "getInstanceId failed", task.getException());
+                        return;
                     }
+                    String token = task.getResult().getToken();
+                    Log.d("FCMToken", token);
                 });
     }
 
