@@ -1,5 +1,6 @@
-package com.cleanseproject.cleanse;
+package com.cleanseproject.cleanse.adapters;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Event;
 
 import java.util.ArrayList;
@@ -37,29 +39,30 @@ private ArrayList<Event>listaEventos;
 
     @Override
     public int getItemCount() {
-        return 0;
+        return listaEventos.size();
     }
 
 
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
+
         public TextView txtTitulo;
         public ImageView btnLike,btnShare,ivFoto;
         public MyViewHolder(View v) {
 
             super(v);
-            txtTitulo=v.findViewById(R.id.txtTitulo);
+            txtTitulo=v.findViewById(R.id.tvTitulo);
             btnLike=v.findViewById(R.id.btnLike);
             btnShare=v.findViewById(R.id.btnShare);
-            ivFoto=v.findViewById(R.id.ivFoto);
+            ivFoto=v.findViewById(R.id.ivEvento);
 
         }
 
         public void asignarDatos(Event event) {
 
             txtTitulo.setText(event.getName());
-            //ivFoto.setImage
+            Uri url= Uri.parse(event.getPhoto());
+            ivFoto.setImageURI(url);
 
             }
     }
