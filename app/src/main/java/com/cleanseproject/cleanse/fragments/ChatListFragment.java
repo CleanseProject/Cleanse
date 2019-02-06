@@ -4,18 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ListView;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.ChatActivity;
-import com.cleanseproject.cleanse.activities.HomeActivity;
 import com.cleanseproject.cleanse.adapters.ChatListAdapter;
-import com.cleanseproject.cleanse.adapters.MessageListAdapter;
 import com.cleanseproject.cleanse.dataClasses.Chat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,12 +19,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class ChatListFragment extends Fragment {
 

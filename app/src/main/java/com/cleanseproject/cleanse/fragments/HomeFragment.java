@@ -1,7 +1,5 @@
 package com.cleanseproject.cleanse.fragments;
 
-import android.app.Fragment;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -60,8 +58,8 @@ public class HomeFragment extends Fragment {
         ArrayList<Event>listaEventos=new ArrayList<>();
 
 
-        listaEventos.add(new Event("Carlosssssssssssssss","","C:\\Users\\ruizv\\Desktop","",""));
-        listaEventos.add(new Event("Adrián","","C:\\Users\\ruizv\\Desktop","",""));
+        listaEventos.add(new Event("Carlosssssssssssssss","","","",""));
+        listaEventos.add(new Event("Adrián","","","",""));
         return  listaEventos;
     }
 

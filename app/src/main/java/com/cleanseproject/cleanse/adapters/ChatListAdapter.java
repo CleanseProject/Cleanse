@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Chat;
-import com.cleanseproject.cleanse.dataClasses.User;
 
 import java.util.ArrayList;
 
