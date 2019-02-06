@@ -15,16 +15,20 @@ import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.ChatActivity;
 import com.cleanseproject.cleanse.activities.HomeActivity;
 import com.cleanseproject.cleanse.adapters.ChatListAdapter;
-import com.cleanseproject.cleanse.dataClasses.User;
+import com.cleanseproject.cleanse.adapters.MessageListAdapter;
+import com.cleanseproject.cleanse.dataClasses.Chat;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class ChatListFragment extends Fragment {
 
@@ -32,6 +36,7 @@ public class ChatListFragment extends Fragment {
     private FirebaseDatabase firebaseDatabase;
 
     private ListView chatList;
+    private ChatListAdapter chatListAdapter;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,45 +52,29 @@ public class ChatListFragment extends Fragment {
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         getUserChats();
-        Button btnChat = view.findViewById(R.id.btn_act_chat);
-        btnChat.setOnClickListener(v -> {
+        chatList.setOnItemClickListener((parent, v, position, id) -> {
+            Chat chat = chatListAdapter.getItem(position);
             Intent intent = new Intent(getActivity(), ChatActivity.class);
-            intent.putExtra("chatuid", "4254312");
+            intent.putExtra("chatuid", chat.getChatUid());
             startActivity(intent);
         });
     }
 
     private void getUserChats() {
-        ((HomeActivity) getActivity()).showLoading();
-        Log.d("id", firebaseUser.getUid());
-
-        DatabaseReference userChats = firebaseDatabase.getReference("userChats").child(firebaseUser.getUid());
+        DatabaseReference userChats = firebaseDatabase.getReference();
         userChats.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<String> userIds = new ArrayList<>();
-                if (dataSnapshot.exists()) {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Log.d("firebaseUid", snapshot.getKey());
-                        userIds.add(snapshot.getKey());
-                        DatabaseReference user = firebaseDatabase.getReference("users");
-                        user.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                ArrayList<User> users = new ArrayList<>();
-                                for (String uid : userIds) {
-                                    users.add(dataSnapshot.child(uid).getValue(User.class));
-                                }
-                                populateList(users);
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
+                DataSnapshot userChatsData = dataSnapshot.child("userChats").child(firebaseUser.getUid());
+                for (DataSnapshot userChat:userChatsData.getChildren()){
                 }
+                /*for (String chatId : userChats) {
+                    Log.d("chatid", chatId);
+                    Chat chat = dataSnapshot.child("chats").child(chatId).getValue(Chat.class);
+                    chat.setChatUid(chatId);
+                    chats.add(chat);
+                }
+                populateList(chats);*/
             }
 
             @Override
@@ -95,10 +84,9 @@ public class ChatListFragment extends Fragment {
         });
     }
 
-    private void populateList(ArrayList<User> users) {
-        ChatListAdapter chatListAdapter = new ChatListAdapter(getActivity(), users);
+    private void populateList(ArrayList<Chat> chats) {
+        chatListAdapter = new ChatListAdapter(getActivity(), chats);
         chatList.setAdapter(chatListAdapter);
-        ((HomeActivity) getActivity()).showLoading();
     }
 
 }

@@ -107,8 +107,5 @@ public class HomeActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    public void showLoading(){
-        setProgressBarIndeterminateVisibility(Boolean.TRUE);
-    }
 
 }
