@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.Window;
+import android.widget.ImageButton;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.fragments.ChatListFragment;
@@ -109,6 +110,7 @@ public class HomeActivity extends AppCompatActivity {
         transaction.replace(R.id.content_frame, new HomeFragment());
         transaction.addToBackStack(null);
         transaction.commit();
+
     }
 
 
