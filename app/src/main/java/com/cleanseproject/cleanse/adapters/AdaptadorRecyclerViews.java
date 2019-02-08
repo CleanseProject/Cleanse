@@ -55,6 +55,7 @@ private ArrayList<Event>listaEventos;
         public TextView txtTitulo;
         public ImageView ivFoto;
         public ImageButton btnLike, btnShare;
+        public boolean liked;
         public MyViewHolder(View v) {
 
             super(v);
@@ -62,6 +63,7 @@ private ArrayList<Event>listaEventos;
             btnLike=v.findViewById(R.id.btnLike);
             btnShare=v.findViewById(R.id.btnShare);
             ivFoto=v.findViewById(R.id.ivEvento);
+            liked=false;
 
         }
 
@@ -72,14 +74,23 @@ private ArrayList<Event>listaEventos;
 
             ivFoto.setBackgroundResource(R.drawable.imagen);
 
+
             btnLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    //btnLike.setImageResource(R.drawable.corazon_rosa);
+                    if (!liked){
+                        btnLike.setImageResource(R.drawable.corazon_rosa);
+                        liked=true;
 
+                    }else{
+                        liked=false;
+                        btnLike.setImageResource(R.drawable.corazon_azul);
+                    }
 
                 }
             });
             }
+
     }
+
 }
