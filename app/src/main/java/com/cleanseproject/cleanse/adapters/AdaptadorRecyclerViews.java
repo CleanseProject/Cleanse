@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,13 +53,13 @@ private ArrayList<Event>listaEventos;
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView txtTitulo;
-        public ImageView btnLike,btnlikeRosa,btnShare,ivFoto;
+        public ImageView ivFoto;
+        public ImageButton btnLike, btnShare;
         public MyViewHolder(View v) {
 
             super(v);
             txtTitulo=v.findViewById(R.id.tvTitulo);
             btnLike=v.findViewById(R.id.btnLike);
-            btnlikeRosa=v.findViewById(R.id.btnLike2);
             btnShare=v.findViewById(R.id.btnShare);
             ivFoto=v.findViewById(R.id.ivEvento);
 
@@ -74,7 +75,8 @@ private ArrayList<Event>listaEventos;
             btnLike.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    btnLike.setImageResource(R.drawable.corazon_rosa);
+                    //btnLike.setImageResource(R.drawable.corazon_rosa);
+
 
                 }
             });
