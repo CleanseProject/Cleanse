@@ -1,6 +1,12 @@
 package com.cleanseproject.cleanse.adapters;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,30 +44,40 @@ private ArrayList<Event>listaEventos;
 
     @Override
     public int getItemCount() {
-        return 0;
+        return listaEventos.size();
     }
 
 
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
+
         public TextView txtTitulo;
-        public ImageView btnLike,btnShare,ivFoto;
+        public ImageView btnLike,btnlikeRosa,btnShare,ivFoto;
         public MyViewHolder(View v) {
 
             super(v);
-            txtTitulo=v.findViewById(R.id.txtTitulo);
+            txtTitulo=v.findViewById(R.id.tvTitulo);
             btnLike=v.findViewById(R.id.btnLike);
+            btnlikeRosa=v.findViewById(R.id.btnLike2);
             btnShare=v.findViewById(R.id.btnShare);
-            ivFoto=v.findViewById(R.id.ivFoto);
+            ivFoto=v.findViewById(R.id.ivEvento);
 
         }
 
         public void asignarDatos(Event event) {
 
             txtTitulo.setText(event.getName());
-            //ivFoto.setImage
 
+
+            ivFoto.setBackgroundResource(R.drawable.imagen);
+
+            btnLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    btnLike.setImageResource(R.drawable.corazon_rosa);
+
+                }
+            });
             }
     }
 }
