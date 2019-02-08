@@ -8,28 +8,28 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
-import com.cleanseproject.cleanse.dataClasses.User;
+import com.cleanseproject.cleanse.dataClasses.Chat;
 
 import java.util.ArrayList;
 
 public class ChatListAdapter extends BaseAdapter {
 
     private Context context;
-    private ArrayList<User> userRows;
+    private ArrayList<Chat> chatRows;
 
-    public ChatListAdapter(Context context, ArrayList<User> userRows) {
+    public ChatListAdapter(Context context, ArrayList<Chat> chatRows) {
         this.context = context;
-        this.userRows = userRows;
+        this.chatRows = chatRows;
     }
 
     @Override
     public int getCount() {
-        return userRows.size();
+        return chatRows.size();
     }
 
     @Override
-    public User getItem(int position) {
-        return userRows.get(position);
+    public Chat getItem(int position) {
+        return chatRows.get(position);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class ChatListAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.row_chat_list, null);
         TextView lblName = view.findViewById(R.id.chat_row_username);
-        lblName.setText(userRows.get(position).getName() + userRows.get(position).getSurname());
+        lblName.setText(chatRows.get(position).getChatUid());
         return view;
     }
 
@@ -49,7 +49,7 @@ public class ChatListAdapter extends BaseAdapter {
         return context;
     }
 
-    public ArrayList<User> getUserRows() {
-        return userRows;
+    public ArrayList<Chat> getUserRows() {
+        return chatRows;
     }
 }

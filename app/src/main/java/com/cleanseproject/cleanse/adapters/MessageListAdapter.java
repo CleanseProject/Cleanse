@@ -67,8 +67,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemViewType(int position) {
         Message message = messages.get(position);
-
-        if (message.getUser().getUid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+        if (message.getUser().equals(FirebaseAuth.getInstance().getCurrentUser().getUid())) {
             // If the current user is the sender of the message
             return VIEW_TYPE_MESSAGE_SENT;
         } else {
@@ -85,9 +84,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
         SentMessageHolder(View itemView) {
             super(itemView);
-
-            messageText = (TextView) itemView.findViewById(R.id.text_message_body);
-            timeText = (TextView) itemView.findViewById(R.id.text_message_time);
+            messageText = itemView.findViewById(R.id.text_message_body);
+            timeText = itemView.findViewById(R.id.text_message_time);
         }
 
         void bind(Message message) {
@@ -115,10 +113,10 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
             // Format the stored timestamp into a readable String using method.
             //timeText.setText(Utils.formatDateTime(message.getCreatedAt()));
-            nameText.setText(message.getUser().getDisplayName());
+            nameText.setText("Nombre");
 
             // Insert the profile image from the URL into the ImageView.
-            //Utils.displayRoundImageFromUrl(mContext, message.getSender().getProfileUrl(), profileImage);
+            //Utils.displayRoundImageFromUrl(context, message.getSender().getProfileUrl(), profileImage);
         }
     }
 
