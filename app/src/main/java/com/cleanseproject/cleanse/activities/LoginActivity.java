@@ -232,6 +232,7 @@ public class LoginActivity extends AppCompatActivity {
             intent.putExtra("username", user.getPhoneNumber());
         }
         startActivity(intent);
+        finish();
     }
 
     private void errorInicioSesion() {

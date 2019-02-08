@@ -34,6 +34,11 @@ public class HomeActivity extends AppCompatActivity {
                 .registerReceiver(onEvent, f);
     }
 
+    @Override
+    public void onBackPressed(){
+
+    }
+
     private BroadcastReceiver onEvent = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent i) {
             //if (i.getAction() != null && i.getAction() != MyFirebaseMessagingService.NOTIFICATION) {

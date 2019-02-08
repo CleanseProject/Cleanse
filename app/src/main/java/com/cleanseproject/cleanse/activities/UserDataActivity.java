@@ -1,5 +1,6 @@
 package com.cleanseproject.cleanse.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
@@ -37,6 +38,10 @@ public class UserDataActivity extends AppCompatActivity {
         DatabaseReference userReference = firebaseDatabase.getReference("users");
         FirebaseUser user = firebaseAuth.getCurrentUser();
         userReference.child(user.getUid()).setValue(new User(user.getUid(), name, surname, ""));
+        Intent intent = new Intent(UserDataActivity.this, HomeActivity.class);
+        intent.putExtra("username", user);
+        startActivity(intent);
+        finish();
     }
 
 }
