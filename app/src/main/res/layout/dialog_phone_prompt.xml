@@ -59,8 +59,8 @@
 
         <Button
             android:id="@+id/btn_login_phone"
-            style="@style/WelcomeButton"
-            android:layout_width="wrap_content"
+            style="@style/ButtonConImagen"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:enabled="true"

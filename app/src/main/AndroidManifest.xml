@@ -10,10 +10,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".activities.ChatActivity"></activity>
-        <activity android:name=".activities.UserDataActivity" />
-        <activity android:name=".activities.HomeActivity" />
-        <activity android:name=".activities.SplashScreen">
+        <activity android:name=".activities.ChatActivity" android:screenOrientation="portrait"></activity>
+        <activity android:name=".activities.UserDataActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.HomeActivity" android:screenOrientation="portrait"/>
+        <activity android:name=".activities.SplashScreen" android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -39,10 +39,11 @@
                     android:scheme="cleanse" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.WelcomeActivity" />
+        <activity android:name=".activities.WelcomeActivity" android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.LoginActivity"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait"/>
 
         <service android:name=".services.CleanseFirebaseMessagingService">
             <intent-filter>

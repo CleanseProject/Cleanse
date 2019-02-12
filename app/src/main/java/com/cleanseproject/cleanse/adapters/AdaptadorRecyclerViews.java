@@ -1,10 +1,17 @@
 package com.cleanseproject.cleanse.adapters;
 
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.ColorFilter;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.ImageViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -46,7 +53,9 @@ private ArrayList<Event>listaEventos;
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
         public TextView txtTitulo;
-        public ImageView btnLike,btnShare,ivFoto;
+        public ImageView ivFoto;
+        public ImageButton btnLike, btnShare;
+        public boolean liked;
         public MyViewHolder(View v) {
 
             super(v);
@@ -54,6 +63,7 @@ private ArrayList<Event>listaEventos;
             btnLike=v.findViewById(R.id.btnLike);
             btnShare=v.findViewById(R.id.btnShare);
             ivFoto=v.findViewById(R.id.ivEvento);
+            liked=false;
 
         }
 
@@ -61,9 +71,26 @@ private ArrayList<Event>listaEventos;
 
             txtTitulo.setText(event.getName());
 
-           //Uri url= Uri.parse(event.getPhoto());
+
             ivFoto.setBackgroundResource(R.drawable.imagen);
 
+
+            btnLike.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!liked){
+                        btnLike.setImageResource(R.drawable.corazon_rosa);
+                        liked=true;
+
+                    }else{
+                        liked=false;
+                        btnLike.setImageResource(R.drawable.corazon_azul);
+                    }
+
+                }
+            });
             }
+
     }
+
 }
