@@ -36,6 +36,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -203,6 +204,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void iniciarSesion(FirebaseUser user) {
+        FirebaseMessaging.getInstance().subscribeToTopic("user_" + user.getUid());
         Log.d("mail", user.getDisplayName() + " " + user.getPhoneNumber());
         DatabaseReference userReference = firebaseDatabase.getReference("users");
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -228,7 +230,7 @@ public class LoginActivity extends AppCompatActivity {
         if (user.getEmail() != null) {
             intent.putExtra("username", user.getEmail());
         } else if (user.getPhoneNumber() != null) {
-            intent = new Intent(LoginActivity.this,UserDataActivity.class);
+            intent = new Intent(LoginActivity.this, UserDataActivity.class);
             intent.putExtra("username", user.getPhoneNumber());
         }
         startActivity(intent);

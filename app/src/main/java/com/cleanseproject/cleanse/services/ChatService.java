@@ -64,6 +64,22 @@ public class ChatService {
         DatabaseReference chatMessages = firebaseDatabase.getReference("chatMessages");
         chatMessages.child(chat.getChatUid()).push().setValue(new Message(message, firebaseUser.getUid(), System.currentTimeMillis()));
         getMessages();
+        DatabaseReference chatUsers = firebaseDatabase.getReference("chats/" + chat.getChatUid() + "/members");
+        chatUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataUser : dataSnapshot.getChildren()) {
+                    String user = dataUser.getValue().toString();
+                    if (!user.equals(firebaseUser.getUid()))
+                        sendNotificationToUser(user, firebaseUser.getDisplayName() + ": " + message);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void getMessages() {
@@ -88,7 +104,6 @@ public class ChatService {
     }
 
     public static void sendNotificationToUser(String user, final String message) {
-//        FirebaseMessaging.getInstance().subscribeToTopic("user_" + username);
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference notifications = ref.child("notificationRequests");
         Map<String, String> notification = new HashMap<>();
