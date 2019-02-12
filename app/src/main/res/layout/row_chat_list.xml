@@ -9,13 +9,12 @@
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:src="@drawable/circle"
-        android:maxWidth="45dp"
-        android:maxHeight="45dp"
+        android:maxWidth="50dp"
+        android:maxHeight="50dp"
         android:adjustViewBounds="true"
-        android:layout_margin="20dp"/>
+        android:layout_margin="15dp"/>
 
     <TextView android:id="@+id/chat_row_username"
-        android:text="Patata"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:textColor="#000"

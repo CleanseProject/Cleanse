@@ -13,7 +13,9 @@ public class CleanseFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Intent intent = new Intent(NOTIFICATION);
-        intent.putExtra("title", remoteMessage.getNotification().getTitle());
+        String notificationTitle = remoteMessage.getNotification().getTitle();
+        if (notificationTitle != null)
+            intent.putExtra("title", notificationTitle);
         intent.putExtra("body", remoteMessage.getNotification().getBody());
         LocalBroadcastManager.getInstance(this)
                 .sendBroadcast(intent);
