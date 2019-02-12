@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="215dp"
+        android:background="@drawable/imagen">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/imagen"/>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/scrim"/>
+
+        <TextView
+            android:id="@+id/txtTituloImagen"
+            android:layout_width="246dp"
+            android:layout_height="47dp"
+            android:layout_gravity="bottom"
+            android:paddingLeft="10dp"
+            android:text="TextView"
+            android:textColor="@color/colorBlanco"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtDistancia"
+            android:layout_width="wrap_content"
+            android:layout_height="47dp"
+            android:layout_gravity="bottom|right"
+            android:text="TextView"
+            android:textColor="@color/colorBlanco"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="431dp"
+        android:padding="20dp"
+        android:text="TextView" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnLikeSeleccionado"
+            android:layout_width="65dp"
+            android:layout_height="49dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="20dp"
+            android:layout_weight="1"
+            android:background="@null"
+            app:srcCompat="@drawable/corazon_azul" />
+
+        <ImageButton
+            android:id="@+id/btnVoy"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@null"
+            app:srcCompat="@drawable/chat_bubble_received" />
+
+        <ImageButton
+            android:id="@+id/btnShareSeleccionado"
+            android:layout_width="54dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:background="@null"
+            app:srcCompat="@drawable/icono_share_boton" />
+
+    </LinearLayout>
+
+</LinearLayout>
