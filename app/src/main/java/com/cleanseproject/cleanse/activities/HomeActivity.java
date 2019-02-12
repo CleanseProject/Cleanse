@@ -16,11 +16,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.Window;
-import android.widget.ImageButton;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.fragments.ChatListFragment;
 import com.cleanseproject.cleanse.fragments.HomeFragment;
+import com.cleanseproject.cleanse.fragments.MapFragment;
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
 
 public class HomeActivity extends AppCompatActivity {
@@ -33,6 +33,11 @@ public class HomeActivity extends AppCompatActivity {
         IntentFilter f = new IntentFilter(CleanseFirebaseMessagingService.NOTIFICATION);
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(onEvent, f);
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 
     private BroadcastReceiver onEvent = new BroadcastReceiver() {
@@ -63,6 +68,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         Intent intent = getIntent();
         initializeUI();
+
     }
 
     @Override
@@ -87,6 +93,7 @@ public class HomeActivity extends AppCompatActivity {
             menuItem.setChecked(true);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (menuItem.getItemId()) {
+
                 case R.id.nav_home:
                     transaction.replace(R.id.content_frame, new HomeFragment());
                     transaction.addToBackStack(null);
@@ -97,6 +104,12 @@ public class HomeActivity extends AppCompatActivity {
                     transaction.addToBackStack(null);
                     transaction.commit();
                     break;
+                case R.id.nav_map:
+                    transaction.replace(R.id.content_frame, new MapFragment());
+                    transaction.addToBackStack(null);
+                    transaction.commit();
+
+
             }
             drawerLayout.closeDrawers();
             return true;
