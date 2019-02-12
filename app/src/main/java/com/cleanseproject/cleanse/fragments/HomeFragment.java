@@ -58,7 +58,7 @@ public class HomeFragment extends Fragment {
         ArrayList<Event>listaEventos=new ArrayList<>();
 
 
-        listaEventos.add(new Event("Carlosssssssssssssss","","","",""));
+        listaEventos.add(new Event("Playa inventada","","","",""));
         listaEventos.add(new Event("Adrián","","","",""));
         return  listaEventos;
     }
