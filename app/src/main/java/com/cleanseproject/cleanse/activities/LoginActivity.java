@@ -251,7 +251,7 @@ public class LoginActivity extends AppCompatActivity {
     private boolean emailCorrecto;
     private boolean pswdCorrecta;
 
-    private void initializeEmailUI() {
+    public void initializeEmailUI() {
         setContentView(R.layout.activity_email_login);
         btnLogIn = findViewById(R.id.btn_login);
         btnSignUp = findViewById(R.id.btn_sign_up);
