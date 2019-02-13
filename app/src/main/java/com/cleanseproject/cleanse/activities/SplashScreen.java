@@ -25,7 +25,11 @@ public class SplashScreen extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
-         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        try {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         firebaseAuth = FirebaseAuth.getInstance();
         TextView txtTituloo = findViewById(R.id.txtTitulo);
         SpannableString ss = new SpannableString("C l e a n S e");

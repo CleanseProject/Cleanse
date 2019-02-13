@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.stream.StreamSupport;
 
 public class ChatListFragment extends Fragment {
 
@@ -55,19 +57,23 @@ public class ChatListFragment extends Fragment {
 
     private void getUserChats() {
         DatabaseReference userChats = firebaseDatabase.getReference();
-        userChats.addListenerForSingleValueEvent(new ValueEventListener() {
+        userChats.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                Log.d("chatid", firebaseUser.getUid());
                 DataSnapshot userChatsData = dataSnapshot.child("userChats").child(firebaseUser.getUid());
-                for (DataSnapshot userChat:userChatsData.getChildren()){
-                }
-                /*for (String chatId : userChats) {
+                ArrayList<Chat> chats = new ArrayList<>();
+                for (DataSnapshot objChatId : userChatsData.getChildren()) {
+                    String chatId = objChatId.getValue().toString();
                     Log.d("chatid", chatId);
                     Chat chat = dataSnapshot.child("chats").child(chatId).getValue(Chat.class);
-                    chat.setChatUid(chatId);
-                    chats.add(chat);
+                    if (chat != null) {
+                        chat.setChatUid(chatId);
+                        chats.add(chat);
+                    }
                 }
-                populateList(chats);*/
+                populateList(chats);
             }
 
             @Override
