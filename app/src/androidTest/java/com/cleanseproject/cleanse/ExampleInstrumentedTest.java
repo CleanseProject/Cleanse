@@ -7,6 +7,7 @@ import android.widget.EditText;
 
 import com.cleanseproject.cleanse.activities.LoginActivity;
 
+import androidx.test.espresso.action.ViewActions;
 
 
 /**
@@ -26,13 +27,18 @@ public class ExampleInstrumentedTest extends ActivityInstrumentationTestCase2<Lo
     protected void setUp() throws Exception {
         super.setUp();
         LoginActivity actividad = getActivity();
+        try {
+            runTestOnUiThread(actividad::initializeEmailUI);
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
         etext1 = actividad.findViewById(R.id.txt_email);
         etext2 = actividad.findViewById(R.id.txt_pswd);
         mloginbutton = actividad.findViewById(R.id.btn_login);
 
     }
-    private static final String USERNAME = "ernesto";
-    private static final String PASSWORD = "123456";
+    private static final String USERNAME = "julenbujanda@me.com";
+    private static final String PASSWORD = "contrasena";
 
     public void testLoginSignup() {
         TouchUtils.tapView(this, etext1);
@@ -42,7 +48,6 @@ public class ExampleInstrumentedTest extends ActivityInstrumentationTestCase2<Lo
         getInstrumentation().sendStringSync(PASSWORD);
         // now on Add button
         TouchUtils.tapView(this, mloginbutton);
-
     }
 
 
