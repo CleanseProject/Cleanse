@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -248,16 +249,18 @@ public class LoginActivity extends AppCompatActivity {
     private TextView lblForgotPassword;
     private EditText txtEMail;
     private EditText txtPassword;
+    private ProgressBar progressBar;
     private boolean emailCorrecto;
     private boolean pswdCorrecta;
 
-    private void initializeEmailUI() {
+    public void initializeEmailUI() {
         setContentView(R.layout.activity_email_login);
         btnLogIn = findViewById(R.id.btn_login);
         btnSignUp = findViewById(R.id.btn_sign_up);
         txtEMail = findViewById(R.id.txt_email);
         txtPassword = findViewById(R.id.txt_pswd);
         lblForgotPassword = findViewById(R.id.lbl_forgot_password);
+        progressBar = findViewById(R.id.sign_in_pb);
         btnLogIn.setOnClickListener(v -> logIn(txtEMail.getText().toString(), txtPassword.getText().toString()));
         btnSignUp.setOnClickListener(v -> signUp(txtEMail.getText().toString(), txtPassword.getText().toString()));
         lblForgotPassword.setOnClickListener(v -> newAccount());
@@ -313,6 +316,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void logIn(String email, String password) {
+        progressBar.setVisibility(View.VISIBLE);
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -335,18 +339,21 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void signUp(String email, String password) {
+        progressBar.setVisibility(View.VISIBLE);
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = task.getResult().getUser();
                         user.sendEmailVerification()
                                 .addOnCompleteListener(t -> {
+                                    progressBar.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
                                         Toast.makeText(LoginActivity.this, "Verification email sent",
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 });
                     } else {
+                        progressBar.setVisibility(View.GONE);
                         Toast.makeText(LoginActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
                     }
