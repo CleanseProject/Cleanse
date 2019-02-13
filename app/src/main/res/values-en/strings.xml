@@ -16,6 +16,6 @@
     <string name="add_new_event">Add new event</string>
     <string name="select_location">Select location</string>
     <string name="close">Close</string>
-    <string name="select_photo">Select photo</string>
     <string name="select_date">Select date</string>
+    <string name="select_photo">Select photo</string>
 </resources>
