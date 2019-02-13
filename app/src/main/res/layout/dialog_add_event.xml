@@ -8,36 +8,37 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_close_black_30dp"
-        android:layout_gravity="end" />
+        android:layout_gravity="end"
+        android:src="@drawable/ic_close_black_30dp"
+        android:contentDescription="@string/close" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/montserrat"
-        android:text="Add new event"
+        android:text="@string/add_new_event"
         android:textColor="#000"
-        android:textSize="20dp" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/txt_dialog_location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select location"
+        android:text="@string/select_location"
         android:textColor="#000" />
 
     <TextView
         android:id="@+id/txt_dialog_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select date"
+        android:text="@string/select_date"
         android:textColor="#000" />
 
     <TextView
         android:id="@+id/txt_dialog_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Select date"
+        android:text="@string/select_date"
         android:textColor="#000" />
 
     <android.support.design.widget.TextInputLayout
@@ -48,13 +49,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="top"
-            android:hint="Description" />
+            android:hint="@string/description" />
     </android.support.design.widget.TextInputLayout>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:text="Add" />
+        android:text="@string/add" />
 
 </LinearLayout>
