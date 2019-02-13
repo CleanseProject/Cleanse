@@ -15,7 +15,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/montserrat"
         android:text="@string/add_new_event"
         android:textColor="#000"
         android:textSize="20sp" />
@@ -38,7 +37,7 @@
         android:id="@+id/txt_dialog_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/select_date"
+        android:text="@string/select_photo"
         android:textColor="#000" />
 
     <android.support.design.widget.TextInputLayout

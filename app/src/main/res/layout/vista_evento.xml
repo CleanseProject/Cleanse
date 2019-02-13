@@ -7,11 +7,7 @@
     android:layout_margin="10dp"
     android:orientation="vertical"
     android:padding="20dp"
-
-
-    app:cardUseCompatPadding="true"
-
-    >
+    app:cardUseCompatPadding="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,7 +40,6 @@
                     android:layout_marginTop="5dp"
                     android:layout_marginRight="5dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/montserrat"
                     android:text="Prueba"
                     android:textSize="24sp" />
 
@@ -54,7 +49,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_weight="1"
-                    android:fontFamily="@font/montserrat"
                     android:text="5 km" />
             </LinearLayout>
 
