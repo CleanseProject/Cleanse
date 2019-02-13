@@ -125,6 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                 txt_phonee.setHint("Type your code");
                 txtNumeroRegion.setText("");
                 btn_Login_phone.setText("Verify");
+                btn_Login_phone.setEnabled(false);
 
             }
         });
@@ -156,11 +157,14 @@ public class LoginActivity extends AppCompatActivity {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("phone", "signInWithCredential:success");
                         iniciarSesion(task.getResult().getUser());
+                        btn_Login_phone.setEnabled(false);
                     } else {
                         // Sign in failed, display a message and update the UI
                         Log.w("phone", "signInWithCredential:failure", task.getException());
+                        btn_Login_phone.setEnabled(true);
                         if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                             // The verification code entered was invalid
+                            btn_Login_phone.setEnabled(true);
                         }
                     }
                 });
@@ -212,9 +216,11 @@ public class LoginActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(user.getUid())) {
                     cambiarActividad(user);
+
                 } else {
                     userReference.child(user.getUid()).setValue(new User());
                     startActivity(new Intent(LoginActivity.this, UserDataActivity.class));
+
                 }
             }
 
@@ -313,6 +319,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void logIn(String email, String password) {
+        btnLogIn.setEnabled(false);
+        btnSignUp.setEnabled(false);
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -325,16 +333,24 @@ public class LoginActivity extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             Toast.makeText(LoginActivity.this, "Please verify your email",
                                                     Toast.LENGTH_LONG).show();
+                                            btnLogIn.setEnabled(true);
+                                            btnSignUp.setEnabled(true);
                                         }
                                     });
                         }
                     } else {
+                        btnLogIn.setEnabled(true);
+                        btnSignUp.setEnabled(true);
+                        Toast.makeText(LoginActivity.this, "E-Mail/Password incorrect, please try again",
+                                Toast.LENGTH_LONG).show();
                         // TODO: credenciales incorrectas
                     }
                 });
     }
 
     private void signUp(String email, String password) {
+        btnLogIn.setEnabled(false);
+        btnSignUp.setEnabled(false);
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -344,9 +360,13 @@ public class LoginActivity extends AppCompatActivity {
                                     if (task.isSuccessful()) {
                                         Toast.makeText(LoginActivity.this, "Verification email sent",
                                                 Toast.LENGTH_SHORT).show();
+                                        btnLogIn.setEnabled(true);
+                                        btnSignUp.setEnabled(true);
                                     }
                                 });
                     } else {
+                        btnLogIn.setEnabled(true);
+                        btnSignUp.setEnabled(true);
                         Toast.makeText(LoginActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
                     }
