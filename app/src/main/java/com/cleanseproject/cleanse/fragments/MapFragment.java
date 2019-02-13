@@ -20,7 +20,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
  * A simple {@link Fragment} subclass.
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
-GoogleMap mMap;
+
+    private GoogleMap mMap;
 
     public MapFragment() {
         // Required empty public constructor
