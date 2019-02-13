@@ -55,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnGoogle;
     private Button btnPhone;
     private Button btnEmail;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         btnGoogle = findViewById(R.id.google_sign_i);
         btnPhone = findViewById(R.id.btn_phone);
         btnEmail = findViewById(R.id.btn_email);
+        progressBar = findViewById(R.id.first_sign_in_pb);
         btnEmail.setOnClickListener(v -> initializeEmailUI());
         btnGoogle.setOnClickListener(v -> googleSignIn());
         btnPhone.setOnClickListener(v -> phoneDialog());
@@ -85,12 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                 phoneVerificationId = verificationId;
                 phoneToken = token;
                 final EditText txtPhone = findViewById(R.id.txt_phone);
-                btn_Login_phone.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString()));
-                    }
-                });
+                btn_Login_phone.setOnClickListener(v -> authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString())));
             }
         };
     }
@@ -118,16 +115,13 @@ public class LoginActivity extends AppCompatActivity {
         txt_phonee = findViewById(R.id.txt_phone);
         txtNumeroRegion = findViewById(R.id.txt_numero_de_region);
 
-        btn_Login_phone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                phoneSignIn(txtNumeroRegion.getText().toString() + txt_phonee.getText().toString());
-                txt_phonee.setText("");
-                txt_phonee.setHint("Type your code");
-                txtNumeroRegion.setText("");
-                btn_Login_phone.setText("Verify");
+        btn_Login_phone.setOnClickListener(v -> {
+            phoneSignIn(txtNumeroRegion.getText().toString() + txt_phonee.getText().toString());
+            txt_phonee.setText("");
+            txt_phonee.setHint("Type your code");
+            txtNumeroRegion.setText("");
+            btn_Login_phone.setText("Verify");
 
-            }
         });
     }
 
@@ -151,6 +145,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param credential Credenciales obtenidas
      */
     private void authWithPhone(PhoneAuthCredential credential) {
+        progressBar.setVisibility(View.VISIBLE);
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -172,6 +167,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        progressBar.setVisibility(View.VISIBLE);
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_GOOGLE_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -249,7 +245,7 @@ public class LoginActivity extends AppCompatActivity {
     private TextView lblForgotPassword;
     private EditText txtEMail;
     private EditText txtPassword;
-    private ProgressBar progressBar;
+    private ProgressBar progressBarEmail;
     private boolean emailCorrecto;
     private boolean pswdCorrecta;
 
@@ -260,7 +256,7 @@ public class LoginActivity extends AppCompatActivity {
         txtEMail = findViewById(R.id.txt_email);
         txtPassword = findViewById(R.id.txt_pswd);
         lblForgotPassword = findViewById(R.id.lbl_forgot_password);
-        progressBar = findViewById(R.id.sign_in_pb);
+        progressBarEmail = findViewById(R.id.sign_in_pb);
         btnLogIn.setOnClickListener(v -> logIn(txtEMail.getText().toString(), txtPassword.getText().toString()));
         btnSignUp.setOnClickListener(v -> signUp(txtEMail.getText().toString(), txtPassword.getText().toString()));
         lblForgotPassword.setOnClickListener(v -> newAccount());
@@ -316,7 +312,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void logIn(String email, String password) {
-        progressBar.setVisibility(View.VISIBLE);
+        progressBarEmail.setVisibility(View.VISIBLE);
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -333,27 +329,30 @@ public class LoginActivity extends AppCompatActivity {
                                     });
                         }
                     } else {
+                        progressBarEmail.setVisibility(View.GONE);
+                        Toast.makeText(LoginActivity.this, getString(R.string.incorrect_credentials),
+                                Toast.LENGTH_SHORT).show();
                         // TODO: credenciales incorrectas
                     }
                 });
     }
 
     private void signUp(String email, String password) {
-        progressBar.setVisibility(View.VISIBLE);
+        progressBarEmail.setVisibility(View.VISIBLE);
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = task.getResult().getUser();
                         user.sendEmailVerification()
                                 .addOnCompleteListener(t -> {
-                                    progressBar.setVisibility(View.GONE);
+                                    progressBarEmail.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
                                         Toast.makeText(LoginActivity.this, "Verification email sent",
                                                 Toast.LENGTH_SHORT).show();
                                     }
                                 });
                     } else {
-                        progressBar.setVisibility(View.GONE);
+                        progressBarEmail.setVisibility(View.GONE);
                         Toast.makeText(LoginActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
                     }

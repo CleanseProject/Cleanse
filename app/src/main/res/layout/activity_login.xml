@@ -70,6 +70,13 @@
             android:drawableStart="@drawable/email"
             android:text="@string/email_login" />
 
+        <ProgressBar
+            android:id="@+id/first_sign_in_pb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:visibility="gone" />
+
     </LinearLayout>
 
 
