@@ -8,5 +8,6 @@ data class Event(
         var description: String? = "",
         var photo: String? = "",
         var latitude: String? = "",
-        var longitude: String? = ""
+        var longitude: String? = "",
+        var geoHash: String = ""
 )
