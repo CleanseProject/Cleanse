@@ -1,5 +1,6 @@
 package com.cleanseproject.cleanse.adapters;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 
 public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecyclerViews.MyViewHolder>{
 private ArrayList<Event>listaEventos;
+private Context context;
 
     public AdaptadorRecyclerViews(ArrayList<Event>listaEventos) {
         this.listaEventos = listaEventos;
@@ -54,19 +56,20 @@ private ArrayList<Event>listaEventos;
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView txtTitulo;
-        public ImageView ivFoto;
-        public ImageButton btnLike, btnShare;
-        public boolean liked;
-        public MyViewHolder(View v) {
+        private TextView txtTitulo;
+        private ImageView ivFoto;
+        private ImageButton btnLike, btnShare;
+        private boolean liked;
+        private Context context;
 
+        public MyViewHolder(View v) {
             super(v);
             txtTitulo=v.findViewById(R.id.tvTitulo);
             btnLike=v.findViewById(R.id.btnLike);
             btnShare=v.findViewById(R.id.btnShare);
             ivFoto=v.findViewById(R.id.ivEvento);
             liked=false;
-
+            context=v.getContext();
         }
 
         public void asignarDatos(Event event) {
@@ -79,9 +82,9 @@ private ArrayList<Event>listaEventos;
             ivFoto.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-//                    Intent intent = new Intent(this, EventDetailsActivity.class);
-//                    intent.putExtra("Evento", event);
-//                    startActivity(intent);
+                    Intent intent = new Intent(context, EventDetailsActivity.class);
+                    intent.putExtra("Evento", event.getId());
+                    context.startActivity(intent);
                 }
             });
 
