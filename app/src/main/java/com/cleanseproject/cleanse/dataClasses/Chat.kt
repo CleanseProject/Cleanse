@@ -7,6 +7,7 @@ import com.google.firebase.database.IgnoreExtraProperties
 data class Chat(
         @Exclude
         var chatUid: String? = "",
+        var chatName: String? = "",
         var members: ArrayList<String>? = null,
         @Exclude
         var lastMessageSent: String? = ""
