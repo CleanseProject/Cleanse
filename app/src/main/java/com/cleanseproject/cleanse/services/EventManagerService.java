@@ -1,6 +1,7 @@
 package com.cleanseproject.cleanse.services;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.cleanseproject.cleanse.callbacks.EventsLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Event;
@@ -25,13 +26,21 @@ public class EventManagerService {
         firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference geoFireRef = firebaseDatabase.getReference("geofire");
         geoFire = new GeoFire(geoFireRef);
+        createEvent(new Event("Areeta", "", "", "37.7853889", "-122.4056973"));
+        getCloseEvents(new GeoLocation(37.7832, -122.4056), 10);
     }
 
     public void createEvent(Event event) {
         DatabaseReference events = firebaseDatabase.getReference("events");
         String eventKey = events.push().getKey();
         events.child(eventKey).setValue(event);
-        geoFire.setLocation(eventKey, new GeoLocation(Double.parseDouble(event.getLatitude()), Double.parseDouble(event.getLongitude())));
+        geoFire.setLocation(eventKey, new GeoLocation(Double.parseDouble(event.getLatitude()), Double.parseDouble(event.getLongitude())),
+                new GeoFire.CompletionListener() {
+                    @Override
+                    public void onComplete(String key, DatabaseError error) {
+
+                    }
+                });
     }
 
     public void getEvents(EventsLoadCallback callback) {
@@ -58,7 +67,7 @@ public class EventManagerService {
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
-
+                Log.d("geofire", "Location found:" + key + " latitude: " + location.latitude + " longitude: " + location.longitude);
             }
 
             @Override
