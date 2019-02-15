@@ -1,7 +1,6 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +10,6 @@ import android.widget.EditText;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.adapters.MessageListAdapter;
-import com.cleanseproject.cleanse.dataClasses.Chat;
 import com.cleanseproject.cleanse.dataClasses.Message;
 import com.cleanseproject.cleanse.services.ChatService;
 
@@ -36,7 +34,7 @@ public class ChatActivity extends AppCompatActivity {
         messageRecycler = findViewById(R.id.reyclerview_message_list);
         messageRecycler.setHasFixedSize(true);
         messageRecycler.setLayoutManager(new GridLayoutManager(this, 1));
-        chatService = new ChatService(this);
+        chatService = new ChatService(this::updateMessages);
         chatService.inicializar(getIntent().getStringExtra("chatuid"));
     }
 

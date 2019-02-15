@@ -3,7 +3,7 @@ package com.cleanseproject.cleanse.services;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.cleanseproject.cleanse.activities.ChatActivity;
+import com.cleanseproject.cleanse.callbacks.MessagesLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Chat;
 import com.cleanseproject.cleanse.dataClasses.Message;
 import com.google.firebase.auth.FirebaseAuth;
@@ -20,17 +20,17 @@ import java.util.Map;
 
 public class ChatService {
 
-    private ChatActivity chatActivity;
     private Chat chat;
     private FirebaseAuth firebaseAuth;
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
+    private MessagesLoadCallback messagesLoadCallback;
 
-    public ChatService(ChatActivity chatActivity) {
-        this.chatActivity = chatActivity;
+    public ChatService(MessagesLoadCallback messagesLoadCallback) {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
+        this.messagesLoadCallback=messagesLoadCallback;
 
     }
 
@@ -83,7 +83,7 @@ public class ChatService {
                     Message message = messageData.getValue(Message.class);
                     messages.add(message);
                 }
-                chatActivity.updateMessages(messages);
+                messagesLoadCallback.messgesLoaded(messages);
             }
 
             @Override
