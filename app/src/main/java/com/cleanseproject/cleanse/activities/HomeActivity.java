@@ -69,9 +69,7 @@ public class HomeActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_home);
-        Intent intent = getIntent();
         initializeUI();
-
     }
 
     @Override
@@ -109,11 +107,11 @@ public class HomeActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (menuItem.getItemId()) {
-
                 case R.id.nav_home:
                     transaction.replace(R.id.content_frame, new HomeFragment());
                     transaction.addToBackStack(null);
@@ -128,8 +126,6 @@ public class HomeActivity extends AppCompatActivity {
                     transaction.replace(R.id.content_frame, new MapFragment());
                     transaction.addToBackStack(null);
                     transaction.commit();
-
-
             }
             drawerLayout.closeDrawers();
             return true;
@@ -138,7 +134,6 @@ public class HomeActivity extends AppCompatActivity {
         transaction.replace(R.id.content_frame, new HomeFragment());
         transaction.addToBackStack(null);
         transaction.commit();
-
     }
 
 
