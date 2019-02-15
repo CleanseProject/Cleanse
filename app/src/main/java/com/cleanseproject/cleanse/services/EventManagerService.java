@@ -46,7 +46,9 @@ public class EventManagerService {
         eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                events.add(dataSnapshot.getValue(Event.class));
+                Event event = dataSnapshot.getValue(Event.class);
+                event.setId(dataSnapshot.getKey());
+                events.add(event);
                 callback.onEventsLoaded(events);
             }
 
