@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,7 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class EventDetailsActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
-    private ImageView imagenEvento;
+    private ImageView imagenEvento, imagenBack;
     private TextView txtDescripcion, txtTituloImagen, txtDistancia;
 
     @Override
@@ -30,6 +31,10 @@ public class EventDetailsActivity extends AppCompatActivity {
         txtDescripcion = findViewById(R.id.txtDescripcion);
         txtTituloImagen = findViewById(R.id.txtTituloImagen);
         txtDistancia = findViewById(R.id.txtDistancia);
+        imagenBack = findViewById(R.id.imagenBack);
+
+        imagenBack.setOnClickListener(v -> onBackPressed());
+
         firebaseDatabase=FirebaseDatabase.getInstance();
 
         Intent intent = getIntent();
