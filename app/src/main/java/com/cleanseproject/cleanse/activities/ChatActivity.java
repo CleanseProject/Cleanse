@@ -44,11 +44,12 @@ public class ChatActivity extends AppCompatActivity {
     public void updateMessages(ArrayList<Message> messages) {
         MessageListAdapter messageListAdapter = new MessageListAdapter(this, messages);
         messageRecycler.setAdapter(messageListAdapter);
+        messageRecycler.scrollToPosition(messageRecycler.getAdapter().getItemCount() - 1);
     }
 
     private void sendMessage() {
         chatService.sendMessage(txtMessage.getText().toString());
-
+        messageRecycler.scrollToPosition(messageRecycler.getAdapter().getItemCount() - 1);
     }
 
 }

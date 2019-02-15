@@ -17,7 +17,8 @@
             android:value="@string/google_maps_key" />
         <activity
             android:name=".activities.ChatActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.UserDataActivity"
             android:screenOrientation="portrait" />
