@@ -22,36 +22,31 @@ public class EventManagerService {
     private FirebaseDatabase firebaseDatabase;
     private GeoFire geoFire;
 
+    private ArrayList<Event> events;
+
     public EventManagerService() {
         firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference geoFireRef = firebaseDatabase.getReference("geofire");
         geoFire = new GeoFire(geoFireRef);
-        createEvent(new Event("Areeta", "", "", "37.7853889", "-122.4056973"));
-        getCloseEvents(new GeoLocation(37.7832, -122.4056), 10);
     }
 
     public void createEvent(Event event) {
         DatabaseReference events = firebaseDatabase.getReference("events");
         String eventKey = events.push().getKey();
         events.child(eventKey).setValue(event);
-        geoFire.setLocation(eventKey, new GeoLocation(Double.parseDouble(event.getLatitude()), Double.parseDouble(event.getLongitude())),
-                new GeoFire.CompletionListener() {
-                    @Override
-                    public void onComplete(String key, DatabaseError error) {
+        geoFire.setLocation(eventKey, new GeoLocation(Double.parseDouble(event.getLatitude()),
+                        Double.parseDouble(event.getLongitude())),
+                (key, error) -> {
 
-                    }
                 });
     }
 
-    public void getEvents(EventsLoadCallback callback) {
-        DatabaseReference eventsRef = firebaseDatabase.getReference("events");
+    public void getEvent(String key, EventsLoadCallback callback) {
+        DatabaseReference eventsRef = firebaseDatabase.getReference("events").child(key);
         eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<Event> events = new ArrayList<>();
-                for (DataSnapshot eventSnapshot : dataSnapshot.getChildren()) {
-                    events.add(eventSnapshot.getValue(Event.class));
-                }
+                events.add(dataSnapshot.getValue(Event.class));
                 callback.onEventsLoaded(events);
             }
 
@@ -62,12 +57,13 @@ public class EventManagerService {
         });
     }
 
-    public void getCloseEvents(GeoLocation location, double radius) {
+    public void getCloseEvents(GeoLocation location, double radius, EventsLoadCallback callback) {
+        events = new ArrayList<>();
         GeoQuery geoQuery = geoFire.queryAtLocation(location, radius);
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
-                Log.d("geofire", "Location found:" + key + " latitude: " + location.latitude + " longitude: " + location.longitude);
+                getEvent(key, callback);
             }
 
             @Override
