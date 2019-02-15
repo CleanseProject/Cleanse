@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
@@ -20,25 +22,23 @@ import android.widget.TextView;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.EventDetailsActivity;
 import com.cleanseproject.cleanse.dataClasses.Event;
+import com.cleanseproject.cleanse.services.LocationService;
 
 import java.util.ArrayList;
 
-public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecyclerViews.MyViewHolder>{
-private ArrayList<Event>listaEventos;
-private Context context;
+public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecyclerViews.MyViewHolder> {
 
-    public AdaptadorRecyclerViews(ArrayList<Event>listaEventos) {
+    private ArrayList<Event> listaEventos;
+
+    public AdaptadorRecyclerViews(ArrayList<Event> listaEventos) {
         this.listaEventos = listaEventos;
     }
 
     @NonNull
     @Override
     public AdaptadorRecyclerViews.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.vista_evento,null,false);
-
-
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.vista_evento, null, false);
         return new MyViewHolder(view);
-
     }
 
     @Override
@@ -52,11 +52,10 @@ private Context context;
         return listaEventos.size();
     }
 
-
-
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView txtTitulo;
+        private LocationService locationService;
+        private TextView txtTitulo, txtDistancia;
         private ImageView ivFoto;
         private ImageButton btnLike, btnShare;
         private boolean liked;
@@ -64,46 +63,40 @@ private Context context;
 
         public MyViewHolder(View v) {
             super(v);
-            txtTitulo=v.findViewById(R.id.tvTitulo);
-            btnLike=v.findViewById(R.id.btnLike);
-            btnShare=v.findViewById(R.id.btnShare);
-            ivFoto=v.findViewById(R.id.ivEvento);
-            liked=false;
-            context=v.getContext();
+            txtTitulo = v.findViewById(R.id.tvTitulo);
+            txtDistancia = v.findViewById(R.id.txtDistancia);
+            btnLike = v.findViewById(R.id.btnLike);
+            btnShare = v.findViewById(R.id.btnShare);
+            ivFoto = v.findViewById(R.id.ivEvento);
+            liked = false;
+            context = v.getContext();
+            locationService = new LocationService(context);
         }
 
         public void asignarDatos(Event event) {
-
             txtTitulo.setText(event.getName());
-
-
+            Location location = new Location("");
+            location.setLatitude(Double.parseDouble(event.getLatitude()));
+            location.setLongitude(Double.parseDouble(event.getLongitude()));
+            txtDistancia.setText(locationService.distance(location) + " km");
             ivFoto.setBackgroundResource(R.drawable.imagen);
-
-            ivFoto.setOnClickListener(new View.OnClickListener(){
-                @Override
-                public void onClick(View v) {
-                    Intent intent = new Intent(context, EventDetailsActivity.class);
-                    intent.putExtra("Evento", event.getId());
-                    context.startActivity(intent);
-                }
+            ivFoto.setOnClickListener(v -> {
+                Intent intent = new Intent(context, EventDetailsActivity.class);
+                intent.putExtra("Evento", event.getId());
+                context.startActivity(intent);
             });
+            btnLike.setOnClickListener(v -> {
+                if (!liked) {
+                    btnLike.setImageResource(R.drawable.corazon_rosa);
+                    liked = true;
 
-
-            btnLike.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!liked){
-                        btnLike.setImageResource(R.drawable.corazon_rosa);
-                        liked=true;
-
-                    }else{
-                        liked=false;
-                        btnLike.setImageResource(R.drawable.corazon_azul);
-                    }
-
+                } else {
+                    liked = false;
+                    btnLike.setImageResource(R.drawable.corazon_azul);
                 }
+
             });
-            }
+        }
 
     }
 
