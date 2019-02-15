@@ -5,7 +5,6 @@ import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties
 data class User(
-        @Exclude
         var userId: String?="",
         var name: String? = "",
         var surname: String? = "",

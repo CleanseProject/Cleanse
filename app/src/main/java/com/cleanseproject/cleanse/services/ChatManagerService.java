@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.cleanseproject.cleanse.callbacks.ChatListLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Chat;
+import com.cleanseproject.cleanse.dataClasses.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -43,11 +44,20 @@ public class ChatManagerService {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.d("chatid", firebaseUser.getUid());
                 DataSnapshot userChatsData = dataSnapshot.child("userChats").child(firebaseUser.getUid());
+                DataSnapshot users = dataSnapshot.child("users");
                 ArrayList<Chat> chats = new ArrayList<>();
                 for (DataSnapshot objChatId : userChatsData.getChildren()) {
                     String chatId = objChatId.getValue().toString();
                     Log.d("chatid", chatId);
                     Chat chat = dataSnapshot.child("chats").child(chatId).getValue(Chat.class);
+                    if (chat.getMembers().size() <= 2) {
+                        for (String member : chat.getMembers()) {
+                            User user = users.child(member).getValue(User.class);
+                            if (!user.getUserId().equals(firebaseUser.getUid())) {
+                                chat.setChatName(user.getName() + " " + user.getSurname());
+                            }
+                        }
+                    }
                     if (chat != null) {
                         chat.setChatUid(chatId);
                         chats.add(chat);
