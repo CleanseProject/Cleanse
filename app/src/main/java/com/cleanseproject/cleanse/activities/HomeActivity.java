@@ -39,6 +39,15 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+        setProgressBarIndeterminateVisibility(true);
+        setContentView(R.layout.activity_home);
+        initializeUI();
+    }
+
+    @Override
     public void onBackPressed() {
 
     }
@@ -62,15 +71,6 @@ public class HomeActivity extends AppCompatActivity {
             //}
         }
     };
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-        setProgressBarIndeterminateVisibility(true);
-        setContentView(R.layout.activity_home);
-        initializeUI();
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

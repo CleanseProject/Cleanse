@@ -37,7 +37,17 @@ public class ChatManagerService {
         }
     }
 
-    public ArrayList<Chat> getUserChats(ChatListLoadCallback callback) {
+    public void createGroupChat(String name, ArrayList<String> userIds) {
+        DatabaseReference chat = firebaseDatabase.getReference("chats").push();
+        String chatKey = chat.getKey();
+        chat.setValue(new Chat(chatKey, name, userIds, ""));
+        DatabaseReference userChats = firebaseDatabase.getReference("userChats");
+        for (String userId : userIds) {
+            userChats.child(userId).push().setValue(chatKey);
+        }
+    }
+
+    public void getUserChats(ChatListLoadCallback callback) {
         FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
         DatabaseReference userChats = firebaseDatabase.getReference();
         userChats.addValueEventListener(new ValueEventListener() {
@@ -59,10 +69,8 @@ public class ChatManagerService {
                             }
                         }
                     }
-                    if (chat != null) {
-                        chat.setChatUid(chatId);
-                        chats.add(chat);
-                    }
+                    chat.setChatUid(chatId);
+                    chats.add(chat);
                 }
                 callback.onCallBack(chats);
             }
@@ -72,7 +80,6 @@ public class ChatManagerService {
 
             }
         });
-        return null;
     }
 
     public void getUserName(String userId, UserNameLoadCallback callback) {
