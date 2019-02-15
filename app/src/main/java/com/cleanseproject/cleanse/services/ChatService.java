@@ -42,15 +42,6 @@ public class ChatService {
                 chat = dataSnapshot.child("chats").child(chatId).getValue(Chat.class);
                 chat.setChatUid(chatId);
                 getMessages();
-//                ArrayList<User> users = new ArrayList<>();
-//                for (String uid : chat.getMembers()) {
-//                    Log.d("userKey", uid);
-//                    User user = dataSnapshot.child("users").child(uid).getValue(User.class);
-//                    user.setUserId(uid);
-//                    if (firebaseAuth.getUid().equals(uid))
-//                        currentUser = user;
-//                    users.add(user);
-//                }
             }
 
             @Override
