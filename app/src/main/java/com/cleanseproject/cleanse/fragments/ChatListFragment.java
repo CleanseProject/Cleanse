@@ -38,6 +38,7 @@ public class ChatListFragment extends Fragment {
             Chat chat = chatListAdapter.getItem(position);
             Intent intent = new Intent(getActivity(), ChatActivity.class);
             intent.putExtra("chatuid", chat.getChatUid());
+            intent.putExtra("chatname", chat.getChatName());
             startActivity(intent);
         });
         chatManagerService = new ChatManagerService();
