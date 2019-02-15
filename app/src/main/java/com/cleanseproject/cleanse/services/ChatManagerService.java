@@ -30,20 +30,29 @@ public class ChatManagerService {
     public void createChat(ArrayList<String> userIds) {
         DatabaseReference chat = firebaseDatabase.getReference("chats").push();
         String chatKey = chat.getKey();
-        chat.setValue(new Chat(chatKey, "", userIds, ""));
+        chat.setValue(new Chat(chatKey, "", null, ""));
+        for (String userId : userIds) {
+            chat.child("members").push().setValue(userId);
+        }
         DatabaseReference userChats = firebaseDatabase.getReference("userChats");
         for (String userId : userIds) {
             userChats.child(userId).push().setValue(chatKey);
         }
     }
 
+    public void joinChat(String userId, String chatId) {
+        DatabaseReference chat = firebaseDatabase.getReference("chats").child(chatId);
+        chat.child("members").push().setValue(userId);
+    }
+
     public void createGroupChat(String name, ArrayList<String> userIds) {
         DatabaseReference chat = firebaseDatabase.getReference("chats").push();
         String chatKey = chat.getKey();
-        chat.setValue(new Chat(chatKey, name, userIds, ""));
+        chat.setValue(new Chat(chatKey, name, null, ""));
         DatabaseReference userChats = firebaseDatabase.getReference("userChats");
         for (String userId : userIds) {
             userChats.child(userId).push().setValue(chatKey);
+            chat.child("members").push().setValue(chatKey);
         }
     }
 
@@ -61,8 +70,10 @@ public class ChatManagerService {
                     String chatId = objChatId.getValue().toString();
                     Log.d("chatid", chatId);
                     Chat chat = dataSnapshot.child("chats").child(chatId).getValue(Chat.class);
+                    DataSnapshot membersSnapshot = dataSnapshot.child("chats").child(chatId).child("members");
                     if (chat.getMembers().size() <= 2) {
-                        for (String member : chat.getMembers()) {
+                        for (String memberKey : chat.getMembers().keySet()) {
+                            String member = chat.getMembers().get(memberKey);
                             User user = users.child(member).getValue(User.class);
                             if (!user.getUserId().equals(firebaseUser.getUid())) {
                                 chat.setChatName(user.getName() + " " + user.getSurname());

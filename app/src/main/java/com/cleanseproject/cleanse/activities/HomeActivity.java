@@ -23,8 +23,11 @@ import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.fragments.ChatListFragment;
 import com.cleanseproject.cleanse.fragments.HomeFragment;
 import com.cleanseproject.cleanse.fragments.MapFragment;
+import com.cleanseproject.cleanse.services.ChatManagerService;
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -45,6 +48,12 @@ public class HomeActivity extends AppCompatActivity {
         setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_home);
         initializeUI();
+        /*ArrayList<String> userIds = new ArrayList<>();
+        userIds.add("CQ4NBpLnpuhs46U4P2tVHYV96G92");
+        userIds.add("Oj8RSAO54dguxr7819levxaLAWS2");
+        userIds.add("ULXikrLHs6Qm1xEglZ2YSNE1nUB3");
+        userIds.add("nr3Blr8ba2dMWARDMWWeu4RhSDy2");
+        new ChatManagerService().createGroupChat("Cleanse Project", userIds);*/
     }
 
     @Override

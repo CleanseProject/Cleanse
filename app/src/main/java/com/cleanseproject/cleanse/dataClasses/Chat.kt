@@ -8,7 +8,7 @@ data class Chat(
         @Exclude
         var chatUid: String? = "",
         var chatName: String? = "",
-        var members: ArrayList<String>? = null,
+        var members: HashMap<String, String>? = null,
         @Exclude
         var lastMessageSent: String? = ""
 )
