@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.adapters.AdaptadorRecyclerViews;
@@ -22,8 +23,10 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
 
     private EventManagerService eventManagerService;
+
     private AdaptadorRecyclerViews adaptador;
     private RecyclerView rvEventos;
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -36,6 +39,7 @@ public class HomeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         View view = getView();
         rvEventos = view.findViewById(R.id.rv_Eventos);
+        progressBar=view.findViewById(R.id.home_fragment_pb);
         LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
         rvEventos.setLayoutManager(llm);
         eventManagerService = new EventManagerService();
@@ -47,6 +51,7 @@ public class HomeFragment extends Fragment {
     private void rellenarEventos(ArrayList<Event> events) {
         adaptador = new AdaptadorRecyclerViews(events);
         rvEventos.setAdapter(adaptador);
+        progressBar.setVisibility(View.GONE);
     }
 
 }
