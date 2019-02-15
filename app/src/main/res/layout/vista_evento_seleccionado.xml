@@ -51,7 +51,7 @@
     <LinearLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="97dp"
+        android:layout_height="86dp"
         android:orientation="horizontal">
 
 
@@ -60,7 +60,7 @@
             android:layout_width="72dp"
             android:layout_height="65dp"
             android:layout_marginLeft="15dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
             android:src="@drawable/imagen"
             app:civ_border_color="#EEE"
@@ -104,44 +104,20 @@
     <TextView
         android:id="@+id/txtDescripcion"
         android:layout_width="match_parent"
-        android:layout_height="431dp"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginBottom="5dp"
         android:fontFamily="@font/montserrat"
-        android:padding="20dp"
-        android:text="TextView" />
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"
+        android:layout_weight="1"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
-
-        <ImageButton
-            android:id="@+id/btnLikeSeleccionado"
-            android:layout_width="65dp"
-            android:layout_height="49dp"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1"
-            android:background="@null"
-            app:srcCompat="@drawable/corazon_azul" />
-
-        <ImageButton
-            android:id="@+id/btnVoy"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            app:srcCompat="@drawable/chat_bubble_received" />
-
-        <ImageButton
-            android:id="@+id/btnShareSeleccionado"
-            android:layout_width="54dp"
-            android:layout_height="49dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="1"
-            android:background="@null"
-            app:srcCompat="@drawable/icono_share_boton" />
-
-    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rvUsuarios"
+        android:layout_width="291dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"/>
 
 </LinearLayout>

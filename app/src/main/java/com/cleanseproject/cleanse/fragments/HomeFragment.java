@@ -64,7 +64,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void updateRecycleView() {
-        //Conexion con Firebase para updatear la lista de eventos
+        /**
+         * TODO: Conexion con Firebase para updatear la lista de eventos
+         */
+
 
 
 
