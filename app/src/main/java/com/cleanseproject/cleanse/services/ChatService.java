@@ -30,8 +30,7 @@ public class ChatService {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        this.messagesLoadCallback=messagesLoadCallback;
-
+        this.messagesLoadCallback = messagesLoadCallback;
     }
 
     public void inicializar(String chatId) {
@@ -83,7 +82,7 @@ public class ChatService {
                     Message message = messageData.getValue(Message.class);
                     messages.add(message);
                 }
-                messagesLoadCallback.messgesLoaded(messages);
+                messagesLoadCallback.onMessagesLoaded(messages);
             }
 
             @Override

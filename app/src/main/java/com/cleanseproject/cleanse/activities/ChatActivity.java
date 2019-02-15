@@ -40,7 +40,7 @@ public class ChatActivity extends AppCompatActivity {
 
 
     public void updateMessages(ArrayList<Message> messages) {
-        MessageListAdapter messageListAdapter = new MessageListAdapter(this, messages);
+        MessageListAdapter messageListAdapter = new MessageListAdapter(messages);
         messageRecycler.setAdapter(messageListAdapter);
         messageRecycler.scrollToPosition(messageRecycler.getAdapter().getItemCount() - 1);
     }

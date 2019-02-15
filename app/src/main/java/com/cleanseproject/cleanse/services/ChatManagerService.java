@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cleanseproject.cleanse.callbacks.ChatListLoadCallback;
+import com.cleanseproject.cleanse.callbacks.UserNameLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Chat;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -72,6 +73,22 @@ public class ChatManagerService {
             }
         });
         return null;
+    }
+
+    public void getUserName(String userId, UserNameLoadCallback callback) {
+        DatabaseReference userRef = firebaseDatabase.getReference("users").child(userId);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                callback.onUsernameLoaded(user.getName() + " " + user.getSurname());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
 }

@@ -6,6 +6,6 @@ import java.util.ArrayList;
 
 public interface MessagesLoadCallback {
 
-    void messgesLoaded(ArrayList<Message> messages);
+    void onMessagesLoaded(ArrayList<Message> messages);
 
 }
