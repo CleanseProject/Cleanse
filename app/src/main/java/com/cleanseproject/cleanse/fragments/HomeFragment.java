@@ -9,22 +9,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.adapters.AdaptadorRecyclerViews;
 import com.cleanseproject.cleanse.dataClasses.Event;
+import com.cleanseproject.cleanse.services.EventManagerService;
+import com.firebase.geofire.GeoLocation;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
+
+    private EventManagerService eventManagerService;
+
     private AdaptadorRecyclerViews adaptador;
     private RecyclerView rvEventos;
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
 
@@ -33,34 +39,19 @@ public class HomeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         View view = getView();
         rvEventos = view.findViewById(R.id.rv_Eventos);
-
-        ArrayList<Event>listaEventos=rellenarEventos();
-        adaptador= new AdaptadorRecyclerViews(listaEventos);
-
-
-        LinearLayoutManager llm = new GridLayoutManager(getActivity(),1);
+        progressBar=view.findViewById(R.id.home_fragment_pb);
+        LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
         rvEventos.setLayoutManager(llm);
-
-        rvEventos.setAdapter(adaptador);
-
-        FirebaseInstanceId.getInstance().getInstanceId()
-                .addOnCompleteListener(task -> {
-                    if (!task.isSuccessful()) {
-                        Log.w("MyFirebaseMsgService", "getInstanceId failed", task.getException());
-                        return;
-                    }
-                    String token = task.getResult().getToken();
-                    Log.d("FCMToken", token);
-                });
+        eventManagerService = new EventManagerService();
+        eventManagerService.getCloseEvents(new GeoLocation(37.7832, -122.4056),
+                10,
+                events -> rellenarEventos(events));
     }
 
-    private ArrayList<Event> rellenarEventos() {
-        ArrayList<Event>listaEventos=new ArrayList<>();
-
-
-        listaEventos.add(new Event("Carlosssssssssssssss","","","",""));
-        listaEventos.add(new Event("Adrián","","","",""));
-        return  listaEventos;
+    private void rellenarEventos(ArrayList<Event> events) {
+        adaptador = new AdaptadorRecyclerViews(events);
+        rvEventos.setAdapter(adaptador);
+        progressBar.setVisibility(View.GONE);
     }
 
 }

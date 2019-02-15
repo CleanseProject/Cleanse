@@ -11,6 +11,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -53,6 +55,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnGoogle;
     private Button btnPhone;
     private Button btnEmail;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         btnGoogle = findViewById(R.id.google_sign_i);
         btnPhone = findViewById(R.id.btn_phone);
         btnEmail = findViewById(R.id.btn_email);
+        progressBar = findViewById(R.id.first_sign_in_pb);
         btnEmail.setOnClickListener(v -> initializeEmailUI());
         btnGoogle.setOnClickListener(v -> googleSignIn());
         btnPhone.setOnClickListener(v -> phoneDialog());
@@ -83,12 +87,7 @@ public class LoginActivity extends AppCompatActivity {
                 phoneVerificationId = verificationId;
                 phoneToken = token;
                 final EditText txtPhone = findViewById(R.id.txt_phone);
-                btn_Login_phone.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString()));
-                    }
-                });
+                btn_Login_phone.setOnClickListener(v -> authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString())));
             }
         };
     }
@@ -116,16 +115,13 @@ public class LoginActivity extends AppCompatActivity {
         txt_phonee = findViewById(R.id.txt_phone);
         txtNumeroRegion = findViewById(R.id.txt_numero_de_region);
 
-        btn_Login_phone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                phoneSignIn(txtNumeroRegion.getText().toString() + txt_phonee.getText().toString());
-                txt_phonee.setText("");
-                txt_phonee.setHint("Type your code");
-                txtNumeroRegion.setText("");
-                btn_Login_phone.setText("Verify");
-
-            }
+        btn_Login_phone.setOnClickListener(v -> {
+            phoneSignIn(txtNumeroRegion.getText().toString() + txt_phonee.getText().toString());
+            txt_phonee.setText("");
+            txt_phonee.setHint("Type your code");
+            txtNumeroRegion.setText("");
+            btn_Login_phone.setText("Verify");
+            btn_Login_phone.setEnabled(false);
         });
     }
 
@@ -149,17 +145,21 @@ public class LoginActivity extends AppCompatActivity {
      * @param credential Credenciales obtenidas
      */
     private void authWithPhone(PhoneAuthCredential credential) {
+        progressBar.setVisibility(View.VISIBLE);
         firebaseAuth.signInWithCredential(credential)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         // Sign in success, update UI with the signed-in user's information
                         Log.d("phone", "signInWithCredential:success");
                         iniciarSesion(task.getResult().getUser());
+                        btn_Login_phone.setEnabled(false);
                     } else {
                         // Sign in failed, display a message and update the UI
                         Log.w("phone", "signInWithCredential:failure", task.getException());
+                        btn_Login_phone.setEnabled(true);
                         if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                             // The verification code entered was invalid
+                            btn_Login_phone.setEnabled(true);
                         }
                     }
                 });
@@ -170,6 +170,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        progressBar.setVisibility(View.VISIBLE);
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_GOOGLE_SIGN_IN) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -203,6 +204,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void iniciarSesion(FirebaseUser user) {
+        FirebaseMessaging.getInstance().subscribeToTopic("user_" + user.getUid());
         Log.d("mail", user.getDisplayName() + " " + user.getPhoneNumber());
         DatabaseReference userReference = firebaseDatabase.getReference("users");
         userReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -228,9 +230,11 @@ public class LoginActivity extends AppCompatActivity {
         if (user.getEmail() != null) {
             intent.putExtra("username", user.getEmail());
         } else if (user.getPhoneNumber() != null) {
+            intent = new Intent(LoginActivity.this, UserDataActivity.class);
             intent.putExtra("username", user.getPhoneNumber());
         }
         startActivity(intent);
+        finish();
     }
 
     private void errorInicioSesion() {
@@ -244,16 +248,18 @@ public class LoginActivity extends AppCompatActivity {
     private TextView lblForgotPassword;
     private EditText txtEMail;
     private EditText txtPassword;
+    private ProgressBar progressBarEmail;
     private boolean emailCorrecto;
     private boolean pswdCorrecta;
 
-    private void initializeEmailUI() {
+    public void initializeEmailUI() {
         setContentView(R.layout.activity_email_login);
         btnLogIn = findViewById(R.id.btn_login);
         btnSignUp = findViewById(R.id.btn_sign_up);
         txtEMail = findViewById(R.id.txt_email);
         txtPassword = findViewById(R.id.txt_pswd);
         lblForgotPassword = findViewById(R.id.lbl_forgot_password);
+        progressBarEmail = findViewById(R.id.sign_in_pb);
         btnLogIn.setOnClickListener(v -> logIn(txtEMail.getText().toString(), txtPassword.getText().toString()));
         btnSignUp.setOnClickListener(v -> signUp(txtEMail.getText().toString(), txtPassword.getText().toString()));
         lblForgotPassword.setOnClickListener(v -> newAccount());
@@ -309,6 +315,9 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void logIn(String email, String password) {
+        btnLogIn.setEnabled(false);
+        btnSignUp.setEnabled(false);
+        progressBarEmail.setVisibility(View.VISIBLE);
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -321,28 +330,44 @@ public class LoginActivity extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             Toast.makeText(LoginActivity.this, "Please verify your email",
                                                     Toast.LENGTH_LONG).show();
+                                            btnLogIn.setEnabled(true);
+                                            btnSignUp.setEnabled(true);
                                         }
                                     });
                         }
                     } else {
+                        progressBarEmail.setVisibility(View.GONE);
+                        Toast.makeText(LoginActivity.this, getString(R.string.incorrect_credentials),
+                                Toast.LENGTH_SHORT).show();
+                        btnLogIn.setEnabled(true);
+                        btnSignUp.setEnabled(true);
                         // TODO: credenciales incorrectas
                     }
                 });
     }
 
     private void signUp(String email, String password) {
+        progressBarEmail.setVisibility(View.VISIBLE);
+        btnLogIn.setEnabled(false);
+        btnSignUp.setEnabled(false);
         firebaseAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         FirebaseUser user = task.getResult().getUser();
                         user.sendEmailVerification()
                                 .addOnCompleteListener(t -> {
+                                    progressBarEmail.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
                                         Toast.makeText(LoginActivity.this, "Verification email sent",
                                                 Toast.LENGTH_SHORT).show();
+                                        btnLogIn.setEnabled(true);
+                                        btnSignUp.setEnabled(true);
                                     }
                                 });
                     } else {
+                        btnLogIn.setEnabled(true);
+                        btnSignUp.setEnabled(true);
+                        progressBarEmail.setVisibility(View.GONE);
                         Toast.makeText(LoginActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
                     }

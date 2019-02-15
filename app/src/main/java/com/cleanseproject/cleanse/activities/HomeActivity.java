@@ -14,13 +14,17 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.Window;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.fragments.ChatListFragment;
 import com.cleanseproject.cleanse.fragments.HomeFragment;
+import com.cleanseproject.cleanse.fragments.MapFragment;
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -32,6 +36,11 @@ public class HomeActivity extends AppCompatActivity {
         IntentFilter f = new IntentFilter(CleanseFirebaseMessagingService.NOTIFICATION);
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(onEvent, f);
+    }
+
+    @Override
+    public void onBackPressed() {
+
     }
 
     private BroadcastReceiver onEvent = new BroadcastReceiver() {
@@ -60,9 +69,17 @@ public class HomeActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_home);
-        Intent intent = getIntent();
         initializeUI();
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.user_menu, menu);
+        return true;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -70,8 +87,16 @@ public class HomeActivity extends AppCompatActivity {
             case android.R.id.home:
                 drawerLayout.openDrawer(GravityCompat.START);
                 return true;
+            case R.id.user_menu:
+                logOut();
+                return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void logOut() {
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(HomeActivity.this, LoginActivity.class));
     }
 
     private void initializeUI() {
@@ -82,6 +107,7 @@ public class HomeActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -96,6 +122,10 @@ public class HomeActivity extends AppCompatActivity {
                     transaction.addToBackStack(null);
                     transaction.commit();
                     break;
+                case R.id.nav_map:
+                    transaction.replace(R.id.content_frame, new MapFragment());
+                    transaction.addToBackStack(null);
+                    transaction.commit();
             }
             drawerLayout.closeDrawers();
             return true;

@@ -11,8 +11,11 @@ import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Message;
+import com.cleanseproject.cleanse.services.ChatManagerService;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MessageListAdapter extends RecyclerView.Adapter {
@@ -20,12 +23,12 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_SENT = 1;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
 
-    private Context context;
     private List<Message> messages;
+    private ChatManagerService chatManagerService;
 
-    public MessageListAdapter(Context context, List<Message> messages) {
-        this.context = context;
+    public MessageListAdapter(List<Message> messages) {
         this.messages = messages;
+        chatManagerService = new ChatManagerService();
     }
 
     @NonNull
@@ -77,8 +80,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     }
 
 
-
-
     private class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText;
 
@@ -90,9 +91,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
         void bind(Message message) {
             messageText.setText(message.getMessage());
-
-            // Format the stored timestamp into a readable String using method.
-            //timeText.setText(Utils.formatDateTime(message.getCreatedAt()));
+            timeText.setText(formatDate(message.getCreatedAt()));
         }
     }
 
@@ -110,14 +109,18 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
         void bind(Message message) {
             messageText.setText(message.getMessage());
-
-            // Format the stored timestamp into a readable String using method.
-            //timeText.setText(Utils.formatDateTime(message.getCreatedAt()));
-            nameText.setText("Nombre");
+            timeText.setText(formatDate(message.getCreatedAt()));
+            chatManagerService.getUserName(message.getUser(), username -> nameText.setText(username));
 
             // Insert the profile image from the URL into the ImageView.
             //Utils.displayRoundImageFromUrl(context, message.getSender().getProfileUrl(), profileImage);
         }
+    }
+
+    private String formatDate(long time){
+        Date date = new Date(time);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        return dateFormat.format(date);
     }
 
 }

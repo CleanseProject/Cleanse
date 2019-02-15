@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#343890</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimaryDark">#2A2D77</color>
     <color name="colorSecundario">#81F1B2</color>
     <color name="colorBlanco">#FFFFFF</color>
-    <color name="colorAccent">#D81B60</color>
+    <color name="colorAccent">#81F1B2</color>
     <color name="verdehojainterno">#00913e</color>
     <color name="verdehojaexterno">#00ce53</color>
+    <color name="botonPressed">#f800ff</color>
 </resources>
