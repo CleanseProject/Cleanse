@@ -30,7 +30,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         txtDescripcion = findViewById(R.id.txtDescripcion);
         txtTituloImagen = findViewById(R.id.txtTituloImagen);
         txtDistancia = findViewById(R.id.txtDistancia);
-
+        firebaseDatabase=FirebaseDatabase.getInstance();
 
         Intent intent = getIntent();
         String idEvento = intent.getStringExtra("Evento");
