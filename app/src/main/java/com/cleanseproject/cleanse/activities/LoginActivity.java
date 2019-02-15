@@ -230,7 +230,6 @@ public class LoginActivity extends AppCompatActivity {
         if (user.getEmail() != null) {
             intent.putExtra("username", user.getEmail());
         } else if (user.getPhoneNumber() != null) {
-            intent = new Intent(LoginActivity.this, UserDataActivity.class);
             intent.putExtra("username", user.getPhoneNumber());
         }
         startActivity(intent);

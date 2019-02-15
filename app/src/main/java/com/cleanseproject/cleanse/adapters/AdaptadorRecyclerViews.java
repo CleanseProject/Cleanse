@@ -1,5 +1,6 @@
 package com.cleanseproject.cleanse.adapters;
 
+import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
@@ -16,11 +17,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
+import com.cleanseproject.cleanse.activities.EventDetailsActivity;
 import com.cleanseproject.cleanse.dataClasses.Event;
 
 import java.util.ArrayList;
 
-public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecyclerViews.MyViewHolder> {
+public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecyclerViews.MyViewHolder>{
 private ArrayList<Event>listaEventos;
 
     public AdaptadorRecyclerViews(ArrayList<Event>listaEventos) {
@@ -73,6 +75,15 @@ private ArrayList<Event>listaEventos;
 
 
             ivFoto.setBackgroundResource(R.drawable.imagen);
+
+            ivFoto.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+//                    Intent intent = new Intent(this, EventDetailsActivity.class);
+//                    intent.putExtra("Evento", event);
+//                    startActivity(intent);
+                }
+            });
 
 
             btnLike.setOnClickListener(new View.OnClickListener() {
