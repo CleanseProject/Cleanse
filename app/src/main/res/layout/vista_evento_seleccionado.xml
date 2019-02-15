@@ -14,9 +14,10 @@
         android:background="@drawable/imagen">
 
         <ImageView
+            android:id="@+id/imagenEventoSeleccionado"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/imagen"/>
+            android:background="@drawable/imagen" />
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -101,7 +102,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/txtDescripcion"
         android:layout_width="match_parent"
         android:layout_height="431dp"
         android:fontFamily="@font/montserrat"
