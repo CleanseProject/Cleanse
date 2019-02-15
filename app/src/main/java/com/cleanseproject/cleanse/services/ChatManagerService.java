@@ -41,8 +41,8 @@ public class ChatManagerService {
     }
 
     public void joinChat(String userId, String chatId) {
-        DatabaseReference chat = firebaseDatabase.getReference("chats").child(chatId);
-        chat.child("members").push().setValue(userId);
+        firebaseDatabase.getReference("chats").child(chatId).child("members").push().setValue(userId);
+        firebaseDatabase.getReference("userChats").child(userId).push().setValue(chatId);
     }
 
     public void createGroupChat(String name, ArrayList<String> userIds) {
@@ -52,7 +52,7 @@ public class ChatManagerService {
         DatabaseReference userChats = firebaseDatabase.getReference("userChats");
         for (String userId : userIds) {
             userChats.child(userId).push().setValue(chatKey);
-            chat.child("members").push().setValue(chatKey);
+            chat.child("members").push().setValue(userId);
         }
     }
 
