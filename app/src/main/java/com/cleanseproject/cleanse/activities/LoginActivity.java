@@ -21,7 +21,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
@@ -181,6 +180,7 @@ public class LoginActivity extends AppCompatActivity {
             } catch (ApiException | NullPointerException e) {
                 errorInicioSesion();
                 e.printStackTrace();
+                progressBar.setVisibility(View.INVISIBLE);
             }
 
         }
@@ -240,6 +240,7 @@ public class LoginActivity extends AppCompatActivity {
         // TODO: Error en el inicio de sesión
         // Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
         Toast.makeText(LoginActivity.this, getString(R.string.google_sign_in_error), Toast.LENGTH_SHORT).show();
+        progressBar.setVisibility(View.INVISIBLE);
     }
 
     private Button btnLogIn;
@@ -331,15 +332,17 @@ public class LoginActivity extends AppCompatActivity {
                                                     Toast.LENGTH_LONG).show();
                                             btnLogIn.setEnabled(true);
                                             btnSignUp.setEnabled(true);
+                                            progressBarEmail.setVisibility(View.INVISIBLE);
                                         }
                                     });
                         }
                     } else {
-                        progressBarEmail.setVisibility(View.GONE);
+
                         Toast.makeText(LoginActivity.this, getString(R.string.incorrect_credentials),
                                 Toast.LENGTH_SHORT).show();
                         btnLogIn.setEnabled(true);
                         btnSignUp.setEnabled(true);
+                        progressBarEmail.setVisibility(View.INVISIBLE);
                         // TODO: credenciales incorrectas
                     }
                 });
@@ -355,18 +358,18 @@ public class LoginActivity extends AppCompatActivity {
                         FirebaseUser user = task.getResult().getUser();
                         user.sendEmailVerification()
                                 .addOnCompleteListener(t -> {
-                                    progressBarEmail.setVisibility(View.GONE);
                                     if (task.isSuccessful()) {
                                         Toast.makeText(LoginActivity.this, "Verification email sent",
                                                 Toast.LENGTH_SHORT).show();
                                         btnLogIn.setEnabled(true);
                                         btnSignUp.setEnabled(true);
+                                        progressBarEmail.setVisibility(View.INVISIBLE);
                                     }
                                 });
                     } else {
                         btnLogIn.setEnabled(true);
                         btnSignUp.setEnabled(true);
-                        progressBarEmail.setVisibility(View.GONE);
+                        progressBarEmail.setVisibility(View.INVISIBLE);
                         Toast.makeText(LoginActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
                     }

@@ -1,6 +1,8 @@
 package com.cleanseproject.cleanse.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
 import com.cleanseproject.cleanse.R;
+import com.cleanseproject.cleanse.activities.AddEventActivity;
 import com.cleanseproject.cleanse.adapters.AdaptadorRecyclerViews;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.services.EventManagerService;
@@ -28,6 +31,7 @@ public class HomeFragment extends Fragment {
     private AdaptadorRecyclerViews adaptador;
     private RecyclerView rvEventos;
     private ProgressBar progressBar;
+    private FloatingActionButton fab;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,8 +44,16 @@ public class HomeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         View view = getView();
         rvEventos = view.findViewById(R.id.rv_Eventos);
-        progressBar=view.findViewById(R.id.home_fragment_pb);
-        swipeRefresh=view.findViewById(R.id.swiperefresh);
+        progressBar = view.findViewById(R.id.home_fragment_pb);
+        swipeRefresh = view.findViewById(R.id.swiperefresh);
+        fab = view.findViewById(R.id.fab_btn);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(v.getContext(), AddEventActivity.class);
+                v.getContext().startActivity(i);
+            }
+        });
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -65,7 +77,6 @@ public class HomeFragment extends Fragment {
 
     private void updateRecycleView() {
         //Conexion con Firebase para updatear la lista de eventos
-
 
 
         swipeRefresh.setRefreshing(false);
