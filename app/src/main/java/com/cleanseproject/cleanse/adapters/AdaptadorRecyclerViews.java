@@ -98,6 +98,7 @@ public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecycl
             });
         }
 
+
     }
 
 }
