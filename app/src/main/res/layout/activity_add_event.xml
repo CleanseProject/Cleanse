@@ -11,13 +11,23 @@
     tools:context=".activities.AddEventActivity">
 
     <ImageView
+        android:id="@+id/imgExit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:contentDescription="@string/close"
         android:src="@drawable/ic_close_black_30dp" />
 
+    <FrameLayout
+        android:id="@+id/FrameLayout_addevent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+    </FrameLayout>
+
     <TextView
+        android:id="@+id/txtAddEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
@@ -54,6 +64,25 @@
         android:text="@string/select_photo" />
 
 
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp">
+
+        <ImageView
+            android:id="@+id/img_estado"
+            android:layout_width="39dp"
+            android:layout_height="match_parent"
+            tools:srcCompat="@tools:sample/avatars[0]" />
+
+        <Spinner
+            android:id="@+id/spnEstado"
+            android:layout_width="161dp"
+            android:layout_height="36dp" />
+
+    </LinearLayout>
+
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -64,11 +93,10 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:ems="10"
+        android:gravity="top"
         android:hint="Description"
         android:inputType="textMultiLine"
-        android:scrollbars="vertical"
-        android:gravity="top"
-        />
+        android:scrollbars="vertical" />
 
     <Button
         android:id="@+id/btn_event_add"
