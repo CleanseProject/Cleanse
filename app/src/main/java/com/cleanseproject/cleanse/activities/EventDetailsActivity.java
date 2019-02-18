@@ -1,15 +1,12 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
-import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,13 +37,10 @@ public class EventDetailsActivity extends AppCompatActivity {
         txtDescripcion = findViewById(R.id.txtDescripcion);
         txtTituloImagen = findViewById(R.id.txtTituloImagen);
         txtDistancia = findViewById(R.id.txtDistancia);
-        rvUsuarios=findViewById(R.id.rvUsuarios);
+        rvUsuarios = findViewById(R.id.rvUsuarios);
         imagenBack = findViewById(R.id.imagenBack);
-
         imagenBack.setOnClickListener(v -> onBackPressed());
-
-        firebaseDatabase=FirebaseDatabase.getInstance();
-
+        firebaseDatabase = FirebaseDatabase.getInstance();
         txtDescripcion.setMovementMethod(new ScrollingMovementMethod());
 
         Intent intent = getIntent();
@@ -56,12 +50,10 @@ public class EventDetailsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Event event = dataSnapshot.getValue(Event.class);
-                /**
-                 * TODO: Set de la imagen
-                 */
+                // TODO: Set de la imagen
                 txtTituloImagen.setText(event.getName());
                 txtDescripcion.setText(event.getDescription());
-                String posicionEvento= "Lat:"+event.getLatitude()+" Long:"+event.getLongitude();
+                String posicionEvento = "Lat:" + event.getLatitude() + " Long:" + event.getLongitude();
                 txtDistancia.setText(posicionEvento);
             }
 
@@ -74,20 +66,13 @@ public class EventDetailsActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvUsuarios.setLayoutManager(layoutManager);
-
-
-        User u1= new User();
-        User u2= new User();
-        ArrayList<User>lista= new ArrayList<>();
+        User u1 = new User();
+        User u2 = new User();
+        ArrayList<User> lista = new ArrayList<>();
         lista.add(u1);
         lista.add(u2);
-        adapter= new UsersInEventAdapter(lista);
-
-
+        adapter = new UsersInEventAdapter(lista);
         rvUsuarios.setAdapter(adapter);
-
-
-
     }
 
 }

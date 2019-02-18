@@ -23,7 +23,7 @@
             android:id="@+id/imagenBack"
             android:layout_width="72dp"
             android:layout_height="80dp"
-            app:srcCompat="@drawable/return" />
+            app:srcCompat="@drawable/return_image" />
 
         <View
             android:layout_width="match_parent"

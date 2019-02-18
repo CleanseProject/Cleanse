@@ -23,11 +23,8 @@ import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.fragments.ChatListFragment;
 import com.cleanseproject.cleanse.fragments.HomeFragment;
 import com.cleanseproject.cleanse.fragments.MapFragment;
-import com.cleanseproject.cleanse.services.ChatManagerService;
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.ArrayList;
 
 public class HomeActivity extends AppCompatActivity {
 
