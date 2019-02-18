@@ -1,8 +1,6 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.app.DatePickerDialog;
-import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -18,7 +16,6 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 import com.cleanseproject.cleanse.R;
-import com.cleanseproject.cleanse.fragments.HomeFragment;
 import com.cleanseproject.cleanse.fragments.MapFragment;
 
 import java.util.ArrayList;
@@ -39,16 +36,16 @@ public class AddEventActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
         imgExit = findViewById(R.id.imgExit);
-        btnSelectLocation = findViewById(R.id.btn_setlocation);
-        btnSelectPic = findViewById(R.id.btn_setpic);
-        btnSelectDate = findViewById(R.id.btn_setdate);
+        btnSelectLocation = findViewById(R.id.btn_set_location);
+        btnSelectPic = findViewById(R.id.btn_set_pic);
+        btnSelectDate = findViewById(R.id.btn_set_date);
         spn_estado = findViewById(R.id.spnEstado);
         imgEstado = findViewById(R.id.img_estado);
-        ArrayList<String>lista = new ArrayList<>();
+        ArrayList<String> lista = new ArrayList<>();
         lista.add("Limpio");
         lista.add("Sucio");
         lista.add("Critico");
-        SpinnerAdapter spinnerAdapter = new ArrayAdapter<String>(this, R.layout.spinner_item, lista);
+        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, lista);
         spn_estado.setAdapter(spinnerAdapter);
         spn_estado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -77,56 +74,43 @@ public class AddEventActivity extends AppCompatActivity {
         });
 
 
-        FrameLayout frameLayout_addevent = findViewById(R.id.FrameLayout_addevent);
-        btnSelectDate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Calendar cal = Calendar.getInstance();
-                int year = cal.get(Calendar.YEAR);
-                int month = cal.get(Calendar.MONTH);
-                int day = cal.get(Calendar.DAY_OF_MONTH);
+        FrameLayout addEvent = findViewById(R.id.FrameLayout_add_event);
+        btnSelectDate.setOnClickListener(v -> {
+            Calendar cal = Calendar.getInstance();
+            int year = cal.get(Calendar.YEAR);
+            int month = cal.get(Calendar.MONTH);
+            int day = cal.get(Calendar.DAY_OF_MONTH);
+            mDateSetListener = new DatePickerDialog(AddEventActivity.this, new DatePickerDialog.OnDateSetListener() {
+                @Override
+                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                    btnSelectDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
+                }
+            }, 2018, month, day);
+            mDateSetListener.show();
 
-                mDateSetListener = new DatePickerDialog(AddEventActivity.this, new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                        btnSelectDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
-                    }
-                }, 2018, month, day);
-                mDateSetListener.show();
-
-            }
         });
 
-        btnSelectLocation.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-                transaction.replace(R.id.FrameLayout_addevent, new MapFragment());
-                frameLayout_addevent.setVisibility(View.VISIBLE);
-                transaction.addToBackStack(null);
-                transaction.commit();
-                imgExit.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        frameLayout_addevent.setVisibility(View.GONE);
-                        imgExit.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                finish();
-                            }
-                        });
-                    }
-                });
-            }
+        btnSelectLocation.setOnClickListener(v -> {
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.FrameLayout_add_event, new MapFragment());
+            addEvent.setVisibility(View.VISIBLE);
+            transaction.addToBackStack(null);
+            transaction.commit();
+            imgExit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addEvent.setVisibility(View.GONE);
+                    imgExit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                        }
+                    });
+                }
+            });
         });
 
 
-        imgExit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        imgExit.setOnClickListener(v -> finish());
     }
 }

@@ -7,8 +7,6 @@ import android.widget.EditText;
 
 import com.cleanseproject.cleanse.activities.LoginActivity;
 
-import androidx.test.espresso.action.ViewActions;
-
 
 /**
  * @author ernesto

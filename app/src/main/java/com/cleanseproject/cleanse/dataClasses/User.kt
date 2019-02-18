@@ -1,6 +1,5 @@
 package com.cleanseproject.cleanse.dataClasses
 
-import com.google.firebase.database.Exclude
 import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties

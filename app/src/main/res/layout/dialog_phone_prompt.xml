@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center"
     android:background="@color/colorPrimary"
-    >
+    android:gravity="center">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,8 +16,9 @@
             android:id="@+id/imageView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/hand_phone"
-            android:paddingBottom="20dp"/>
+            android:contentDescription="@string/phone_login"
+            android:paddingBottom="20dp"
+            app:srcCompat="@drawable/hand_phone" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,14 +42,14 @@
                     android:layout_weight="1"
                     android:text="+34"
                     android:textSize="18sp" />
+
                 <EditText
                     android:id="@+id/txt_phone"
                     android:layout_width="184dp"
                     android:layout_height="wrap_content"
                     android:ems="10"
-
                     android:hint="@string/type_phone"
-                    android:inputType="number" />
+                    android:inputType="phone" />
 
 
             </LinearLayout>
@@ -63,11 +62,11 @@
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
-            android:enabled="true"
-            android:text="@string/log_in"
             android:drawableLeft="@drawable/login_icon"
-
             android:drawablePadding="10dp"
+            android:enabled="true"
+
+            android:text="@string/log_in"
             android:visibility="visible" />
 
     </LinearLayout>

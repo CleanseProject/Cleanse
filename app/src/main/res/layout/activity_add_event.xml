@@ -19,7 +19,7 @@
         android:src="@drawable/ic_close_black_30dp" />
 
     <FrameLayout
-        android:id="@+id/FrameLayout_addevent"
+        android:id="@+id/FrameLayout_add_event"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
@@ -37,7 +37,7 @@
 
 
     <Button
-        android:id="@+id/btn_setlocation"
+        android:id="@+id/btn_set_location"
         style="@style/ButtonConImagen"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -46,7 +46,7 @@
         android:text="@string/select_location" />
 
     <Button
-        android:id="@+id/btn_setdate"
+        android:id="@+id/btn_set_date"
         style="@style/ButtonConImagen"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -55,7 +55,7 @@
         android:text="@string/select_date" />
 
     <Button
-        android:id="@+id/btn_setpic"
+        android:id="@+id/btn_set_pic"
         style="@style/ButtonConImagen"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -74,7 +74,8 @@
             android:id="@+id/img_estado"
             android:layout_width="39dp"
             android:layout_height="match_parent"
-            tools:srcCompat="@tools:sample/avatars[0]" />
+            tools:srcCompat="@tools:sample/avatars[0]"
+            android:contentDescription="@string/status" />
 
         <Spinner
             android:id="@+id/spnEstado"

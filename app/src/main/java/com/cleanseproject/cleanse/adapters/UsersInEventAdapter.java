@@ -18,14 +18,14 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
     private ArrayList<User> listaUsuarios;
     private Context context;
 
-    public UsersInEventAdapter(ArrayList<User>listaUsuarios){
-        this.listaUsuarios=listaUsuarios;
+    public UsersInEventAdapter(ArrayList<User> listaUsuarios) {
+        this.listaUsuarios = listaUsuarios;
     }
 
     @NonNull
     @Override
     public UsersInEventAdapter.Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view= LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_user_photo,null,false);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_user_photo, null, false);
 
 
         return new UsersInEventAdapter.Holder(view);
@@ -35,7 +35,6 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
     public void onBindViewHolder(@NonNull Holder holder, int i) {
         holder.setPhotos();
     }
-
 
 
     @Override
@@ -52,18 +51,14 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
 
         public Holder(View v) {
             super(v);
-            ivUser=v.findViewById(R.id.ivUser);
+            ivUser = v.findViewById(R.id.ivUser);
 
-            context=v.getContext();
+            context = v.getContext();
         }
 
 
-
-
         public void setPhotos() {
-            /**
-             * TODO: Cambiar por la foto de User en Firebase
-             */
+            // TODO: Cambiar por la foto de User en Firebase
             ivUser.setImageResource(R.drawable.imagen);
         }
     }

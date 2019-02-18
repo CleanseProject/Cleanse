@@ -34,7 +34,7 @@
 
                     android:layout_height="wrap_content"
                     android:autofillHints="emailAddress"
-                    android:drawableLeft="@drawable/emaillock_icon"
+                    android:drawableLeft="@drawable/email_lock_icon"
                     android:drawablePadding="10dp"
                     android:ems="10"
                     android:hint="@string/e_mail"
