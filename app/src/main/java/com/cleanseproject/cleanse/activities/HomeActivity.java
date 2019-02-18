@@ -120,6 +120,7 @@ public class HomeActivity extends AppCompatActivity {
         navigationView.getMenu().getItem(0).setChecked(true);
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
+            drawerLayout.closeDrawers();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:
@@ -137,7 +138,6 @@ public class HomeActivity extends AppCompatActivity {
                     transaction.addToBackStack(null);
                     transaction.commit();
             }
-            drawerLayout.closeDrawers();
             return true;
         });
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
