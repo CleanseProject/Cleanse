@@ -17,12 +17,22 @@ public class LocationService {
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
     }
 
+    private boolean checkPermission() {
+        return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public Location getCurrentLocation() {
+        if (checkPermission())
+            return locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        return new Location("");
+    }
+
     public float distance(Location eventLocation) {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return 0;
+        if (checkPermission()) {
+            Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            return currentLocation.distanceTo(eventLocation) / 1000;
         }
-        Location currentLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-        return currentLocation.distanceTo(eventLocation) / 1000;
+        return -1;
     }
 
 }

@@ -1,6 +1,7 @@
 package com.cleanseproject.cleanse.fragments;
 
 
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,6 +12,7 @@ import android.view.ViewGroup;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.services.EventManagerService;
+import com.cleanseproject.cleanse.services.LocationService;
 import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,6 +27,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private EventManagerService eventManagerService;
+    private LocationService locationService;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,6 +40,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         super.onActivityCreated(savedInstanceState);
         View view = getView();
         eventManagerService = new EventManagerService();
+        locationService = new LocationService(getContext());
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);  //use SuppoprtMapFragment for using in fragment instead of activity  MapFragment = activity   SupportMapFragment = fragment
         mapFragment.getMapAsync(this);
     }
@@ -45,14 +49,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         mMap.setOnMapClickListener(latLng -> Log.v("Mensaje", latLng + ""));
-        eventManagerService.getCloseEvents(new GeoLocation(37.7832, -122.4056),
+        Location currentLocation = locationService.getCurrentLocation();
+        eventManagerService.getCloseEvents(
+                new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
                 10,
                 this::addEventToMap);
     }
 
     private void addEventToMap(Event event) {
-            LatLng latLng = new LatLng(Double.parseDouble(event.getLatitude()), Double.parseDouble(event.getLongitude()));
-            mMap.addMarker(new MarkerOptions().position(latLng).title(event.getName()));
+        LatLng latLng = new LatLng(Double.parseDouble(event.getLatitude()), Double.parseDouble(event.getLongitude()));
+        mMap.addMarker(new MarkerOptions().position(latLng).title(event.getName()));
     }
 
 }
