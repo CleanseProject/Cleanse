@@ -2,16 +2,14 @@ package com.cleanseproject.cleanse.fragments;
 
 
 import android.Manifest;
-import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -20,7 +18,6 @@ import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
 import com.firebase.geofire.GeoLocation;
-import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -34,6 +31,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private EventManagerService eventManagerService;
     private LocationService locationService;
 
+    private boolean followUser;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -44,6 +43,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         View view = getView();
+        View overlay = view.findViewById(R.id.map_overlay);
+        followUser = true;
+        overlay.setOnTouchListener((v, event) -> {
+            if (event.getAction() == MotionEvent.ACTION_UP) {
+                v.performClick();
+            }
+            followUser = false;
+            return false;
+        });
         eventManagerService = new EventManagerService();
         locationService = new LocationService(getContext());
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);  //use SuppoprtMapFragment for using in fragment instead of activity  MapFragment = activity   SupportMapFragment = fragment
@@ -55,10 +63,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap = googleMap;
         if (checkPermission())
             mMap.setMyLocationEnabled(true);
+        mMap.setOnMyLocationButtonClickListener(() -> {
+            followUser = true;
+            return false;
+        });
         locationService.setLocationListener(location -> {
             LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 10);
-            mMap.animateCamera(cameraUpdate);
+            if (followUser)
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
         });
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setOnMapClickListener(latLng -> Log.v("Mensaje", latLng + ""));
