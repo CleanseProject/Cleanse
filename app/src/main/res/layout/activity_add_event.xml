@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,99 +11,100 @@
     tools:context=".activities.AddEventActivity">
 
     <ImageView
+        android:id="@+id/imgExit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
         android:contentDescription="@string/close"
         android:src="@drawable/ic_close_black_30dp" />
 
+    <FrameLayout
+        android:id="@+id/FrameLayout_addevent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+    </FrameLayout>
+
     <TextView
+        android:id="@+id/txtAddEvent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:text="@string/add_new_event"
         android:textColor="#000"
         android:textSize="20sp" />
 
-    <LinearLayout
-        android:id="@+id/linearlayout_setlocation"
-        android:layout_width="wrap_content"
+
+    <Button
+        android:id="@+id/btn_setlocation"
+        style="@style/ButtonConImagen"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal">
+        android:layout_marginBottom="10dp"
+        android:drawableStart="@drawable/placeholder"
+        android:text="@string/select_location" />
 
-        <ImageView
-            android:id="@+id/imageView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/placeholder" />
-
-        <TextView
-            android:id="@+id/txt_dialog_location"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/select_location"
-            android:textColor="#000" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/linearlayout_setdate"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/btn_setdate"
+        style="@style/ButtonConImagen"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginBottom="10dp"
+        android:drawableStart="@drawable/calendar"
+        android:text="@string/select_date" />
 
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/placeholder" />
+    <Button
+        android:id="@+id/btn_setpic"
+        style="@style/ButtonConImagen"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:drawableStart="@drawable/add_pic"
+        android:text="@string/select_photo" />
 
-        <TextView
-            android:id="@+id/txt_dialog_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/select_date"
-            android:textColor="#000" />
-    </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearlayout_setpic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="10dp">
 
         <ImageView
-            android:id="@+id/imageView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@drawable/placeholder" />
+            android:id="@+id/img_estado"
+            android:layout_width="39dp"
+            android:layout_height="match_parent"
+            tools:srcCompat="@tools:sample/avatars[0]" />
 
-        <TextView
-            android:id="@+id/txt_dialog_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/select_photo"
-            android:textColor="#000" />
+        <Spinner
+            android:id="@+id/spnEstado"
+            android:layout_width="161dp"
+            android:layout_height="36dp" />
+
     </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
-        android:layout_height="285dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:ems="10"
+        android:gravity="top"
         android:hint="Description"
-        android:inputType="textMultiLine" />
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical" />
 
     <Button
+        android:id="@+id/btn_event_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="end"
+        android:layout_gravity="right"
         android:text="@string/add" />
 
 </LinearLayout>
+
+
