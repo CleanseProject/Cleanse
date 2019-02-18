@@ -119,7 +119,7 @@ public class LoginActivity extends AppCompatActivity {
             txt_phonee.setText("");
             txt_phonee.setHint("Type your code");
             txtNumeroRegion.setText("");
-            btn_Login_phone.setText("Verify");
+            btn_Login_phone.setText(getString(R.string.verify));
             btn_Login_phone.setEnabled(true);
         });
     }
