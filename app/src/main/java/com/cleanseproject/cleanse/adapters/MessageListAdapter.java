@@ -1,5 +1,6 @@
 package com.cleanseproject.cleanse.adapters;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import com.cleanseproject.cleanse.dataClasses.Message;
 import com.cleanseproject.cleanse.services.ChatManagerService;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -118,7 +120,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     private String formatDate(long time){
         Date date = new Date(time);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        DateFormat dateFormat = SimpleDateFormat.getTimeInstance();
         return dateFormat.format(date);
     }
 
