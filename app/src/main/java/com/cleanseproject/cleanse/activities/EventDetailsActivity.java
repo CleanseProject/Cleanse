@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 
 public class EventDetailsActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
-    private ImageView imagenEvento;
+    private ImageView imagenEvento, imagenBack;
     private TextView txtDescripcion, txtTituloImagen, txtDistancia;
     private RecyclerView rvUsuarios;
     private UsersInEventAdapter adapter;
@@ -40,6 +41,10 @@ public class EventDetailsActivity extends AppCompatActivity {
         txtTituloImagen = findViewById(R.id.txtTituloImagen);
         txtDistancia = findViewById(R.id.txtDistancia);
         rvUsuarios=findViewById(R.id.rvUsuarios);
+        imagenBack = findViewById(R.id.imagenBack);
+
+        imagenBack.setOnClickListener(v -> onBackPressed());
+
         firebaseDatabase=FirebaseDatabase.getInstance();
 
         txtDescripcion.setMovementMethod(new ScrollingMovementMethod());
@@ -56,7 +61,6 @@ public class EventDetailsActivity extends AppCompatActivity {
                  */
                 txtTituloImagen.setText(event.getName());
                 txtDescripcion.setText(event.getDescription());
-
                 String posicionEvento= "Lat:"+event.getLatitude()+" Long:"+event.getLongitude();
                 txtDistancia.setText(posicionEvento);
             }
