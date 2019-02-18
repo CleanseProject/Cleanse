@@ -47,24 +47,11 @@ public class HomeFragment extends Fragment {
         progressBar = view.findViewById(R.id.home_fragment_pb);
         swipeRefresh = view.findViewById(R.id.swiperefresh);
         fab = view.findViewById(R.id.fab_btn);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(v.getContext(), AddEventActivity.class);
-                v.getContext().startActivity(i);
-            }
-        });
-        swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-
-                //swipeRefresh.setRefreshing(true);
-
-                updateRecycleView();
-
-            }
-
-
+        fab.setOnClickListener(v -> v.getContext().startActivity(
+                new Intent(v.getContext(), AddEventActivity.class)));
+        swipeRefresh.setOnRefreshListener(() -> {
+            //swipeRefresh.setRefreshing(true);
+            updateRecycleView();
         });
 
         LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
@@ -72,16 +59,11 @@ public class HomeFragment extends Fragment {
         eventManagerService = new EventManagerService();
         eventManagerService.getCloseEvents(new GeoLocation(37.7832, -122.4056),
                 10,
-                events -> rellenarEventos(events));
+                this::rellenarEventos);
     }
 
     private void updateRecycleView() {
-        /**
-         * TODO: Conexion con Firebase para updatear la lista de eventos
-         */
-
-
-
+        // TODO: Conexion con Firebase para updatear la lista de eventos
         swipeRefresh.setRefreshing(false);
     }
 

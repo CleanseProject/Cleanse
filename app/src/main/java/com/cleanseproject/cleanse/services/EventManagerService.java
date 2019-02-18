@@ -47,9 +47,13 @@ public class EventManagerService {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Event event = dataSnapshot.getValue(Event.class);
-                event.setId(dataSnapshot.getKey());
-                events.add(event);
-                callback.onEventsLoaded(events);
+                if (event != null) {
+                    event.setId(dataSnapshot.getKey());
+                    events.add(event);
+                    callback.onEventsLoaded(events);
+                } else {
+                    Log.d("Firebase", "Null Event returned");
+                }
             }
 
             @Override
