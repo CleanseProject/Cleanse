@@ -47,14 +47,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.setOnMapClickListener(latLng -> Log.v("Mensaje", latLng + ""));
         eventManagerService.getCloseEvents(new GeoLocation(37.7832, -122.4056),
                 10,
-                this::addEventsToMap);
+                this::addEventToMap);
     }
 
-    private void addEventsToMap(ArrayList<Event> events) {
-        for (Event event : events) {
+    private void addEventToMap(Event event) {
             LatLng latLng = new LatLng(Double.parseDouble(event.getLatitude()), Double.parseDouble(event.getLongitude()));
             mMap.addMarker(new MarkerOptions().position(latLng).title(event.getName()));
-        }
     }
 
 }

@@ -33,6 +33,8 @@ public class HomeFragment extends Fragment {
     private ProgressBar progressBar;
     private FloatingActionButton fab;
 
+    private ArrayList<Event> events;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,6 +59,9 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
         rvEventos.setLayoutManager(llm);
         eventManagerService = new EventManagerService();
+        events = new ArrayList<>();
+        adaptador = new AdaptadorRecyclerViews(events);
+        rvEventos.setAdapter(adaptador);
         eventManagerService.getCloseEvents(new GeoLocation(37.7832, -122.4056),
                 10,
                 this::rellenarEventos);
@@ -67,10 +72,11 @@ public class HomeFragment extends Fragment {
         swipeRefresh.setRefreshing(false);
     }
 
-    private void rellenarEventos(ArrayList<Event> events) {
-        adaptador = new AdaptadorRecyclerViews(events);
-        rvEventos.setAdapter(adaptador);
-        progressBar.setVisibility(View.GONE);
+    private void rellenarEventos(Event event) {
+        events.add(event);
+        adaptador.notifyDataSetChanged();
+        if (progressBar.getVisibility() == View.VISIBLE)
+            progressBar.setVisibility(View.GONE);
     }
 
 }

@@ -3,7 +3,7 @@ package com.cleanseproject.cleanse.services;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.cleanseproject.cleanse.callbacks.EventsLoadCallback;
+import com.cleanseproject.cleanse.callbacks.EventLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
@@ -22,8 +22,6 @@ public class EventManagerService {
     private FirebaseDatabase firebaseDatabase;
     private GeoFire geoFire;
 
-    private ArrayList<Event> events;
-
     public EventManagerService() {
         firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference geoFireRef = firebaseDatabase.getReference("geofire");
@@ -41,7 +39,7 @@ public class EventManagerService {
                 });
     }
 
-    public void getEvent(String key, EventsLoadCallback callback) {
+    public void getEvent(String key, EventLoadCallback callback) {
         DatabaseReference eventsRef = firebaseDatabase.getReference("events").child(key);
         eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -49,8 +47,7 @@ public class EventManagerService {
                 Event event = dataSnapshot.getValue(Event.class);
                 if (event != null) {
                     event.setId(dataSnapshot.getKey());
-                    events.add(event);
-                    callback.onEventsLoaded(events);
+                    callback.onEventLoaded(event);
                 } else {
                     Log.d("Firebase", "Null Event returned");
                 }
@@ -63,8 +60,7 @@ public class EventManagerService {
         });
     }
 
-    public void getCloseEvents(GeoLocation location, double radius, EventsLoadCallback callback) {
-        events = new ArrayList<>();
+    public void getCloseEvents(GeoLocation location, double radius, EventLoadCallback callback) {
         GeoQuery geoQuery = geoFire.queryAtLocation(location, radius);
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
