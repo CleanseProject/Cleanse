@@ -2,6 +2,8 @@ package com.cleanseproject.cleanse.fragments;
 
 
 import android.Manifest;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.cleanseproject.cleanse.R;
+import com.cleanseproject.cleanse.activities.AddEventActivity;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
@@ -23,26 +26,33 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private EventManagerService eventManagerService;
     private LocationService locationService;
-
     private boolean followUser;
+    private double latitud;
+    private double longitud;
+    private ArrayList<Marker> listaMarcadores;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_map, container, false);
+
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         View view = getView();
+        listaMarcadores = new ArrayList<>();
         View overlay = view.findViewById(R.id.map_overlay);
         followUser = true;
         overlay.setOnTouchListener((v, event) -> {
@@ -73,13 +83,37 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
         });
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
-        mMap.setOnMapClickListener(latLng -> Log.v("Mensaje", latLng + ""));
+        mMap.setOnMapClickListener(latLng -> {
+
+
+            //borrarMarcador();
+            Marker marcador = mMap.addMarker(new MarkerOptions().position(latLng).title("Agregar punto").snippet("Haz click para agregar este punto"));
+            latitud = latLng.latitude;
+            longitud = latLng.longitude;
+
+            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+                    Log.v("Mensaje", latLng.latitude + "");
+                   /* Double lat = latLng.latitude;
+                    Double lon = latLng.longitude;
+                    Intent i = new Intent(getContext(), AddEventActivity.class);
+                    i.putExtra("Latitud", lat);
+                    i.putExtra("Longitud", lon);
+                    startActivity(i);*/
+                }
+            });
+
+
+        });
+
         Location currentLocation = locationService.getCurrentLocation();
         eventManagerService.getCloseEvents(
                 new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
                 10,
                 this::addEventToMap);
     }
+
 
     private boolean checkPermission() {
         return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;

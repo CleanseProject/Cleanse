@@ -1,6 +1,7 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.widget.SpinnerAdapter;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.fragments.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,6 +43,14 @@ public class AddEventActivity extends AppCompatActivity {
         btnSelectDate = findViewById(R.id.btn_set_date);
         spn_estado = findViewById(R.id.spnEstado);
         imgEstado = findViewById(R.id.img_estado);
+        ////////////////// Intent
+        Intent i = getIntent();
+        Double lat = i.getDoubleExtra("Latitud", 0);
+        Double lon = i.getDoubleExtra("Longitud", 0);
+        if (lat != 0 && lon != 0) {
+            btnSelectLocation.setText("Lat/Lon: " + lat + "/" + lon);
+        }
+        //////////////////
         ArrayList<String> lista = new ArrayList<>();
         lista.add("Limpio");
         lista.add("Sucio");
