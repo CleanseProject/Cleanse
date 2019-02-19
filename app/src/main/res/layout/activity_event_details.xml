@@ -8,6 +8,13 @@
     android:orientation="vertical"
     tools:context=".activities.EventDetailsActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/event_details_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ToolBarStyle" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="215dp"
@@ -18,12 +25,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/imagen" />
-
-        <ImageView
-            android:id="@+id/imagenBack"
-            android:layout_width="72dp"
-            android:layout_height="80dp"
-            app:srcCompat="@drawable/return_image" />
 
         <View
             android:layout_width="match_parent"
