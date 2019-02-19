@@ -1,6 +1,7 @@
 package com.cleanseproject.cleanse.fragments;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import com.cleanseproject.cleanse.activities.AddEventActivity;
 import com.cleanseproject.cleanse.adapters.AdaptadorRecyclerViews;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.services.EventManagerService;
+import com.cleanseproject.cleanse.services.LocationService;
 import com.firebase.geofire.GeoLocation;
 
 import java.util.ArrayList;
@@ -25,6 +27,8 @@ import java.util.ArrayList;
 public class HomeFragment extends Fragment {
 
     private EventManagerService eventManagerService;
+    private LocationService locationService;
+
     private SwipeRefreshLayout swipeRefresh;
     private AdaptadorRecyclerViews adaptador;
     private RecyclerView rvEventos;
@@ -57,10 +61,13 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
         rvEventos.setLayoutManager(llm);
         eventManagerService = new EventManagerService();
+        locationService = new LocationService(getContext());
         events = new ArrayList<>();
         adaptador = new AdaptadorRecyclerViews(events);
         rvEventos.setAdapter(adaptador);
-        eventManagerService.getCloseEvents(new GeoLocation(37.7832, -122.4056),
+        Location currentLocation = locationService.getCurrentLocation();
+        eventManagerService.getCloseEvents(
+                new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
                 10,
                 this::rellenarEventos);
     }
