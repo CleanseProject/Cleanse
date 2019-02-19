@@ -1,12 +1,14 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,55 +16,63 @@ import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.adapters.UsersInEventAdapter;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.dataClasses.User;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.cleanseproject.cleanse.services.ChatManagerService;
+import com.cleanseproject.cleanse.services.EventManagerService;
+import com.cleanseproject.cleanse.services.LocationService;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
 public class EventDetailsActivity extends AppCompatActivity {
-    private FirebaseDatabase firebaseDatabase;
-    private ImageView imagenEvento, imagenBack;
-    private TextView txtDescripcion, txtTituloImagen, txtDistancia;
+
+    private FirebaseAuth firebaseAuth;
+    private EventManagerService eventManagerService;
+    private ChatManagerService chatManagerService;
+    private LocationService locationService;
+
+    private Event event;
+
+    private ImageView imagenEvento;
+    private TextView txtDescripcion, txtDistancia, txtJoinChat;
     private RecyclerView rvUsuarios;
     private UsersInEventAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.vista_evento_seleccionado);
+        setContentView(R.layout.activity_event_details);
+        Toolbar toolbar = findViewById(R.id.event_details_toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         imagenEvento = findViewById(R.id.imagenEventoSeleccionado);
         txtDescripcion = findViewById(R.id.txtDescripcion);
-        txtTituloImagen = findViewById(R.id.txtTituloImagen);
         txtDistancia = findViewById(R.id.txtDistancia);
+        txtJoinChat = findViewById(R.id.txt_join_chat);
         rvUsuarios = findViewById(R.id.rvUsuarios);
-        imagenBack = findViewById(R.id.imagenBack);
-        imagenBack.setOnClickListener(v -> onBackPressed());
-        firebaseDatabase = FirebaseDatabase.getInstance();
+        eventManagerService = new EventManagerService();
+        chatManagerService = new ChatManagerService();
+        locationService = new LocationService(this);
+        firebaseAuth = FirebaseAuth.getInstance();
+        txtJoinChat.setOnClickListener(v -> startChat());
         txtDescripcion.setMovementMethod(new ScrollingMovementMethod());
-
         Intent intent = getIntent();
         String idEvento = intent.getStringExtra("Evento");
-        DatabaseReference refEvents = firebaseDatabase.getReference("events").child(idEvento);
-        refEvents.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Event event = dataSnapshot.getValue(Event.class);
-                // TODO: Set de la imagen
-                txtTituloImagen.setText(event.getName());
-                txtDescripcion.setText(event.getDescription());
-                String posicionEvento = "Lat:" + event.getLatitude() + " Long:" + event.getLongitude();
-                txtDistancia.setText(posicionEvento);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+        eventManagerService.getEvent(idEvento, event -> {
+            this.event = event;
+            toolbar.setTitle(event.getName());
+            txtDescripcion.setText(event.getDescription());
+            Location location = new Location("");
+            location.setLatitude(Double.parseDouble(event.getLatitude()));
+            location.setLongitude(Double.parseDouble(event.getLongitude()));
+            String distancia;
+            float distanciaMetros = locationService.distance(location);
+            if (distanciaMetros >= 1000)
+                distancia = Math.round(distanciaMetros / 1000) + " km";
+            else
+                distancia = Math.round(distanciaMetros) + " m";
+            txtDistancia.setText(distancia);
         });
-
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvUsuarios.setLayoutManager(layoutManager);
@@ -73,6 +83,25 @@ public class EventDetailsActivity extends AppCompatActivity {
         lista.add(u2);
         adapter = new UsersInEventAdapter(lista);
         rvUsuarios.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void startChat() {
+        chatManagerService.joinChat(firebaseAuth.getCurrentUser().getUid(), event.getId());
+        Intent intent = new Intent(EventDetailsActivity.this, ChatActivity.class);
+        intent.putExtra("chatuid", event.getId());
+        intent.putExtra("chatname", event.getName());
+        startActivity(intent);
     }
 
 }

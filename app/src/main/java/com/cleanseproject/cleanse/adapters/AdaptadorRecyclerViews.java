@@ -72,7 +72,13 @@ public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecycl
             Location location = new Location("");
             location.setLatitude(Double.parseDouble(event.getLatitude()));
             location.setLongitude(Double.parseDouble(event.getLongitude()));
-            txtDistancia.setText(locationService.distance(location) + " km");
+            String distancia;
+            float distanciaMetros = locationService.distance(location);
+            if (distanciaMetros >= 1000)
+                distancia = Math.round(distanciaMetros / 1000) + " km";
+            else
+                distancia = Math.round(distanciaMetros) + " m";
+            txtDistancia.setText(distancia);
             ivFoto.setBackgroundResource(R.drawable.imagen);
             ivFoto.setOnClickListener(v -> {
                 Intent intent = new Intent(context, EventDetailsActivity.class);

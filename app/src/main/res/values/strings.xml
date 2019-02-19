@@ -29,4 +29,5 @@
     <string name="select_photo">Select photo</string>
     <string name="verify">Verify</string>
     <string name="status">Estado</string>
+    <string name="join_chat">Join chat</string>
 </resources>

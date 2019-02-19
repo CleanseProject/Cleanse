@@ -8,6 +8,13 @@
     android:orientation="vertical"
     tools:context=".activities.EventDetailsActivity">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/event_details_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ToolBarStyle" />
+
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="215dp"
@@ -19,28 +26,10 @@
             android:layout_height="match_parent"
             android:background="@drawable/imagen" />
 
-        <ImageView
-            android:id="@+id/imagenBack"
-            android:layout_width="72dp"
-            android:layout_height="80dp"
-            app:srcCompat="@drawable/return_image" />
-
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/scrim" />
-
-        <TextView
-            android:id="@+id/txtTituloImagen"
-            android:layout_width="246dp"
-            android:layout_height="47dp"
-            android:layout_gravity="bottom"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/montserrat"
-            android:text="TextView"
-            android:textColor="@color/colorBlanco"
-            android:textSize="24sp"
-            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/txtDistancia"
@@ -109,22 +98,37 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/txt_join_chat"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:drawableStart="@drawable/ic_chat"
+        android:drawablePadding="20dp"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:text="@string/join_chat"
+        android:textColor="#000"
+        android:textSize="20sp" />
+
+    <TextView
         android:id="@+id/txtDescripcion"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginLeft="5dp"
         android:layout_marginTop="1dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="5dp"
+        android:layout_weight="1"
         android:fontFamily="@font/montserrat"
-        android:inputType="textMultiLine"
-        android:scrollbars="vertical"
-        android:layout_weight="1"/>
+        android:scrollbars="vertical" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvUsuarios"
         android:layout_width="291dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"/>
+        android:layout_gravity="bottom" />
 
 </LinearLayout>
