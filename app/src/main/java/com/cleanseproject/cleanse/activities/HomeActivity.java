@@ -106,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
         startActivity(new Intent(HomeActivity.this, LoginActivity.class));
     }
 
-    private void initializeUI() {
+    private void dinitializeUI() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
