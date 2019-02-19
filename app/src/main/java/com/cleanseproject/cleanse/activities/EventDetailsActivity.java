@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.adapters.UsersInEventAdapter;
+import com.cleanseproject.cleanse.dataClasses.Chat;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.services.ChatManagerService;
@@ -88,6 +89,10 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     private void startChat() {
         chatManagerService.joinChat(firebaseAuth.getCurrentUser().getUid(), event.getId());
+        Intent intent = new Intent(EventDetailsActivity.this, ChatActivity.class);
+        intent.putExtra("chatuid", event.getId());
+        intent.putExtra("chatname", event.getName());
+        startActivity(intent);
     }
 
 }
