@@ -85,9 +85,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setOnMapClickListener(latLng -> {
 
+            if (listaMarcadores.size()!=0){
+                borrarMarcador();
+            }
 
-            //borrarMarcador();
             Marker marcador = mMap.addMarker(new MarkerOptions().position(latLng).title("Agregar punto").snippet("Haz click para agregar este punto"));
+            listaMarcadores.add(marcador);
+            marcador.showInfoWindow();
             latitud = latLng.latitude;
             longitud = latLng.longitude;
 
@@ -95,16 +99,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 @Override
                 public void onInfoWindowClick(Marker marker) {
                     Log.v("Mensaje", latLng.latitude + "");
-                   /* Double lat = latLng.latitude;
+                    Double lat = latLng.latitude;
                     Double lon = latLng.longitude;
+                    if (getActivity().getClass()==AddEventActivity.class){
+
+                    }
                     Intent i = new Intent(getContext(), AddEventActivity.class);
                     i.putExtra("Latitud", lat);
                     i.putExtra("Longitud", lon);
-                    startActivity(i);*/
+                    startActivity(i);
                 }
             });
-
-
         });
 
         Location currentLocation = locationService.getCurrentLocation();
@@ -112,6 +117,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
                 10,
                 this::addEventToMap);
+    }
+
+    private void borrarMarcador() {
+        for (int i = 0; i<listaMarcadores.size();i++){
+            Marker marcador = listaMarcadores.get(i);
+            marcador.remove();
+        }
+
     }
 
 
