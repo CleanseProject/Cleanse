@@ -36,24 +36,42 @@
                 android:layout_weight="1"
                 android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/tvTitulo"
-                    android:layout_width="188dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_weight="1"
-                    android:text="Prueba"
-                    android:textSize="24sp" />
 
-                <TextView
-                    android:id="@+id/txtDistancia"
-                    android:layout_width="106dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:text="5 km" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <HorizontalScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="56dp">
+
+                            <TextView
+                                android:id="@+id/tvTitulo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:layout_marginStart="16dp"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginRight="5dp"
+                                android:layout_weight="1"
+                                android:paddingEnd="16dp"
+                                android:text="Prueba"
+                                android:inputType="textLongMessage"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:textSize="24sp" />
+                        </HorizontalScrollView>
+
+                        <TextView
+                            android:id="@+id/txtDistancia"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:text="5 km" />
+                    </LinearLayout>
+
+
             </LinearLayout>
 
             <ImageButton
