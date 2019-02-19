@@ -33,6 +33,8 @@ public class AddEventActivity extends AppCompatActivity {
     private Spinner spn_estado;
     private ImageView imgEstado;
 
+    private boolean frameAbierto;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -100,27 +102,26 @@ public class AddEventActivity extends AppCompatActivity {
 
         });
 
+        imgExit.setOnClickListener(v -> {
+            if (frameAbierto) {
+                addEvent.setVisibility(View.GONE);
+                frameAbierto = false;
+            } else {
+                finish();
+            }
+        });
         btnSelectLocation.setOnClickListener(v -> {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.FrameLayout_add_event, new MapFragment());
             addEvent.setVisibility(View.VISIBLE);
             transaction.addToBackStack(null);
             transaction.commit();
-            imgExit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    addEvent.setVisibility(View.GONE);
-                    imgExit.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            finish();
-                        }
-                    });
-                }
-            });
+            frameAbierto = true;
         });
-
-
-        imgExit.setOnClickListener(v -> finish());
     }
+
+    public void setFrameAbierto(boolean frameAbierto) {
+        this.frameAbierto = frameAbierto;
+    }
+
 }

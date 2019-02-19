@@ -105,12 +105,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     Double lat = latLng.latitude;
                     Double lon = latLng.longitude;
                     if (getActivity().getClass() == AddEventActivity.class) {
+                        AddEventActivity addEventActivity=(AddEventActivity) getActivity();
                         Button btnLocalizacion = getActivity().findViewById(R.id.btn_set_location);
                         if (lat != 0 && lon != 0) {
                             btnLocalizacion.setText("Lat/Lon: " + lat + "/" + lon);
                         }
-                        FrameLayout frameLayout = getActivity().findViewById(R.id.FrameLayout_add_event);
+                        FrameLayout frameLayout = addEventActivity.findViewById(R.id.FrameLayout_add_event);
                         frameLayout.setVisibility(View.GONE);
+                        addEventActivity.setFrameAbierto(false);
                     } else {
                         Intent i = new Intent(getContext(), AddEventActivity.class);
                         i.putExtra("Latitud", lat);
