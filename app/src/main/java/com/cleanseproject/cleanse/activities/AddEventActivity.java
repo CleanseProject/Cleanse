@@ -19,7 +19,9 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 import com.cleanseproject.cleanse.R;
+import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.fragments.MapFragment;
+import com.cleanseproject.cleanse.services.EventManagerService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -27,12 +29,15 @@ import java.util.Calendar;
 
 public class AddEventActivity extends AppCompatActivity {
 
+    private EventManagerService eventManagerService;
+
     public static final int PICK_IMAGE = 1;
 
     private DatePickerDialog mDateSetListener;
     private Button btnSelectDate;
     private Button btnSelectLocation;
     private Button btnSelectPic;
+    private Button btnAdd;
     private ImageView imgExit, selectedImage;
     private Spinner spn_estado;
     private ImageView imgEstado;
@@ -47,9 +52,11 @@ public class AddEventActivity extends AppCompatActivity {
         btnSelectLocation = findViewById(R.id.btn_set_location);
         btnSelectPic = findViewById(R.id.btn_set_pic);
         btnSelectDate = findViewById(R.id.btn_set_date);
+        btnAdd = findViewById(R.id.btn_event_add);
         spn_estado = findViewById(R.id.spnEstado);
         imgEstado = findViewById(R.id.img_estado);
         selectedImage = findViewById(R.id.selected_image);
+        eventManagerService=new EventManagerService();
         ////////////////// Intent
         Intent i = getIntent();
         Double lat = i.getDoubleExtra("Latitud", 0);
