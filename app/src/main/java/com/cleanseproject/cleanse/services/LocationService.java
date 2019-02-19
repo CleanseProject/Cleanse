@@ -74,7 +74,7 @@ public class LocationService {
     public float distance(Location eventLocation) {
         if (checkPermission()) {
             Location currentLocation = getCurrentLocation();
-            return currentLocation.distanceTo(eventLocation) / 1000;
+            return currentLocation.distanceTo(eventLocation);
         }
         return -1;
     }

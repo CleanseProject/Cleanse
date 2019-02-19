@@ -32,18 +32,6 @@
             android:background="@drawable/scrim" />
 
         <TextView
-            android:id="@+id/txtTituloImagen"
-            android:layout_width="246dp"
-            android:layout_height="47dp"
-            android:layout_gravity="bottom"
-            android:layout_marginStart="10dp"
-            android:fontFamily="@font/montserrat"
-            android:text="TextView"
-            android:textColor="@color/colorBlanco"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <TextView
             android:id="@+id/txtDistancia"
             android:layout_width="wrap_content"
             android:layout_height="47dp"

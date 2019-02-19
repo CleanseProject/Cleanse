@@ -1,6 +1,7 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,11 +14,11 @@ import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.adapters.UsersInEventAdapter;
-import com.cleanseproject.cleanse.dataClasses.Chat;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.services.ChatManagerService;
 import com.cleanseproject.cleanse.services.EventManagerService;
+import com.cleanseproject.cleanse.services.LocationService;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -27,11 +28,12 @@ public class EventDetailsActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private EventManagerService eventManagerService;
     private ChatManagerService chatManagerService;
+    private LocationService locationService;
 
     private Event event;
 
     private ImageView imagenEvento;
-    private TextView txtDescripcion, txtTituloImagen, txtDistancia, txtJoinChat;
+    private TextView txtDescripcion, txtDistancia, txtJoinChat;
     private RecyclerView rvUsuarios;
     private UsersInEventAdapter adapter;
 
@@ -45,12 +47,12 @@ public class EventDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         imagenEvento = findViewById(R.id.imagenEventoSeleccionado);
         txtDescripcion = findViewById(R.id.txtDescripcion);
-        txtTituloImagen = findViewById(R.id.txtTituloImagen);
         txtDistancia = findViewById(R.id.txtDistancia);
         txtJoinChat = findViewById(R.id.txt_join_chat);
         rvUsuarios = findViewById(R.id.rvUsuarios);
         eventManagerService = new EventManagerService();
         chatManagerService = new ChatManagerService();
+        locationService = new LocationService(this);
         firebaseAuth = FirebaseAuth.getInstance();
         txtJoinChat.setOnClickListener(v -> startChat());
         txtDescripcion.setMovementMethod(new ScrollingMovementMethod());
@@ -59,10 +61,17 @@ public class EventDetailsActivity extends AppCompatActivity {
         eventManagerService.getEvent(idEvento, event -> {
             this.event = event;
             toolbar.setTitle(event.getName());
-            txtTituloImagen.setText(event.getName());
             txtDescripcion.setText(event.getDescription());
-            String posicionEvento = "Lat:" + event.getLatitude() + " Long:" + event.getLongitude();
-            txtDistancia.setText(posicionEvento);
+            Location location = new Location("");
+            location.setLatitude(Double.parseDouble(event.getLatitude()));
+            location.setLongitude(Double.parseDouble(event.getLongitude()));
+            String distancia;
+            float distanciaMetros = locationService.distance(location);
+            if (distanciaMetros >= 1000)
+                distancia = Math.round(distanciaMetros / 1000) + " km";
+            else
+                distancia = Math.round(distanciaMetros) + " m";
+            txtDistancia.setText(distancia);
         });
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
