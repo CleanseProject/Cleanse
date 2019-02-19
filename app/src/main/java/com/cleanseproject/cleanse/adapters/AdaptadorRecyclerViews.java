@@ -67,7 +67,8 @@ public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecycl
         }
 
         public void asignarDatos(Event event) {
-            txtTitulo.setText(event.getName());
+            //txtTitulo.setText(event.getName());
+            txtTitulo.setText("Universidad Europea de Madrid");
             Location location = new Location("");
             location.setLatitude(Double.parseDouble(event.getLatitude()));
             location.setLongitude(Double.parseDouble(event.getLongitude()));

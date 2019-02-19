@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.AddEventActivity;
@@ -40,6 +42,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private double latitud;
     private double longitud;
     private ArrayList<Marker> listaMarcadores;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -85,9 +88,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setOnMapClickListener(latLng -> {
 
+            if (listaMarcadores.size() != 0) {
+                borrarMarcador();
+            }
 
-            //borrarMarcador();
             Marker marcador = mMap.addMarker(new MarkerOptions().position(latLng).title("Agregar punto").snippet("Haz click para agregar este punto"));
+            listaMarcadores.add(marcador);
+            marcador.showInfoWindow();
             latitud = latLng.latitude;
             longitud = latLng.longitude;
 
@@ -95,16 +102,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 @Override
                 public void onInfoWindowClick(Marker marker) {
                     Log.v("Mensaje", latLng.latitude + "");
-                   /* Double lat = latLng.latitude;
+                    Double lat = latLng.latitude;
                     Double lon = latLng.longitude;
-                    Intent i = new Intent(getContext(), AddEventActivity.class);
-                    i.putExtra("Latitud", lat);
-                    i.putExtra("Longitud", lon);
-                    startActivity(i);*/
+                    if (getActivity().getClass() == AddEventActivity.class) {
+                        Button btnLocalizacion = getActivity().findViewById(R.id.btn_set_location);
+                        if (lat != 0 && lon != 0) {
+                            btnLocalizacion.setText("Lat/Lon: " + lat + "/" + lon);
+                        }
+                        FrameLayout frameLayout = getActivity().findViewById(R.id.FrameLayout_add_event);
+                        frameLayout.setVisibility(View.GONE);
+                    } else {
+                        Intent i = new Intent(getContext(), AddEventActivity.class);
+                        i.putExtra("Latitud", lat);
+                        i.putExtra("Longitud", lon);
+                        startActivity(i);
+                    }
                 }
             });
-
-
         });
 
         Location currentLocation = locationService.getCurrentLocation();
@@ -112,6 +126,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
                 10,
                 this::addEventToMap);
+    }
+
+    private void borrarMarcador() {
+        for (int i = 0; i < listaMarcadores.size(); i++) {
+            Marker marcador = listaMarcadores.get(i);
+            marcador.remove();
+        }
+
     }
 
 
