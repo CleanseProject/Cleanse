@@ -8,11 +8,13 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -43,6 +45,8 @@ public class AddEventActivity extends AppCompatActivity {
     private ImageView imgEstado;
 
     private Uri filePath;
+
+    private boolean frameAbierto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +116,14 @@ public class AddEventActivity extends AppCompatActivity {
 
         });
 
+        imgExit.setOnClickListener(v -> {
+            if (frameAbierto) {
+                addEvent.setVisibility(View.GONE);
+                frameAbierto = false;
+            } else {
+                finish();
+            }
+        });
         btnSelectLocation.setOnClickListener(v -> {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.FrameLayout_add_event, new MapFragment());
@@ -145,6 +157,14 @@ public class AddEventActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+            frameAbierto = true;
+        });
+    }
+
+    public void setFrameAbierto(boolean frameAbierto) {
+        this.frameAbierto = frameAbierto;
     }
 
 }
