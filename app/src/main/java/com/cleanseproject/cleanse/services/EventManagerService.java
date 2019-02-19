@@ -17,10 +17,12 @@ import com.google.firebase.database.ValueEventListener;
 
 public class EventManagerService {
 
+    private ChatManagerService chatManagerService;
     private FirebaseDatabase firebaseDatabase;
     private GeoFire geoFire;
 
     public EventManagerService() {
+        chatManagerService = new ChatManagerService();
         firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference geoFireRef = firebaseDatabase.getReference("geofire");
         geoFire = new GeoFire(geoFireRef);
@@ -29,12 +31,14 @@ public class EventManagerService {
     public void createEvent(Event event) {
         DatabaseReference events = firebaseDatabase.getReference("events");
         String eventKey = events.push().getKey();
+        event.setId(eventKey);
         events.child(eventKey).setValue(event);
         geoFire.setLocation(eventKey, new GeoLocation(Double.parseDouble(event.getLatitude()),
                         Double.parseDouble(event.getLongitude())),
                 (key, error) -> {
 
                 });
+        chatManagerService.createGroupChat(eventKey, event.getName());
     }
 
     public void getEvent(String key, EventLoadCallback callback) {

@@ -5,7 +5,6 @@ import com.google.firebase.database.IgnoreExtraProperties
 
 @IgnoreExtraProperties
 data class Event(
-        @Exclude
         var id: String? = "",
         var name: String? = "",
         var description: String? = "",

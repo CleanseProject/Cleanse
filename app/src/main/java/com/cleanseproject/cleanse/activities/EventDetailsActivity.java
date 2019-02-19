@@ -13,14 +13,21 @@ import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.adapters.UsersInEventAdapter;
+import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.dataClasses.User;
+import com.cleanseproject.cleanse.services.ChatManagerService;
 import com.cleanseproject.cleanse.services.EventManagerService;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
 public class EventDetailsActivity extends AppCompatActivity {
 
+    private FirebaseAuth firebaseAuth;
     private EventManagerService eventManagerService;
+    private ChatManagerService chatManagerService;
+
+    private Event event;
 
     private ImageView imagenEvento;
     private TextView txtDescripcion, txtTituloImagen, txtDistancia, txtJoinChat;
@@ -42,11 +49,14 @@ public class EventDetailsActivity extends AppCompatActivity {
         txtJoinChat = findViewById(R.id.txt_join_chat);
         rvUsuarios = findViewById(R.id.rvUsuarios);
         eventManagerService = new EventManagerService();
+        chatManagerService = new ChatManagerService();
+        firebaseAuth = FirebaseAuth.getInstance();
         txtJoinChat.setOnClickListener(v -> startChat());
         txtDescripcion.setMovementMethod(new ScrollingMovementMethod());
         Intent intent = getIntent();
         String idEvento = intent.getStringExtra("Evento");
         eventManagerService.getEvent(idEvento, event -> {
+            this.event = event;
             toolbar.setTitle(event.getName());
             txtTituloImagen.setText(event.getName());
             txtDescripcion.setText(event.getDescription());
@@ -77,7 +87,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     }
 
     private void startChat() {
-
+        chatManagerService.joinChat(firebaseAuth.getCurrentUser().getUid(), event.getId());
     }
 
 }
