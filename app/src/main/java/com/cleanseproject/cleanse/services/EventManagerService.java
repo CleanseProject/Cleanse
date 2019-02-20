@@ -1,5 +1,6 @@
 package com.cleanseproject.cleanse.services;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -18,17 +19,19 @@ import com.google.firebase.database.ValueEventListener;
 public class EventManagerService {
 
     private ChatManagerService chatManagerService;
+    private ImageManagerService imageManagerService;
     private FirebaseDatabase firebaseDatabase;
     private GeoFire geoFire;
 
     public EventManagerService() {
         chatManagerService = new ChatManagerService();
+        imageManagerService = new ImageManagerService();
         firebaseDatabase = FirebaseDatabase.getInstance();
         DatabaseReference geoFireRef = firebaseDatabase.getReference("geofire");
         geoFire = new GeoFire(geoFireRef);
     }
 
-    public void createEvent(Event event) {
+    public void createEvent(Event event, Uri image) {
         DatabaseReference events = firebaseDatabase.getReference("events");
         String eventKey = events.push().getKey();
         event.setId(eventKey);
@@ -39,6 +42,9 @@ public class EventManagerService {
 
                 });
         chatManagerService.createGroupChat(eventKey, event.getName());
+        if (image != null) {
+            imageManagerService.uploadEventImage(eventKey, image);
+        }
     }
 
     public void getEvent(String key, EventLoadCallback callback) {

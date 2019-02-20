@@ -2,15 +2,17 @@ package com.cleanseproject.cleanse.activities;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -18,20 +20,24 @@ import android.widget.SpinnerAdapter;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.fragments.MapFragment;
-import com.google.android.gms.maps.model.LatLng;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AddEventActivity extends AppCompatActivity {
 
+    public static final int PICK_IMAGE = 1;
+
     private DatePickerDialog mDateSetListener;
     private Button btnSelectDate;
     private Button btnSelectLocation;
     private Button btnSelectPic;
-    private ImageView imgExit;
+    private ImageView imgExit, selectedImage;
     private Spinner spn_estado;
     private ImageView imgEstado;
+
+    private Uri filePath;
 
     private boolean frameAbierto;
 
@@ -45,6 +51,7 @@ public class AddEventActivity extends AppCompatActivity {
         btnSelectDate = findViewById(R.id.btn_set_date);
         spn_estado = findViewById(R.id.spnEstado);
         imgEstado = findViewById(R.id.img_estado);
+        selectedImage = findViewById(R.id.selected_image);
         ////////////////// Intent
         Intent i = getIntent();
         Double lat = i.getDoubleExtra("Latitud", 0);
@@ -92,12 +99,10 @@ public class AddEventActivity extends AppCompatActivity {
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
             int day = cal.get(Calendar.DAY_OF_MONTH);
-            mDateSetListener = new DatePickerDialog(AddEventActivity.this, new DatePickerDialog.OnDateSetListener() {
-                @Override
-                public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                    btnSelectDate.setText(dayOfMonth + "/" + (month + 1) + "/" + year);
-                }
-            }, 2018, month, day);
+            mDateSetListener = new DatePickerDialog(AddEventActivity.this,
+                    (view, year1, month1, dayOfMonth) ->
+                            btnSelectDate.setText(dayOfMonth + "/" + (month1 + 1) + "/" + year1),
+                    2018, month, day);
             mDateSetListener.show();
 
         });
@@ -116,6 +121,35 @@ public class AddEventActivity extends AppCompatActivity {
             addEvent.setVisibility(View.VISIBLE);
             transaction.addToBackStack(null);
             transaction.commit();
+            imgExit.setOnClickListener(v1 -> {
+                addEvent.setVisibility(View.GONE);
+                imgExit.setOnClickListener(v11 -> finish());
+            });
+        });
+
+        btnSelectPic.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setType("image/*");
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+        });
+
+        imgExit.setOnClickListener(v -> finish());
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_IMAGE) {
+            filePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                selectedImage.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
             frameAbierto = true;
         });
     }

@@ -64,7 +64,6 @@ public class ChatManagerService {
                     String chatId = objChatId.getValue().toString();
                     Log.d("chatid", chatId);
                     Chat chat = dataSnapshot.child("chats").child(chatId).getValue(Chat.class);
-                    DataSnapshot membersSnapshot = dataSnapshot.child("chats").child(chatId).child("members");
                     if (chat.getMembers().size() <= 2) {
                         for (String memberKey : chat.getMembers().keySet()) {
                             String member = chat.getMembers().get(memberKey);

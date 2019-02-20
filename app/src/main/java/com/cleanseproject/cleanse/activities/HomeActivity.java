@@ -45,13 +45,6 @@ public class HomeActivity extends AppCompatActivity {
         setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_home);
         initializeUI();
-        /*ArrayList<String> userIds = new ArrayList<>();
-        userIds.add("CQ4NBpLnpuhs46U4P2tVHYV96G92");
-        userIds.add("Oj8RSAO54dguxr7819levxaLAWS2");
-        userIds.add("ULXikrLHs6Qm1xEglZ2YSNE1nUB3");
-        userIds.add("nr3Blr8ba2dMWARDMWWeu4RhSDy2");
-        new ChatManagerService().createGroupChat("Cleanse Project", userIds);
-        new ChatManagerService().joinChat("PRuKd2js2Lf9mJIlKqo1ByEeWEh2", "-LYmI2K2UG7Y2e1oyak9");*/
     }
 
     @Override
@@ -75,7 +68,6 @@ public class HomeActivity extends AppCompatActivity {
             Snackbar.make(findViewById(R.id.homeCoordinatorLayout), mensaje,
                     Snackbar.LENGTH_LONG)
                     .show();
-            //}
         }
     };
 
