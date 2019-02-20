@@ -2,6 +2,7 @@ package com.cleanseproject.cleanse.services;
 
 import android.net.Uri;
 
+import com.cleanseproject.cleanse.callbacks.ImageUrlLoadCallback;
 import com.google.firebase.storage.FirebaseStorage;
 
 public class ImageManagerService {
@@ -14,6 +15,14 @@ public class ImageManagerService {
 
     public void uploadEventImage(String eventId, Uri filePath) {
         firebaseStorage.getReference("images/events/" + eventId).putFile(filePath);
+    }
+
+    public void eventImageDownloadUrl(String eventId, ImageUrlLoadCallback callback) {
+        firebaseStorage.getReference("images/events/" + eventId).getDownloadUrl()
+                .addOnSuccessListener(uri -> callback.onUrlLoaded(uri.toString()))
+                .addOnFailureListener(e -> {
+
+                });
     }
 
 }
