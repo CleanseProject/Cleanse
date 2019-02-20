@@ -119,7 +119,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Location currentLocation = locationService.getCurrentLocation();
         eventManagerService.getCloseEvents(
                 new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                10,
+                8587,
                 this::addEventToMap);
     }
 

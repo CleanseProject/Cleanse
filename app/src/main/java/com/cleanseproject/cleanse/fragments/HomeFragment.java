@@ -68,7 +68,7 @@ public class HomeFragment extends Fragment {
         Location currentLocation = locationService.getCurrentLocation();
         eventManagerService.getCloseEvents(
                 new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                10,
+                8587,
                 this::rellenarEventos);
     }
 
