@@ -51,6 +51,8 @@ public class ChatService {
     }
 
     public void sendMessage(String message) {
+        firebaseDatabase.getReference("chats").child(chat.getChatUid()).child("lastMessageTime").setValue(System.currentTimeMillis());
+        firebaseDatabase.getReference("chats").child(chat.getChatUid()).child("lastMessageSent").setValue(message);
         DatabaseReference chatMessages = firebaseDatabase.getReference("chatMessages");
         chatMessages.child(chat.getChatUid()).push().setValue(new Message(message, firebaseUser.getUid(), System.currentTimeMillis()));
         getMessages();

@@ -16,6 +16,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ChatManagerService {
 
@@ -30,7 +31,7 @@ public class ChatManagerService {
     public void createChat(ArrayList<String> userIds) {
         DatabaseReference chat = firebaseDatabase.getReference("chats").push();
         String chatKey = chat.getKey();
-        chat.setValue(new Chat(chatKey, "", null, "", false));
+        chat.setValue(new Chat(chatKey, "", null, "", false, System.currentTimeMillis()));
         for (String userId : userIds) {
             chat.child("members").push().setValue(userId);
         }
@@ -47,7 +48,7 @@ public class ChatManagerService {
 
     public void createGroupChat(String eventId, String name) {
         DatabaseReference chat = firebaseDatabase.getReference("chats").child(eventId);
-        chat.setValue(new Chat(eventId, name, null, "", true));
+        chat.setValue(new Chat(eventId, name, null, "", true, 0));
     }
 
     public void getUserChats(ChatListLoadCallback callback) {
@@ -76,6 +77,7 @@ public class ChatManagerService {
                     chat.setChatUid(chatId);
                     chats.add(chat);
                 }
+                Collections.sort(chats);
                 callback.onCallBack(chats);
             }
 
