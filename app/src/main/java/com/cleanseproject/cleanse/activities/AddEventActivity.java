@@ -60,12 +60,11 @@ public class AddEventActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_event);
         imgExit = findViewById(R.id.imgExit);
         btnSelectLocation = findViewById(R.id.btn_set_location);
-        btnSelectPic = findViewById(R.id.btn_set_pic);
+
         btnSelectDate = findViewById(R.id.btn_set_date);
         btnAdd = findViewById(R.id.btn_event_add);
-        spn_estado = findViewById(R.id.spnEstado);
-        imgEstado = findViewById(R.id.img_estado);
-        selectedImage = findViewById(R.id.selected_image);
+        
+        selectedImage = findViewById(R.id.imagen_evento);
         eventManagerService = new EventManagerService();
         locationService = new LocationService(this);
         ////////////////// Intent
@@ -140,7 +139,7 @@ public class AddEventActivity extends AppCompatActivity {
             frameAbierto = true;
         });
 
-        btnSelectPic.setOnClickListener(v -> {
+        selectedImage.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);

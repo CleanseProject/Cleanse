@@ -88,7 +88,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
                 distancia = Math.round(distanciaMetros) + " m";
             txtDistancia.setText(distancia);
             if (eventosFavoritos.contains(event.getId()))
-                btnLike.setImageResource(R.drawable.corazon_rosa);
+                btnLike.setImageResource(R.drawable.corazon_rojo);
             imageManagerService.eventImageDownloadUrl(
                     event.getId(),
                     imageUrl -> {
@@ -103,12 +103,12 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
             });
             btnLike.setOnClickListener(v -> {
                 if (!liked) {
-                    btnLike.setImageResource(R.drawable.corazon_rosa);
+                    btnLike.setImageResource(R.drawable.corazon_rojo);
                     liked = true;
                     eventManagerService.setEventAsFavourite(event.getId());
                 } else {
                     liked = false;
-                    btnLike.setImageResource(R.drawable.corazon_azul);
+                    btnLike.setImageResource(R.drawable.corazon_blanco);
                     eventManagerService.deleteFavouriteEvent(event.getId());
                 }
             });
