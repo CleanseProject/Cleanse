@@ -57,10 +57,10 @@ public class EventManagerService {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Event event = dataSnapshot.getValue(Event.class);
-                boolean isFavourite = dataSnapshot.child("members").child(firebaseUser.getUid()).exists();
                 if (event != null) {
                     event.setId(dataSnapshot.getKey());
-                    callback.onEventLoaded(event, isFavourite);
+                    event.setFavourite(dataSnapshot.child("members").child(firebaseUser.getUid()).exists());
+                    callback.onEventLoaded(event);
                 } else {
                     Log.d("Firebase", "Null Event returned");
                 }

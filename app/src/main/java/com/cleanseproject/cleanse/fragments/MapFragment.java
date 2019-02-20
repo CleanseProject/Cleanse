@@ -120,7 +120,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         eventManagerService.getCloseEvents(
                 new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
                 8587,
-                (this::addEventToMap));
+                this::addEventToMap);
     }
 
 
@@ -128,7 +128,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
-    private void addEventToMap(Event event, boolean isFavourite) {
+    private void addEventToMap(Event event) {
         LatLng latLng = new LatLng(event.getLatitude(), event.getLongitude());
         mMap.addMarker(new MarkerOptions().position(latLng).title(event.getName()));
     }

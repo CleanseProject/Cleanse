@@ -13,7 +13,9 @@ data class Event(
         @Exclude
         var longitude: Double? = 0.0,
         @Exclude
-        var distance: Float = 0f
+        var distance: Float = 0f,
+        @Exclude
+        var isFavourite: Boolean = false
 ) : Comparable<Event> {
 
     override fun compareTo(other: Event): Int {

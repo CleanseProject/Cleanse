@@ -25,11 +25,9 @@ import java.util.ArrayList;
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyViewHolder> {
 
     private ArrayList<Event> listaEventos;
-    public ArrayList<String> eventosFavoritos;
 
     public EventListAdapter(ArrayList<Event> listaEventos, ArrayList<String> eventosFavoritos) {
         this.listaEventos = listaEventos;
-        this.eventosFavoritos = eventosFavoritos;
     }
 
     @NonNull
@@ -81,7 +79,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
             else
                 distancia = Math.round(event.getDistance()) + " m";
             txtDistancia.setText(distancia);
-            if (eventosFavoritos.contains(event.getId()))
+            if (event.isFavourite())
                 btnLike.setImageResource(R.drawable.corazon_rosa);
             imageManagerService.eventImageDownloadUrl(
                     event.getId(),

@@ -83,13 +83,13 @@ public class HomeFragment extends Fragment {
         if (bundle != null) {
             String filter = bundle.getString("filter");
             if (filter != null && filter.equals("favourites")) {
-                eventManagerService.getFavouriteEvents((this::rellenarEventos));
+                eventManagerService.getFavouriteEvents(this::rellenarEventos);
             }
         } else {
             eventManagerService.getCloseEvents(
                     new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
                     8587,
-                    (this::rellenarEventos));
+                    this::rellenarEventos);
         }
     }
 
@@ -99,13 +99,13 @@ public class HomeFragment extends Fragment {
         swipeRefresh.setRefreshing(false);
     }
 
-    private void rellenarEventos(Event event, boolean isFavourite) {
+    private void rellenarEventos(Event event) {
         Location location = new Location("");
         location.setLatitude(event.getLatitude());
         location.setLongitude(event.getLongitude());
         event.setDistance(locationService.distance(location));
         events.add(event);
-        if (isFavourite)
+        if (event.isFavourite())
             favouriteEvents.add(event.getId());
         Collections.sort(events);
         adaptador.notifyDataSetChanged();

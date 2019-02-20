@@ -156,7 +156,7 @@ public class AddEventActivity extends AppCompatActivity {
             String description = txtDescription.getText().toString();
             double latitude = eventLatLng.latitude;
             double longitude = eventLatLng.longitude;
-            eventManagerService.createEvent(new Event("", title, description, latitude, longitude,0), imagePath);
+            eventManagerService.createEvent(new Event("", title, description, latitude, longitude, 0, false), imagePath);
             //TODO: Mostrar evento creado
             finish();
         });
