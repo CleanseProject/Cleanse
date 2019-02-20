@@ -62,6 +62,8 @@ public class AddEventActivity extends AppCompatActivity {
         spn_estado = findViewById(R.id.spnEstado);
         imgEstado = findViewById(R.id.img_estado);
         selectedImage = findViewById(R.id.selected_image);
+        eventManagerService = new EventManagerService();
+        ////////////////// Intent
         txtTitle = findViewById(R.id.txt_add_event_title);
         txtDescription = findViewById(R.id.txt_add_description);
         eventManagerService = new EventManagerService();
@@ -153,12 +155,14 @@ public class AddEventActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_IMAGE) {
-            imagePath = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
-                selectedImage.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (data != null) {
+                imagePath = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
+                    selectedImage.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
