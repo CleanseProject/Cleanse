@@ -86,35 +86,38 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setOnMapClickListener(latLng -> {
-            if (selectedMarker != null)
+            if (selectedMarker != null) {
                 selectedMarker.remove();
-            selectedMarker = mMap.addMarker(new MarkerOptions()
-                    .position(latLng)
-                    .title(getString(R.string.add_event))
-                    .snippet("Haz click para agregar este punto"));
-            selectedMarker.showInfoWindow();
-            latitud = latLng.latitude;
-            longitud = latLng.longitude;
-            mMap.setOnInfoWindowClickListener(marker -> {
-                double lat = latLng.latitude;
-                double lon = latLng.longitude;
-                if (getActivity().getClass() == AddEventActivity.class) {
-                    AddEventActivity addEventActivity = (AddEventActivity) getActivity();
-                    Button btnLocalizacion = addEventActivity.findViewById(R.id.btn_set_location);
-                    if (lat != 0 && lon != 0) {
-                        addEventActivity.setEventLatLng(latLng);
-                        btnLocalizacion.setText("Lat/Lon: " + lat + "/" + lon);
+                selectedMarker = null;
+            } else {
+                selectedMarker = mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(getString(R.string.add_event))
+                        .snippet("Haz click para agregar este punto"));
+                selectedMarker.showInfoWindow();
+                latitud = latLng.latitude;
+                longitud = latLng.longitude;
+                mMap.setOnInfoWindowClickListener(marker -> {
+                    double lat = latLng.latitude;
+                    double lon = latLng.longitude;
+                    if (getActivity().getClass() == AddEventActivity.class) {
+                        AddEventActivity addEventActivity = (AddEventActivity) getActivity();
+                        Button btnLocalizacion = addEventActivity.findViewById(R.id.btn_set_location);
+                        if (lat != 0 && lon != 0) {
+                            addEventActivity.setEventLatLng(latLng);
+                            btnLocalizacion.setText("Lat/Lon: " + lat + "/" + lon);
+                        }
+                        FrameLayout frameLayout = addEventActivity.findViewById(R.id.FrameLayout_add_event);
+                        frameLayout.setVisibility(View.GONE);
+                        addEventActivity.setFrameAbierto(false);
+                    } else {
+                        Intent i = new Intent(getContext(), AddEventActivity.class);
+                        i.putExtra("latitude", lat);
+                        i.putExtra("longitude", lon);
+                        startActivity(i);
                     }
-                    FrameLayout frameLayout = addEventActivity.findViewById(R.id.FrameLayout_add_event);
-                    frameLayout.setVisibility(View.GONE);
-                    addEventActivity.setFrameAbierto(false);
-                } else {
-                    Intent i = new Intent(getContext(), AddEventActivity.class);
-                    i.putExtra("latitude", lat);
-                    i.putExtra("longitude", lon);
-                    startActivity(i);
-                }
-            });
+                });
+            }
         });
 
         Location currentLocation = locationService.getCurrentLocation();
