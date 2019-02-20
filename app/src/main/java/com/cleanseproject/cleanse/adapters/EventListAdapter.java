@@ -16,22 +16,25 @@ import com.bumptech.glide.Glide;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.EventDetailsActivity;
 import com.cleanseproject.cleanse.dataClasses.Event;
+import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.ImageManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
 
 import java.util.ArrayList;
 
-public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecyclerViews.MyViewHolder> {
+public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyViewHolder> {
 
     private ArrayList<Event> listaEventos;
+    public ArrayList<String> eventosFavoritos;
 
-    public AdaptadorRecyclerViews(ArrayList<Event> listaEventos) {
+    public EventListAdapter(ArrayList<Event> listaEventos, ArrayList<String> eventosFavoritos) {
         this.listaEventos = listaEventos;
+        this.eventosFavoritos = eventosFavoritos;
     }
 
     @NonNull
     @Override
-    public AdaptadorRecyclerViews.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public EventListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.vista_evento, null, false);
         return new MyViewHolder(view);
     }
@@ -47,8 +50,9 @@ public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecycl
         return listaEventos.size();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
+        private EventManagerService eventManagerService;
         private ImageManagerService imageManagerService;
         private LocationService locationService;
         private TextView txtTitulo, txtDistancia;
@@ -68,6 +72,7 @@ public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecycl
             context = v.getContext();
             locationService = new LocationService(context);
             imageManagerService = new ImageManagerService();
+            eventManagerService = new EventManagerService();
         }
 
         public void asignarDatos(Event event) {
@@ -82,6 +87,8 @@ public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecycl
             else
                 distancia = Math.round(distanciaMetros) + " m";
             txtDistancia.setText(distancia);
+            if (eventosFavoritos.contains(event.getId()))
+                btnLike.setImageResource(R.drawable.corazon_rosa);
             imageManagerService.eventImageDownloadUrl(
                     event.getId(),
                     imageUrl -> {
@@ -98,12 +105,12 @@ public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecycl
                 if (!liked) {
                     btnLike.setImageResource(R.drawable.corazon_rosa);
                     liked = true;
-
+                    eventManagerService.setEventAsFavourite(event.getId());
                 } else {
                     liked = false;
                     btnLike.setImageResource(R.drawable.corazon_azul);
+                    eventManagerService.deleteFavouriteEvent(event.getId());
                 }
-
             });
         }
 

@@ -4,6 +4,6 @@ import com.cleanseproject.cleanse.dataClasses.Event;
 
 public interface EventLoadCallback {
 
-    void onEventLoaded(Event event);
+    void onEventLoaded(Event event, boolean isFavourite);
 
 }

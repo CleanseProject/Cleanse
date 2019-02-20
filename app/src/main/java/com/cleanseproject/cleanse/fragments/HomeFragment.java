@@ -16,7 +16,7 @@ import android.widget.ProgressBar;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.AddEventActivity;
-import com.cleanseproject.cleanse.adapters.AdaptadorRecyclerViews;
+import com.cleanseproject.cleanse.adapters.EventListAdapter;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
@@ -30,12 +30,13 @@ public class HomeFragment extends Fragment {
     private LocationService locationService;
 
     private SwipeRefreshLayout swipeRefresh;
-    private AdaptadorRecyclerViews adaptador;
+    private EventListAdapter adaptador;
     private RecyclerView rvEventos;
     private ProgressBar progressBar;
     private FloatingActionButton fab;
 
     private ArrayList<Event> events;
+    private ArrayList<String> favouriteEvents;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,13 +64,14 @@ public class HomeFragment extends Fragment {
         eventManagerService = new EventManagerService();
         locationService = new LocationService(getContext());
         events = new ArrayList<>();
-        adaptador = new AdaptadorRecyclerViews(events);
+        favouriteEvents = new ArrayList<>();
+        adaptador = new EventListAdapter(events, favouriteEvents);
         rvEventos.setAdapter(adaptador);
         Location currentLocation = locationService.getCurrentLocation();
         eventManagerService.getCloseEvents(
                 new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
                 8587,
-                this::rellenarEventos);
+                (this::rellenarEventos));
     }
 
     private void updateRecycleView() {
@@ -77,8 +79,10 @@ public class HomeFragment extends Fragment {
         swipeRefresh.setRefreshing(false);
     }
 
-    private void rellenarEventos(Event event) {
+    private void rellenarEventos(Event event, boolean isFavourite) {
         events.add(event);
+        if (isFavourite)
+            favouriteEvents.add(event.getId());
         adaptador.notifyDataSetChanged();
         if (progressBar.getVisibility() == View.VISIBLE)
             progressBar.setVisibility(View.GONE);

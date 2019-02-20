@@ -10,6 +10,8 @@ import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -20,6 +22,7 @@ public class EventManagerService {
 
     private ChatManagerService chatManagerService;
     private ImageManagerService imageManagerService;
+    private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
     private GeoFire geoFire;
 
@@ -27,6 +30,7 @@ public class EventManagerService {
         chatManagerService = new ChatManagerService();
         imageManagerService = new ImageManagerService();
         firebaseDatabase = FirebaseDatabase.getInstance();
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference geoFireRef = firebaseDatabase.getReference("geofire");
         geoFire = new GeoFire(geoFireRef);
     }
@@ -53,9 +57,10 @@ public class EventManagerService {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Event event = dataSnapshot.getValue(Event.class);
+                boolean isFavourite = dataSnapshot.child("members").child(firebaseUser.getUid()).exists();
                 if (event != null) {
                     event.setId(dataSnapshot.getKey());
-                    callback.onEventLoaded(event);
+                    callback.onEventLoaded(event, isFavourite);
                 } else {
                     Log.d("Firebase", "Null Event returned");
                 }
@@ -96,6 +101,18 @@ public class EventManagerService {
 
             }
         });
+    }
+
+    public void setEventAsFavourite(String eventId) {
+        String userId = firebaseUser.getUid();
+        firebaseDatabase.getReference("events").child(eventId).child("members").child(userId).setValue(userId);
+        firebaseDatabase.getReference("userEvents").child(userId).child(eventId).setValue(eventId);
+    }
+
+    public void deleteFavouriteEvent(String eventId) {
+        String userId = firebaseUser.getUid();
+        firebaseDatabase.getReference("events").child(eventId).child("members").child(userId).removeValue();
+        firebaseDatabase.getReference("userEvents").child(firebaseUser.getUid()).child(eventId).removeValue();
     }
 
 }

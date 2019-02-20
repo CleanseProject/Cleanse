@@ -62,7 +62,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         txtDescripcion.setMovementMethod(new ScrollingMovementMethod());
         Intent intent = getIntent();
         String idEvento = intent.getStringExtra("Evento");
-        eventManagerService.getEvent(idEvento, event -> {
+        eventManagerService.getEvent(idEvento, (event, isFavourite) -> {
             this.event = event;
             toolbar.setTitle(event.getName());
             txtDescripcion.setText(event.getDescription());
