@@ -30,7 +30,7 @@ public class ChatManagerService {
     public void createChat(ArrayList<String> userIds) {
         DatabaseReference chat = firebaseDatabase.getReference("chats").push();
         String chatKey = chat.getKey();
-        chat.setValue(new Chat(chatKey, "", null, ""));
+        chat.setValue(new Chat(chatKey, "", null, "", false));
         for (String userId : userIds) {
             chat.child("members").push().setValue(userId);
         }
@@ -42,12 +42,12 @@ public class ChatManagerService {
 
     public void joinChat(String userId, String chatId) {
         firebaseDatabase.getReference("chats").child(chatId).child("members").child(userId).setValue(userId);
-        firebaseDatabase.getReference("userChats").child(userId).child(userId).setValue(chatId);
+        firebaseDatabase.getReference("userChats").child(userId).push().setValue(chatId);
     }
 
     public void createGroupChat(String eventId, String name) {
         DatabaseReference chat = firebaseDatabase.getReference("chats").child(eventId);
-        chat.setValue(new Chat(eventId, name, null, ""));
+        chat.setValue(new Chat(eventId, name, null, "", true));
     }
 
     public void getUserChats(ChatListLoadCallback callback) {
@@ -64,7 +64,7 @@ public class ChatManagerService {
                     String chatId = objChatId.getValue().toString();
                     Log.d("chatid", chatId);
                     Chat chat = dataSnapshot.child("chats").child(chatId).getValue(Chat.class);
-                    if (chat.getMembers().size() <= 2) {
+                    if (!chat.getGroupChat()) {
                         for (String memberKey : chat.getMembers().keySet()) {
                             String member = chat.getMembers().get(memberKey);
                             User user = users.child(member).getValue(User.class);

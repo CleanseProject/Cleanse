@@ -10,5 +10,6 @@ data class Chat(
         var chatName: String? = "",
         var members: HashMap<String, String>? = null,
         @Exclude
-        var lastMessageSent: String? = ""
+        var lastMessageSent: String? = "",
+        var groupChat: Boolean? = false
 )

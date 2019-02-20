@@ -10,6 +10,7 @@
 
 
     <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/nav_header_imagen"
         android:layout_width="119dp"
         android:layout_height="122dp"
         android:layout_centerHorizontal="true"

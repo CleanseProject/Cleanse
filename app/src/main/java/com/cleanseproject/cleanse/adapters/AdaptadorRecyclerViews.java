@@ -12,9 +12,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.EventDetailsActivity;
 import com.cleanseproject.cleanse.dataClasses.Event;
+import com.cleanseproject.cleanse.services.ImageManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
 
 import java.util.ArrayList;
@@ -47,6 +49,7 @@ public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecycl
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
+        private ImageManagerService imageManagerService;
         private LocationService locationService;
         private TextView txtTitulo, txtDistancia;
         private ImageView ivFoto;
@@ -64,14 +67,14 @@ public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecycl
             liked = false;
             context = v.getContext();
             locationService = new LocationService(context);
+            imageManagerService = new ImageManagerService();
         }
 
         public void asignarDatos(Event event) {
-            //txtTitulo.setText(event.getName());
-            txtTitulo.setText("Universidad Europea de Madrid");
+            txtTitulo.setText(event.getName());
             Location location = new Location("");
-            location.setLatitude(Double.parseDouble(event.getLatitude()));
-            location.setLongitude(Double.parseDouble(event.getLongitude()));
+            location.setLatitude(event.getLatitude());
+            location.setLongitude(event.getLongitude());
             String distancia;
             float distanciaMetros = locationService.distance(location);
             if (distanciaMetros >= 1000)
@@ -79,7 +82,13 @@ public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecycl
             else
                 distancia = Math.round(distanciaMetros) + " m";
             txtDistancia.setText(distancia);
-            ivFoto.setBackgroundResource(R.drawable.imagen);
+            imageManagerService.eventImageDownloadUrl(
+                    event.getId(),
+                    imageUrl -> {
+                        Glide.with(context)
+                                .load(imageUrl)
+                                .into(ivFoto);
+                    });
             ivFoto.setOnClickListener(v -> {
                 Intent intent = new Intent(context, EventDetailsActivity.class);
                 intent.putExtra("Evento", event.getId());

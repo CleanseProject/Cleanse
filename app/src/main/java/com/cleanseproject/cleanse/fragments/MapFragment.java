@@ -41,7 +41,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private boolean followUser;
     private double latitud;
     private double longitud;
-    private ArrayList<Marker> listaMarcadores;
+    private Marker selectedMarker;
 
 
     @Override
@@ -55,7 +55,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         View view = getView();
-        listaMarcadores = new ArrayList<>();
         View overlay = view.findViewById(R.id.map_overlay);
         followUser = true;
         overlay.setOnTouchListener((v, event) -> {
@@ -87,27 +86,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.setOnMapClickListener(latLng -> {
-
-            if (listaMarcadores.size() != 0) {
-                borrarMarcador();
-            }
-
-            Marker marcador = mMap.addMarker(new MarkerOptions().position(latLng).title("Agregar punto").snippet("Haz click para agregar este punto"));
-            listaMarcadores.add(marcador);
-            marcador.showInfoWindow();
-            latitud = latLng.latitude;
-            longitud = latLng.longitude;
-
-            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                @Override
-                public void onInfoWindowClick(Marker marker) {
-                    Log.v("Mensaje", latLng.latitude + "");
-                    Double lat = latLng.latitude;
-                    Double lon = latLng.longitude;
+            if (selectedMarker != null) {
+                selectedMarker.remove();
+                selectedMarker = null;
+            } else {
+                selectedMarker = mMap.addMarker(new MarkerOptions()
+                        .position(latLng)
+                        .title(getString(R.string.add_event))
+                        .snippet("Haz click para agregar este punto"));
+                selectedMarker.showInfoWindow();
+                latitud = latLng.latitude;
+                longitud = latLng.longitude;
+                mMap.setOnInfoWindowClickListener(marker -> {
+                    double lat = latLng.latitude;
+                    double lon = latLng.longitude;
                     if (getActivity().getClass() == AddEventActivity.class) {
-                        AddEventActivity addEventActivity=(AddEventActivity) getActivity();
-                        Button btnLocalizacion = getActivity().findViewById(R.id.btn_set_location);
+                        AddEventActivity addEventActivity = (AddEventActivity) getActivity();
+                        Button btnLocalizacion = addEventActivity.findViewById(R.id.btn_set_location);
                         if (lat != 0 && lon != 0) {
+                            addEventActivity.setEventLatLng(latLng);
                             btnLocalizacion.setText("Lat/Lon: " + lat + "/" + lon);
                         }
                         FrameLayout frameLayout = addEventActivity.findViewById(R.id.FrameLayout_add_event);
@@ -115,12 +112,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         addEventActivity.setFrameAbierto(false);
                     } else {
                         Intent i = new Intent(getContext(), AddEventActivity.class);
-                        i.putExtra("Latitud", lat);
-                        i.putExtra("Longitud", lon);
+                        i.putExtra("latitude", lat);
+                        i.putExtra("longitude", lon);
                         startActivity(i);
                     }
-                }
-            });
+                });
+            }
         });
 
         Location currentLocation = locationService.getCurrentLocation();
@@ -130,21 +127,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 this::addEventToMap);
     }
 
-    private void borrarMarcador() {
-        for (int i = 0; i < listaMarcadores.size(); i++) {
-            Marker marcador = listaMarcadores.get(i);
-            marcador.remove();
-        }
-
-    }
-
 
     private boolean checkPermission() {
         return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void addEventToMap(Event event) {
-        LatLng latLng = new LatLng(Double.parseDouble(event.getLatitude()), Double.parseDouble(event.getLongitude()));
+        LatLng latLng = new LatLng(event.getLatitude(), event.getLongitude());
         mMap.addMarker(new MarkerOptions().position(latLng).title(event.getName()));
     }
 
