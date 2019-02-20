@@ -5,10 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Chat;
+import com.cleanseproject.cleanse.services.ImageManagerService;
 
 import java.util.ArrayList;
 
@@ -16,10 +20,12 @@ public class ChatListAdapter extends BaseAdapter {
 
     private Context context;
     private ArrayList<Chat> chatRows;
+    private ImageManagerService imageManagerService;
 
     public ChatListAdapter(Context context, ArrayList<Chat> chatRows) {
         this.context = context;
         this.chatRows = chatRows;
+        imageManagerService = new ImageManagerService();
     }
 
     @Override
@@ -40,8 +46,19 @@ public class ChatListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = LayoutInflater.from(context).inflate(R.layout.row_chat_list, null);
+        Chat chat = chatRows.get(position);
         TextView lblName = view.findViewById(R.id.chat_row_username);
-        lblName.setText(chatRows.get(position).getChatName());
+        ImageView chatImage = view.findViewById(R.id.chat_row_user_img);
+        if (chat.getGroupChat()) {
+            imageManagerService.eventImageDownloadUrl(chat.getChatUid(),
+                    imageUrl -> {
+                        Glide.with(view)
+                                .load(imageUrl)
+                                .apply(RequestOptions.circleCropTransform())
+                                .into(chatImage);
+                    });
+        }
+        lblName.setText(chat.getChatName());
         return view;
     }
 
