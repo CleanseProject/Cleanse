@@ -1,14 +1,17 @@
 package com.cleanseproject.cleanse.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,12 +70,24 @@ public class HomeFragment extends Fragment {
         favouriteEvents = new ArrayList<>();
         adaptador = new EventListAdapter(events, favouriteEvents);
         rvEventos.setAdapter(adaptador);
+        rvEventos.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                if(dy > 0) fab.hide();
+                else fab.show();
+                super.onScrolled(recyclerView, dx, dy);
+            }
+        });
+
         Location currentLocation = locationService.getCurrentLocation();
         eventManagerService.getCloseEvents(
                 new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
                 8587,
                 (this::rellenarEventos));
     }
+
+
+
 
     private void updateRecycleView() {
         // TODO: Conexion con Firebase para updatear la lista de eventos
