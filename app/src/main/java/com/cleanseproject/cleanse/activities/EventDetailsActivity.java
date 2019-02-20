@@ -66,15 +66,11 @@ public class EventDetailsActivity extends AppCompatActivity {
             this.event = event;
             toolbar.setTitle(event.getName());
             txtDescripcion.setText(event.getDescription());
-            Location location = new Location("");
-            location.setLatitude(event.getLatitude());
-            location.setLongitude(event.getLongitude());
             String distancia;
-            float distanciaMetros = locationService.distance(location);
-            if (distanciaMetros >= 1000)
-                distancia = Math.round(distanciaMetros / 1000) + " km";
+            if (event.getDistance() >= 1000)
+                distancia = Math.round(event.getDistance() / 1000) + " km";
             else
-                distancia = Math.round(distanciaMetros) + " m";
+                distancia = Math.round(event.getDistance()) + " m";
             txtDistancia.setText(distancia);
         });
         imageManagerService.eventImageDownloadUrl(
