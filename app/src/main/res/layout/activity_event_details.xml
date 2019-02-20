@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -26,7 +27,7 @@
             <ImageView
                 android:id="@+id/imagenEventoSeleccionado"
                 android:layout_width="match_parent"
-                android:layout_height="350dp"
+                android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/imagen"
 
@@ -79,7 +80,7 @@
                     android:id="@+id/ivAutor"
                     android:layout_width="72dp"
                     android:layout_height="65dp"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="16dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="10dp"
                     android:src="@drawable/imagen"
@@ -103,6 +104,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
+                        android:layout_marginLeft="72dp"
                         android:layout_marginTop="30dp"
                         android:layout_weight="1"
                         android:text="Carlos Ruiz"
@@ -114,6 +116,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
+                        android:layout_marginLeft="72dp"
                         android:layout_marginTop="-20dp"
                         android:layout_weight="1"
                         android:text="crv5@hotmail.es" />
@@ -125,10 +128,10 @@
             <TextView
                 android:id="@+id/txtDescripcion"
                 android:layout_width="match_parent"
-                android:layout_height="315dp"
-                android:layout_marginLeft="5dp"
+                android:layout_height="209dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginTop="1dp"
-                android:layout_marginRight="5dp"
+                android:layout_marginRight="16dp"
                 android:layout_marginBottom="5dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/montserrat"
@@ -138,20 +141,22 @@
                 android:id="@+id/rvUsuarios"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom" />
+                android:layout_gravity="bottom"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp" />
 
             <TextView
                 android:id="@+id/txt_join_chat"
                 android:layout_width="match_parent"
                 android:layout_height="70dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
                 android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
                 android:drawableStart="@drawable/ic_chat"
                 android:drawablePadding="20dp"
                 android:focusable="true"
                 android:gravity="center_vertical"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp"
                 android:text="@string/join_chat"
                 android:textColor="#000"
                 android:textSize="20sp" />
