@@ -72,7 +72,8 @@
                 android:background="?attr/selectableItemBackground"
                 android:gravity="center"
                 android:text="@string/send"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:enabled="false"/>
 
         </LinearLayout>
 

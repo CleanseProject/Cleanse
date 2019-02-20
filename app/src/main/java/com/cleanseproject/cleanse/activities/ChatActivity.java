@@ -5,6 +5,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,6 +22,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private ChatService chatService;
 
+    private Button btnSend;
     private EditText txtMessage;
     private RecyclerView messageRecycler;
 
@@ -32,9 +35,10 @@ public class ChatActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-        Button btnSend = findViewById(R.id.button_chatbox_send);
+        btnSend = findViewById(R.id.button_chatbox_send);
         btnSend.setOnClickListener(v -> sendMessage());
         txtMessage = findViewById(R.id.edittext_chatbox);
+        txtMessage.addTextChangedListener(sendTextWatcher);
         messageRecycler = findViewById(R.id.reyclerview_message_list);
         messageRecycler.setHasFixedSize(true);
         messageRecycler.setLayoutManager(new GridLayoutManager(this, 1));
@@ -53,6 +57,26 @@ public class ChatActivity extends AppCompatActivity {
         }
     }
 
+    private TextWatcher sendTextWatcher = new TextWatcher() {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence text, int start, int before, int count) {
+            if (text.equals(""))
+                btnSend.setEnabled(false);
+            else
+                btnSend.setEnabled(true);
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
+        }
+    };
+
     public void updateMessages(ArrayList<Message> messages) {
         MessageListAdapter messageListAdapter = new MessageListAdapter(messages);
         messageRecycler.setAdapter(messageListAdapter);
@@ -62,6 +86,7 @@ public class ChatActivity extends AppCompatActivity {
     private void sendMessage() {
         chatService.sendMessage(txtMessage.getText().toString());
         messageRecycler.scrollToPosition(messageRecycler.getAdapter().getItemCount() - 1);
+        txtMessage.setText("");
     }
 
 }
