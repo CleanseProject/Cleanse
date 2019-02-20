@@ -36,8 +36,8 @@ public class EventManagerService {
         String eventKey = events.push().getKey();
         event.setId(eventKey);
         events.child(eventKey).setValue(event);
-        geoFire.setLocation(eventKey, new GeoLocation(Double.parseDouble(event.getLatitude()),
-                        Double.parseDouble(event.getLongitude())),
+        geoFire.setLocation(eventKey, new GeoLocation(event.getLatitude(),
+                        event.getLongitude()),
                 (key, error) -> {
 
                 });

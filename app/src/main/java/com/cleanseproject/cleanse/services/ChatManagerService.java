@@ -42,7 +42,7 @@ public class ChatManagerService {
 
     public void joinChat(String userId, String chatId) {
         firebaseDatabase.getReference("chats").child(chatId).child("members").child(userId).setValue(userId);
-        firebaseDatabase.getReference("userChats").child(userId).child(userId).setValue(chatId);
+        firebaseDatabase.getReference("userChats").child(userId).push().setValue(chatId);
     }
 
     public void createGroupChat(String eventId, String name) {

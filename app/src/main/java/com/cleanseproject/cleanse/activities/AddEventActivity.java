@@ -142,8 +142,8 @@ public class AddEventActivity extends AppCompatActivity {
             //TODO: Comprobar que se han insertado todos los datos
             String title = txtTitle.getText().toString();
             String description = txtDescription.getText().toString();
-            String latitude = String.valueOf(eventLatLng.latitude);
-            String longitude = String.valueOf(eventLatLng.longitude);
+            double latitude = eventLatLng.latitude;
+            double longitude = eventLatLng.longitude;
             eventManagerService.createEvent(new Event("", title, description, latitude, longitude), imagePath);
             //TODO: Mostrar evento creado
             finish();

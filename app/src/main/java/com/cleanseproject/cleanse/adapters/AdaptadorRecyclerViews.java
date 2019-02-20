@@ -73,8 +73,8 @@ public class AdaptadorRecyclerViews extends RecyclerView.Adapter<AdaptadorRecycl
         public void asignarDatos(Event event) {
             txtTitulo.setText(event.getName());
             Location location = new Location("");
-            location.setLatitude(Double.parseDouble(event.getLatitude()));
-            location.setLongitude(Double.parseDouble(event.getLongitude()));
+            location.setLatitude(event.getLatitude());
+            location.setLongitude(event.getLongitude());
             String distancia;
             float distanciaMetros = locationService.distance(location);
             if (distanciaMetros >= 1000)

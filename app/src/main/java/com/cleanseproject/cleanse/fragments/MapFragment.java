@@ -130,7 +130,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void addEventToMap(Event event) {
-        LatLng latLng = new LatLng(Double.parseDouble(event.getLatitude()), Double.parseDouble(event.getLongitude()));
+        LatLng latLng = new LatLng(event.getLatitude(), event.getLongitude());
         mMap.addMarker(new MarkerOptions().position(latLng).title(event.getName()));
     }
 
