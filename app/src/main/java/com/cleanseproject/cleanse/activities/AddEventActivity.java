@@ -174,10 +174,6 @@ public class AddEventActivity extends AppCompatActivity {
         }
     }
 
-            frameAbierto = true;
-        });
-    }
-
     public void setFrameAbierto(boolean frameAbierto) {
         this.frameAbierto = frameAbierto;
     }
