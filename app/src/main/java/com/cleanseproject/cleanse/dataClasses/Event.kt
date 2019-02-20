@@ -9,7 +9,7 @@ data class Event(
         var name: String? = "",
         var description: String? = "",
         @Exclude
-        var latitude: String? = "",
+        var latitude: Double? = 0.0,
         @Exclude
-        var longitude: String? = ""
+        var longitude: Double? = 0.0
 )
