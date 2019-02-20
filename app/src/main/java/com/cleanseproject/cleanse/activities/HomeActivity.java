@@ -114,19 +114,22 @@ public class HomeActivity extends AppCompatActivity {
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:
                     transaction.replace(R.id.content_frame, new HomeFragment());
-                    transaction.addToBackStack(null);
-                    transaction.commit();
+                    break;
+                case R.id.nav_favourites:
+                    Bundle bundle = new Bundle();
+                    HomeFragment homeFragment = new HomeFragment();
+                    bundle.putString("filter", "favourites");
+                    homeFragment.setArguments(bundle);
+                    transaction.replace(R.id.content_frame, homeFragment);
                     break;
                 case R.id.nav_chats:
                     transaction.replace(R.id.content_frame, new ChatListFragment());
-                    transaction.addToBackStack(null);
-                    transaction.commit();
                     break;
                 case R.id.nav_map:
                     transaction.replace(R.id.content_frame, new MapFragment());
-                    transaction.addToBackStack(null);
-                    transaction.commit();
             }
+            transaction.addToBackStack(null);
+            transaction.commit();
             return true;
         });
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

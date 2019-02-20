@@ -78,6 +78,7 @@ public class EventManagerService {
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
+                Log.d("event", key);
                 getEvent(key, callback);
             }
 
@@ -98,6 +99,22 @@ public class EventManagerService {
 
             @Override
             public void onGeoQueryError(DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void getFavouriteEvents(EventLoadCallback callback) {
+        firebaseDatabase.getReference("userEvents").child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot event : dataSnapshot.getChildren()) {
+                    getEvent(event.getKey(), callback);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });

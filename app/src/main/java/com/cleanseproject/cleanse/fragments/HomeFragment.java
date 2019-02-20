@@ -61,7 +61,6 @@ public class HomeFragment extends Fragment {
             //swipeRefresh.setRefreshing(true);
             updateRecycleView();
         });
-
         LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
         rvEventos.setLayoutManager(llm);
         eventManagerService = new EventManagerService();
@@ -73,20 +72,25 @@ public class HomeFragment extends Fragment {
         rvEventos.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                if(dy > 0) fab.hide();
+                if (dy > 0) fab.hide();
                 else fab.show();
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
-
         Location currentLocation = locationService.getCurrentLocation();
-        eventManagerService.getCloseEvents(
-                new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                8587,
-                (this::rellenarEventos));
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String filter = bundle.getString("filter");
+            if (filter != null && filter.equals("favourites")) {
+                eventManagerService.getFavouriteEvents((this::rellenarEventos));
+            }
+        } else {
+            eventManagerService.getCloseEvents(
+                    new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                    8587,
+                    (this::rellenarEventos));
+        }
     }
-
-
 
 
     private void updateRecycleView() {

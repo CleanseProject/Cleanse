@@ -23,4 +23,8 @@
     <string name="join_chat">Join chat</string>
     <string name="add_event">Add event</string>
     <string name="unknown">Unknown</string>
+    <string name="home">Home</string>
+    <string name="favourites">Favourites</string>
+    <string name="places">Places</string>
+    <string name="chats">Chats</string>
 </resources>

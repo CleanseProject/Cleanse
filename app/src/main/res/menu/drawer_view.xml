@@ -4,14 +4,18 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home"
-            android:title="Home" />
+            android:title="@string/home" />
+        <item
+            android:id="@+id/nav_favourites"
+            android:icon="@drawable/corazon_azul"
+            android:title="@string/favourites" />
         <item
             android:id="@+id/nav_map"
             android:icon="@drawable/ic_map"
-            android:title="Lugares" />
+            android:title="@string/places" />
         <item
             android:id="@+id/nav_chats"
             android:icon="@drawable/ic_chat"
-            android:title="Chats" />
+            android:title="@string/chats" />
     </group>
 </menu>
