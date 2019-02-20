@@ -48,6 +48,7 @@ public class ChatListAdapter extends BaseAdapter {
         View view = LayoutInflater.from(context).inflate(R.layout.row_chat_list, null);
         Chat chat = chatRows.get(position);
         TextView lblName = view.findViewById(R.id.chat_row_username);
+        TextView lblLastMessage = view.findViewById(R.id.chat_list_last_message);
         ImageView chatImage = view.findViewById(R.id.chat_row_user_img);
         if (chat.getGroupChat()) {
             imageManagerService.eventImageDownloadUrl(chat.getChatUid(),
@@ -59,6 +60,7 @@ public class ChatListAdapter extends BaseAdapter {
                     });
         }
         lblName.setText(chat.getChatName());
+        lblLastMessage.setText(chat.getLastMessageSent());
         return view;
     }
 
