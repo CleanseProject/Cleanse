@@ -27,7 +27,7 @@
     </FrameLayout>
 
     <TextView
-        android:id="@+id/txtAddEvent"
+        android:id="@+id/lbl_add_event"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
@@ -35,6 +35,11 @@
         android:textColor="#000"
         android:textSize="20sp" />
 
+    <EditText
+        android:id="@+id/txt_add_event_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Event title" />
 
     <Button
         android:id="@+id/btn_set_location"

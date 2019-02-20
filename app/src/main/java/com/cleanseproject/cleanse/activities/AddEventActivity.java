@@ -8,13 +8,12 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -24,6 +23,7 @@ import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.fragments.MapFragment;
 import com.cleanseproject.cleanse.services.EventManagerService;
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -43,10 +43,12 @@ public class AddEventActivity extends AppCompatActivity {
     private ImageView imgExit, selectedImage;
     private Spinner spn_estado;
     private ImageView imgEstado;
+    private EditText txtTitle, txtDescription;
 
-    private Uri filePath;
+    private Uri imagePath;
 
     private boolean frameAbierto;
+    private LatLng eventLatLng;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +62,16 @@ public class AddEventActivity extends AppCompatActivity {
         spn_estado = findViewById(R.id.spnEstado);
         imgEstado = findViewById(R.id.img_estado);
         selectedImage = findViewById(R.id.selected_image);
-        eventManagerService=new EventManagerService();
-        ////////////////// Intent
+        txtTitle = findViewById(R.id.txt_add_event_title);
+        txtDescription = findViewById(R.id.txt_add_description);
+        eventManagerService = new EventManagerService();
         Intent i = getIntent();
-        Double lat = i.getDoubleExtra("Latitud", 0);
-        Double lon = i.getDoubleExtra("Longitud", 0);
+        double lat = i.getDoubleExtra("latitude", 0);
+        double lon = i.getDoubleExtra("longitude", 0);
         if (lat != 0 && lon != 0) {
+            eventLatLng = new LatLng(lat, lon);
             btnSelectLocation.setText("Lat/Lon: " + lat + "/" + lon);
         }
-        //////////////////
         ArrayList<String> lista = new ArrayList<>();
         lista.add("Limpio");
         lista.add("Sucio");
@@ -100,8 +103,6 @@ public class AddEventActivity extends AppCompatActivity {
 
             }
         });
-
-
         FrameLayout addEvent = findViewById(R.id.FrameLayout_add_event);
         btnSelectDate.setOnClickListener(v -> {
             Calendar cal = Calendar.getInstance();
@@ -115,7 +116,6 @@ public class AddEventActivity extends AppCompatActivity {
             mDateSetListener.show();
 
         });
-
         imgExit.setOnClickListener(v -> {
             if (frameAbierto) {
                 addEvent.setVisibility(View.GONE);
@@ -130,28 +130,32 @@ public class AddEventActivity extends AppCompatActivity {
             addEvent.setVisibility(View.VISIBLE);
             transaction.addToBackStack(null);
             transaction.commit();
-            imgExit.setOnClickListener(v1 -> {
-                addEvent.setVisibility(View.GONE);
-                imgExit.setOnClickListener(v11 -> finish());
-            });
             frameAbierto = true;
         });
-
         btnSelectPic.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
         });
-
+        btnAdd.setOnClickListener(v -> {
+            //TODO: Comprobar que se han insertado todos los datos
+            String title = txtTitle.getText().toString();
+            String description = txtDescription.getText().toString();
+            String latitude = String.valueOf(eventLatLng.latitude);
+            String longitude = String.valueOf(eventLatLng.longitude);
+            eventManagerService.createEvent(new Event("", title, description, latitude, longitude), imagePath);
+            //TODO: Mostrar evento creado
+            finish();
+        });
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_IMAGE) {
-            filePath = data.getData();
+            imagePath = data.getData();
             try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
                 selectedImage.setImageBitmap(bitmap);
             } catch (IOException e) {
                 e.printStackTrace();
@@ -161,6 +165,10 @@ public class AddEventActivity extends AppCompatActivity {
 
     public void setFrameAbierto(boolean frameAbierto) {
         this.frameAbierto = frameAbierto;
+    }
+
+    public void setEventLatLng(LatLng eventLatLng) {
+        this.eventLatLng = eventLatLng;
     }
 
 }
