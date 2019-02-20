@@ -56,7 +56,7 @@ public class AddEventActivity extends AppCompatActivity {
         spn_estado = findViewById(R.id.spnEstado);
         imgEstado = findViewById(R.id.img_estado);
         selectedImage = findViewById(R.id.selected_image);
-        eventManagerService=new EventManagerService();
+        eventManagerService = new EventManagerService();
         ////////////////// Intent
         Intent i = getIntent();
         Double lat = i.getDoubleExtra("Latitud", 0);
@@ -137,12 +137,14 @@ public class AddEventActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == PICK_IMAGE) {
-            filePath = data.getData();
-            try {
-                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
-                selectedImage.setImageBitmap(bitmap);
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (data != null) {
+                filePath = data.getData();
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                    selectedImage.setImageBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
