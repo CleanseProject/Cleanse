@@ -3,24 +3,31 @@ package com.cleanseproject.cleanse.services;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 
+import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.callbacks.LocationUpdatesCallback;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 public class LocationService {
 
     private Context context;
     private LocationManager locationManager;
+    private Geocoder geocoder;
 
     public LocationService(Context context) {
         this.context = context;
         locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        geocoder = new Geocoder(context, Locale.getDefault());
     }
 
     private boolean checkPermission() {
@@ -38,7 +45,6 @@ public class LocationService {
                 continue;
             }
             if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
-                // Found best last known location: %s", l);
                 bestLocation = l;
             }
         }
@@ -77,6 +83,18 @@ public class LocationService {
             return currentLocation.distanceTo(eventLocation);
         }
         return -1;
+    }
+
+    public String localityName(double lat, double lng) {
+        try {
+            List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
+            if (addresses != null && addresses.size() > 0) {
+                return addresses.get(0).getLocality();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return context.getString(R.string.unknown);
     }
 
 }

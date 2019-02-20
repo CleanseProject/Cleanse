@@ -23,6 +23,7 @@ import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.fragments.MapFragment;
 import com.cleanseproject.cleanse.services.EventManagerService;
+import com.cleanseproject.cleanse.services.LocationService;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
@@ -31,6 +32,7 @@ import java.util.Calendar;
 
 public class AddEventActivity extends AppCompatActivity {
 
+    private LocationService locationService;
     private EventManagerService eventManagerService;
 
     public static final int PICK_IMAGE = 1;
@@ -63,6 +65,7 @@ public class AddEventActivity extends AppCompatActivity {
         imgEstado = findViewById(R.id.img_estado);
         selectedImage = findViewById(R.id.selected_image);
         eventManagerService = new EventManagerService();
+        locationService = new LocationService(this);
         ////////////////// Intent
         txtTitle = findViewById(R.id.txt_add_event_title);
         txtDescription = findViewById(R.id.txt_add_description);
@@ -72,7 +75,7 @@ public class AddEventActivity extends AppCompatActivity {
         double lon = i.getDoubleExtra("longitude", 0);
         if (lat != 0 && lon != 0) {
             eventLatLng = new LatLng(lat, lon);
-            btnSelectLocation.setText("Lat/Lon: " + lat + "/" + lon);
+            btnSelectLocation.setText(locationService.localityName(lat, lon));
         }
         ArrayList<String> lista = new ArrayList<>();
         lista.add("Limpio");

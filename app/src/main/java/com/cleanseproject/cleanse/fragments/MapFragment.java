@@ -2,14 +2,12 @@ package com.cleanseproject.cleanse.fragments;
 
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,8 +28,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import java.util.ArrayList;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
@@ -105,7 +101,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         Button btnLocalizacion = addEventActivity.findViewById(R.id.btn_set_location);
                         if (lat != 0 && lon != 0) {
                             addEventActivity.setEventLatLng(latLng);
-                            btnLocalizacion.setText("Lat/Lon: " + lat + "/" + lon);
+                            btnLocalizacion.setText(locationService.localityName(lat, lon));
                         }
                         FrameLayout frameLayout = addEventActivity.findViewById(R.id.FrameLayout_add_event);
                         frameLayout.setVisibility(View.GONE);
