@@ -49,6 +49,8 @@ public class AddEventActivity extends AppCompatActivity {
 
     private Uri imagePath;
 
+    private Uri filePath;
+
     private boolean frameAbierto;
     private LatLng eventLatLng;
 
@@ -135,8 +137,13 @@ public class AddEventActivity extends AppCompatActivity {
             addEvent.setVisibility(View.VISIBLE);
             transaction.addToBackStack(null);
             transaction.commit();
+            imgExit.setOnClickListener(v1 -> {
+                addEvent.setVisibility(View.GONE);
+                imgExit.setOnClickListener(v11 -> finish());
+            });
             frameAbierto = true;
         });
+
         btnSelectPic.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setType("image/*");
