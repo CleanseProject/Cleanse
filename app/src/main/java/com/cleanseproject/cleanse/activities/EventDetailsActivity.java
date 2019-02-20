@@ -12,12 +12,14 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.adapters.UsersInEventAdapter;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.services.ChatManagerService;
 import com.cleanseproject.cleanse.services.EventManagerService;
+import com.cleanseproject.cleanse.services.ImageManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -28,6 +30,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private EventManagerService eventManagerService;
     private ChatManagerService chatManagerService;
+    private ImageManagerService imageManagerService;
     private LocationService locationService;
 
     private Event event;
@@ -52,6 +55,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         rvUsuarios = findViewById(R.id.rvUsuarios);
         eventManagerService = new EventManagerService();
         chatManagerService = new ChatManagerService();
+        imageManagerService = new ImageManagerService();
         locationService = new LocationService(this);
         firebaseAuth = FirebaseAuth.getInstance();
         txtJoinChat.setOnClickListener(v -> startChat());
@@ -73,6 +77,13 @@ public class EventDetailsActivity extends AppCompatActivity {
                 distancia = Math.round(distanciaMetros) + " m";
             txtDistancia.setText(distancia);
         });
+        imageManagerService.eventImageDownloadUrl(
+                idEvento,
+                imageUrl -> {
+                    Glide.with(this)
+                            .load(imageUrl)
+                            .into(imagenEvento);
+                });
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvUsuarios.setLayoutManager(layoutManager);

@@ -17,14 +17,12 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="215dp"
-        android:background="@drawable/imagen">
+        android:layout_height="215dp">
 
         <ImageView
             android:id="@+id/imagenEventoSeleccionado"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/imagen" />
+            android:layout_height="match_parent" />
 
         <View
             android:layout_width="match_parent"

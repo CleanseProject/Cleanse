@@ -21,7 +21,7 @@ public class ImageManagerService {
         firebaseStorage.getReference("images/events/" + eventId).getDownloadUrl()
                 .addOnSuccessListener(uri -> callback.onUrlLoaded(uri.toString()))
                 .addOnFailureListener(e -> {
-
+                    //TODO: Set default image
                 });
     }
 
