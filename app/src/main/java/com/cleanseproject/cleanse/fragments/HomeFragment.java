@@ -26,6 +26,7 @@ import com.cleanseproject.cleanse.services.LocationService;
 import com.firebase.geofire.GeoLocation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class HomeFragment extends Fragment {
 
@@ -99,9 +100,14 @@ public class HomeFragment extends Fragment {
     }
 
     private void rellenarEventos(Event event, boolean isFavourite) {
+        Location location = new Location("");
+        location.setLatitude(event.getLatitude());
+        location.setLongitude(event.getLongitude());
+        event.setDistance(locationService.distance(location));
         events.add(event);
         if (isFavourite)
             favouriteEvents.add(event.getId());
+        Collections.sort(events);
         adaptador.notifyDataSetChanged();
         if (progressBar.getVisibility() == View.VISIBLE)
             progressBar.setVisibility(View.GONE);

@@ -54,7 +54,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
 
         private EventManagerService eventManagerService;
         private ImageManagerService imageManagerService;
-        private LocationService locationService;
         private TextView txtTitulo, txtDistancia;
         private ImageView ivFoto;
         private ImageButton btnLike, btnShare;
@@ -70,22 +69,17 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
             ivFoto = v.findViewById(R.id.ivEvento);
             liked = false;
             context = v.getContext();
-            locationService = new LocationService(context);
             imageManagerService = new ImageManagerService();
             eventManagerService = new EventManagerService();
         }
 
         public void asignarDatos(Event event) {
             txtTitulo.setText(event.getName());
-            Location location = new Location("");
-            location.setLatitude(event.getLatitude());
-            location.setLongitude(event.getLongitude());
             String distancia;
-            float distanciaMetros = locationService.distance(location);
-            if (distanciaMetros >= 1000)
-                distancia = Math.round(distanciaMetros / 1000) + " km";
+            if (event.getDistance() >= 1000)
+                distancia = Math.round(event.getDistance() / 1000) + " km";
             else
-                distancia = Math.round(distanciaMetros) + " m";
+                distancia = Math.round(event.getDistance()) + " m";
             txtDistancia.setText(distancia);
             if (eventosFavoritos.contains(event.getId()))
                 btnLike.setImageResource(R.drawable.corazon_rosa);
