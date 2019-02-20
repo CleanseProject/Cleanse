@@ -63,7 +63,7 @@ public class AddEventActivity extends AppCompatActivity {
 
         btnSelectDate = findViewById(R.id.btn_set_date);
         btnAdd = findViewById(R.id.btn_event_add);
-        
+
         selectedImage = findViewById(R.id.imagen_evento);
         eventManagerService = new EventManagerService();
         locationService = new LocationService(this);
@@ -82,33 +82,7 @@ public class AddEventActivity extends AppCompatActivity {
         lista.add("Limpio");
         lista.add("Sucio");
         lista.add("Critico");
-        SpinnerAdapter spinnerAdapter = new ArrayAdapter<>(this, R.layout.spinner_item, lista);
-        spn_estado.setAdapter(spinnerAdapter);
-        spn_estado.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String imagen = (String) parent.getItemAtPosition(position);
-                switch (imagen) {
-                    case "Limpio":
-                        Log.v("Mensaje", "Limpio");
-                        imgEstado.setImageResource(R.drawable.marcadorverde_vector);
-                        break;
-                    case "Sucio":
-                        Log.v("Mensaje", "Sucio");
-                        imgEstado.setImageResource(R.drawable.marcadornaranja_vector);
-                        break;
-                    case "Critico":
-                        Log.v("Mensaje", "Critico");
-                        imgEstado.setImageResource(R.drawable.marcadorrojo_vector);
-                        break;
-                }
-            }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
         FrameLayout addEvent = findViewById(R.id.FrameLayout_add_event);
         btnSelectDate.setOnClickListener(v -> {
             Calendar cal = Calendar.getInstance();
