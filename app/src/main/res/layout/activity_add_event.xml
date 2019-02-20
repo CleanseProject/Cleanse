@@ -69,6 +69,12 @@
         android:text="@string/select_photo" />
 
 
+    <ImageView
+        android:id="@+id/selected_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:srcCompat="@android:drawable/ic_menu_report_image" />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -88,11 +94,6 @@
             android:layout_height="36dp" />
 
     </LinearLayout>
-
-    <ImageView
-        android:id="@+id/selected_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
