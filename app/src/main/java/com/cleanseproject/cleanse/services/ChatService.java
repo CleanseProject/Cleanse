@@ -62,8 +62,10 @@ public class ChatService {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot dataUser : dataSnapshot.getChildren()) {
                     String user = dataUser.getValue().toString();
-                    if (!user.equals(firebaseUser.getUid()))
+                    if (!user.equals(firebaseUser.getUid())) {
                         sendNotificationToUser(user, firebaseUser.getDisplayName() + ": " + message);
+                        firebaseDatabase.getReference("userChats").child(user).child(chat.getChatUid()).child("unread").setValue(true);
+                    }
                 }
             }
 
@@ -92,7 +94,7 @@ public class ChatService {
 
             }
         });
-        Log.d("updated", "updated");
+        firebaseDatabase.getReference("userChats").child(firebaseUser.getUid()).child(chat.getChatUid()).child("unread").setValue(false);
     }
 
     public static void sendNotificationToUser(String user, final String message) {

@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cleanseproject.cleanse.callbacks.ChatListLoadCallback;
+import com.cleanseproject.cleanse.callbacks.UnreadMessagesCallback;
 import com.cleanseproject.cleanse.callbacks.UserNameLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Chat;
 import com.cleanseproject.cleanse.dataClasses.User;
@@ -21,11 +22,13 @@ import java.util.Collections;
 public class ChatManagerService {
 
     private FirebaseAuth firebaseAuth;
+    private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
 
     public ChatManagerService() {
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
+        firebaseUser = firebaseAuth.getCurrentUser();
     }
 
     public void createChat(ArrayList<String> userIds) {
@@ -43,7 +46,7 @@ public class ChatManagerService {
 
     public void joinChat(String userId, String chatId) {
         firebaseDatabase.getReference("chats").child(chatId).child("members").child(userId).setValue(userId);
-        firebaseDatabase.getReference("userChats").child(userId).child(chatId).setValue(chatId);
+        firebaseDatabase.getReference("userChats").child(userId).child(chatId).child("chatId").setValue(chatId);
     }
 
     public void createGroupChat(String eventId, String name) {
@@ -57,12 +60,11 @@ public class ChatManagerService {
         userChats.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d("chatid", firebaseUser.getUid());
                 DataSnapshot userChatsData = dataSnapshot.child("userChats").child(firebaseUser.getUid());
                 DataSnapshot users = dataSnapshot.child("users");
                 ArrayList<Chat> chats = new ArrayList<>();
                 for (DataSnapshot objChatId : userChatsData.getChildren()) {
-                    String chatId = objChatId.getValue().toString();
+                    String chatId = objChatId.getKey();
                     Log.d("chatid", chatId);
                     Chat chat = dataSnapshot.child("chats").child(chatId).getValue(Chat.class);
                     if (!chat.getGroupChat()) {
@@ -102,6 +104,21 @@ public class ChatManagerService {
 
             }
         });
+    }
+
+    public void hasUnreadMessages(String chatId, UnreadMessagesCallback callback) {
+        firebaseDatabase.getReference("userChats").child(firebaseUser.getUid()).child(chatId).child("unread")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        callback.loadUnreadMessages(dataSnapshot.getValue(Boolean.class));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
 }

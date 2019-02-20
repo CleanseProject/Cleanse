@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Chat;
+import com.cleanseproject.cleanse.services.ChatManagerService;
 import com.cleanseproject.cleanse.services.ImageManagerService;
 
 import java.util.ArrayList;
@@ -21,11 +22,13 @@ public class ChatListAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<Chat> chatRows;
     private ImageManagerService imageManagerService;
+    private ChatManagerService chatManagerService;
 
     public ChatListAdapter(Context context, ArrayList<Chat> chatRows) {
         this.context = context;
         this.chatRows = chatRows;
         imageManagerService = new ImageManagerService();
+        chatManagerService = new ChatManagerService();
     }
 
     @Override
@@ -50,6 +53,7 @@ public class ChatListAdapter extends BaseAdapter {
         TextView lblName = view.findViewById(R.id.chat_row_username);
         TextView lblLastMessage = view.findViewById(R.id.chat_list_last_message);
         ImageView chatImage = view.findViewById(R.id.chat_row_user_img);
+        ImageView imgUnread = view.findViewById(R.id.chat_list_unread);
         if (chat.getGroupChat()) {
             imageManagerService.eventImageDownloadUrl(chat.getChatUid(),
                     imageUrl -> {
@@ -61,6 +65,8 @@ public class ChatListAdapter extends BaseAdapter {
         }
         lblName.setText(chat.getChatName());
         lblLastMessage.setText(chat.getLastMessageSent());
+        chatManagerService.hasUnreadMessages(chat.getChatUid(),
+                unread -> imgUnread.setVisibility(unread ? View.VISIBLE : View.GONE));
         return view;
     }
 

@@ -87,6 +87,7 @@ public class ChatActivity extends AppCompatActivity {
         chatService.sendMessage(txtMessage.getText().toString());
         messageRecycler.scrollToPosition(messageRecycler.getAdapter().getItemCount() - 1);
         txtMessage.setText("");
+        btnSend.setEnabled(false);
     }
 
 }
