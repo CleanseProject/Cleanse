@@ -134,6 +134,7 @@ public class AddEventActivity extends AppCompatActivity {
                 addEvent.setVisibility(View.GONE);
                 imgExit.setOnClickListener(v11 -> finish());
             });
+            frameAbierto = true;
         });
 
         btnSelectPic.setOnClickListener(v -> {
@@ -143,7 +144,6 @@ public class AddEventActivity extends AppCompatActivity {
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
         });
 
-        imgExit.setOnClickListener(v -> finish());
     }
 
     @Override
@@ -157,10 +157,6 @@ public class AddEventActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
-    }
-
-            frameAbierto = true;
-        });
     }
 
     public void setFrameAbierto(boolean frameAbierto) {
