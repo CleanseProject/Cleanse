@@ -25,11 +25,13 @@ public class ChatService {
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
     private MessagesLoadCallback messagesLoadCallback;
+    private ChatManagerService chatManagerService;
 
     public ChatService(MessagesLoadCallback messagesLoadCallback) {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
+        chatManagerService = new ChatManagerService();
         this.messagesLoadCallback = messagesLoadCallback;
     }
 
@@ -63,6 +65,9 @@ public class ChatService {
                 for (DataSnapshot dataUser : dataSnapshot.getChildren()) {
                     String user = dataUser.getValue().toString();
                     if (!user.equals(firebaseUser.getUid())) {
+                        chatManagerService.getUserName(
+                                firebaseUser.getUid(),
+                                username -> sendNotificationToUser(username, message));
                         sendNotificationToUser(user, firebaseUser.getDisplayName() + ": " + message);
                         firebaseDatabase.getReference("userChats").child(user).child(chat.getChatUid()).child("unread").setValue(true);
                     }
