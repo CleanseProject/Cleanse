@@ -67,8 +67,7 @@ public class ChatService {
                     if (!user.equals(firebaseUser.getUid())) {
                         chatManagerService.getUserName(
                                 firebaseUser.getUid(),
-                                username -> sendNotificationToUser(username, message));
-                        sendNotificationToUser(user, firebaseUser.getDisplayName() + ": " + message);
+                                username -> sendNotificationToUser(user, username + " @" + chat.getChatName(), message));
                         firebaseDatabase.getReference("userChats").child(user).child(chat.getChatUid()).child("unread").setValue(true);
                     }
                 }
@@ -102,11 +101,12 @@ public class ChatService {
         firebaseDatabase.getReference("userChats").child(firebaseUser.getUid()).child(chat.getChatUid()).child("unread").setValue(false);
     }
 
-    public static void sendNotificationToUser(String user, final String message) {
+    public static void sendNotificationToUser(String user, String title, final String message) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference notifications = ref.child("notificationRequests");
         Map<String, String> notification = new HashMap<>();
         notification.put("username", user);
+        notification.put("title", title);
         notification.put("message", message);
         notifications.push().setValue(notification);
     }
