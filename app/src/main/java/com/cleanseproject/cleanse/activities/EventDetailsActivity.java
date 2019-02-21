@@ -33,7 +33,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private ChatManagerService chatManagerService;
     private ImageManagerService imageManagerService;
     private LocationService locationService;
-
+    private Toolbar toolbar;
     private Event event;
 
     private ImageView imagenEvento;
@@ -45,11 +45,11 @@ public class EventDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details);
-        CollapsingToolbarLayout toolbar = findViewById(R.id.event_details_toolbar);
-
-        //setSupportActionBar(toolbar);
-        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-       // getSupportActionBar().setDisplayShowHomeEnabled(true);
+        CollapsingToolbarLayout Coltoolbar = findViewById(R.id.event_details_toolbar);
+        Toolbar toolbar= findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
        imagenEvento = findViewById(R.id.imagenEventoSeleccionado);
         txtDescripcion = findViewById(R.id.txtDescripcion);
        // txtDistancia = findViewById(R.id.txtDistancia);
@@ -66,7 +66,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         String idEvento = intent.getStringExtra("Evento");
         eventManagerService.getEvent(idEvento, event -> {
             this.event = event;
-            toolbar.setTitle(event.getName());
+            Coltoolbar.setTitle(event.getName());
             txtDescripcion.setText(event.getDescription());
             String distancia;
             if (event.getDistance() >= 1000)
