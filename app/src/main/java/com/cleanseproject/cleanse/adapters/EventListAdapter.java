@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +54,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
         private TextView txtTitulo, txtDistancia;
         private ImageView ivFoto;
         private ImageButton btnLike, btnShare;
-        private boolean liked;
         private Context context;
 
         public MyViewHolder(View v) {
@@ -63,7 +63,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
             btnLike = v.findViewById(R.id.btnLike);
             btnShare = v.findViewById(R.id.btnShare);
             ivFoto = v.findViewById(R.id.ivEvento);
-            liked = false;
             context = v.getContext();
             imageManagerService = new ImageManagerService();
             eventManagerService = new EventManagerService();
@@ -92,14 +91,14 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
                 context.startActivity(intent);
             });
             btnLike.setOnClickListener(v -> {
-                if (!liked) {
+                if (!event.isFavourite()) {
                     btnLike.setImageResource(R.drawable.corazon_rojo);
-                    liked = true;
                     eventManagerService.setEventAsFavourite(event.getId());
+                    event.setFavourite(true);
                 } else {
-                    liked = false;
                     btnLike.setImageResource(R.drawable.corazon_blanco);
                     eventManagerService.deleteFavouriteEvent(event.getId());
+                    event.setFavourite(false);
                 }
             });
         }

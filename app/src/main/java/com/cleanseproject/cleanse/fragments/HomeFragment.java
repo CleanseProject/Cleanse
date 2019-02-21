@@ -24,6 +24,8 @@ import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
 import com.firebase.geofire.GeoLocation;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -80,6 +82,8 @@ public class HomeFragment extends Fragment {
         });
         Location currentLocation = locationService.getCurrentLocation();
         Bundle bundle = getArguments();
+        DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference("events");
+        eventsRef.keepSynced(true);
         if (bundle != null) {
             String filter = bundle.getString("filter");
             if (filter != null && filter.equals("favourites")) {
