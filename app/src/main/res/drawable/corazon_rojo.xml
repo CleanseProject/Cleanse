@@ -11,13 +11,6 @@
         android:fillColor="#ff0000"
         android:strokeWidth="1"/>
     <group android:name="group_2">
-        <path
-            android:name="path_6"
-            android:pathData="M 23.49 113.5 C 23.49 113.5 20.84 83.59 51.31 52.72 C 57.85 46.016 65.126 40.072 73 35 M 98.61 23.71 C 111.93 19.11 121.07 19.71 121.07 19.71"
-            android:fillAlpha="0.5"
-            android:strokeColor="#ffffff"
-            android:strokeAlpha="0.5"
-            android:strokeWidth="20"
-            android:strokeLineCap="round"/>
+
     </group>
 </vector>

@@ -2,7 +2,6 @@ package com.cleanseproject.cleanse.adapters;
 
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,7 +17,6 @@ import com.cleanseproject.cleanse.activities.EventDetailsActivity;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.ImageManagerService;
-import com.cleanseproject.cleanse.services.LocationService;
 
 import java.util.ArrayList;
 
@@ -80,7 +78,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
                 distancia = Math.round(event.getDistance()) + " m";
             txtDistancia.setText(distancia);
             if (event.isFavourite())
-                btnLike.setImageResource(R.drawable.corazon_rosa);
+                btnLike.setImageResource(R.drawable.corazon_rojo);
             imageManagerService.eventImageDownloadUrl(
                     event.getId(),
                     imageUrl -> {
@@ -95,12 +93,12 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
             });
             btnLike.setOnClickListener(v -> {
                 if (!liked) {
-                    btnLike.setImageResource(R.drawable.corazon_rosa);
+                    btnLike.setImageResource(R.drawable.corazon_rojo);
                     liked = true;
                     eventManagerService.setEventAsFavourite(event.getId());
                 } else {
                     liked = false;
-                    btnLike.setImageResource(R.drawable.corazon_azul);
+                    btnLike.setImageResource(R.drawable.corazon_blanco);
                     eventManagerService.deleteFavouriteEvent(event.getId());
                 }
             });

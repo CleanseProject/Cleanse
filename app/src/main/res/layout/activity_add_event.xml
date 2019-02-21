@@ -35,64 +35,135 @@
         android:textColor="#000"
         android:textSize="20sp" />
 
-    <EditText
-        android:id="@+id/txt_add_event_title"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Event title" />
-
-    <Button
-        android:id="@+id/btn_set_location"
-        style="@style/ButtonConImagen"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:drawableStart="@drawable/placeholder"
-        android:text="@string/select_location" />
-
-    <Button
-        android:id="@+id/btn_set_date"
-        style="@style/ButtonConImagen"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:drawableStart="@drawable/calendar"
-        android:text="@string/select_date" />
-
-    <Button
-        android:id="@+id/btn_set_pic"
-        style="@style/ButtonConImagen"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
-        android:drawableStart="@drawable/add_pic"
-        android:text="@string/select_photo" />
-
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="10dp">
+        android:layout_height="215dp">
 
         <ImageView
-            android:id="@+id/img_estado"
-            android:layout_width="39dp"
+            android:id="@+id/imagen_evento"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            tools:srcCompat="@tools:sample/avatars[0]"
-            android:contentDescription="@string/status" />
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/picture" />
 
-        <Spinner
-            android:id="@+id/spnEstado"
-            android:layout_width="161dp"
-            android:layout_height="36dp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Select image"
+            android:textColor="@color/colorSecundario"
+            android:textSize="40dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/scrim" />
+
+        <EditText
+            android:id="@+id/txt_add_event_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="right"
+            android:hint="Event title"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#FFFFFF" />
+    </FrameLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_set_location"
+            style="@style/ButtonConImagen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/placeholder"
+            android:text="@string/select_location" />
+
+        <Button
+            android:id="@+id/btn_set_date"
+            style="@style/ButtonConImagen"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:drawableStart="@drawable/calendar"
+            android:text="@string/select_date" />
+
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/selected_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+
+        android:paddingLeft="10dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_gravity="left">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/marcadorverde_vector"
+                android:text="Limpio" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_weight="1"
+            android:layout_gravity="right">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/marcadornaranja_vector"
+                android:text="Sucio" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="right">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableLeft="@drawable/marcadorrojo_vector"
+                android:text="Critico" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+    </LinearLayout>
 
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
