@@ -3,6 +3,7 @@ package com.cleanseproject.cleanse.activities;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,13 +45,14 @@ public class EventDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details);
-        Toolbar toolbar = findViewById(R.id.event_details_toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        imagenEvento = findViewById(R.id.imagenEventoSeleccionado);
+        CollapsingToolbarLayout toolbar = findViewById(R.id.event_details_toolbar);
+
+        //setSupportActionBar(toolbar);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       // getSupportActionBar().setDisplayShowHomeEnabled(true);
+       imagenEvento = findViewById(R.id.imagenEventoSeleccionado);
         txtDescripcion = findViewById(R.id.txtDescripcion);
-        txtDistancia = findViewById(R.id.txtDistancia);
+       // txtDistancia = findViewById(R.id.txtDistancia);
         txtJoinChat = findViewById(R.id.txt_join_chat);
         rvUsuarios = findViewById(R.id.rvUsuarios);
         eventManagerService = new EventManagerService();
@@ -71,7 +73,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                 distancia = Math.round(event.getDistance() / 1000) + " km";
             else
                 distancia = Math.round(event.getDistance()) + " m";
-            txtDistancia.setText(distancia);
+            //txtDistancia.setText(distancia);
         });
         imageManagerService.eventImageDownloadUrl(
                 idEvento,
