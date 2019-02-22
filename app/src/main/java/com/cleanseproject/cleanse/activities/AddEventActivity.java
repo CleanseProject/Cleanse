@@ -27,10 +27,12 @@ import com.cleanseproject.cleanse.fragments.MapFragment;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
 import com.google.android.gms.maps.model.LatLng;
+import com.yalantis.ucrop.UCrop;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.UUID;
 
 public class AddEventActivity extends AppCompatActivity implements BSImagePicker.OnSingleImageSelectedListener {
 
@@ -141,12 +143,26 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
 
     @Override
     public void onSingleImageSelected(Uri uri, String tag) {
-        imagePath = uri;
-        try {
-            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
-            selectedImage.setImageBitmap(bitmap);
-        } catch (IOException e) {
-            e.printStackTrace();
+        String tempPath = AddEventActivity.this.getCacheDir().toURI().toString() + UUID.randomUUID();
+        UCrop.of(uri, Uri.parse(tempPath))
+                .withAspectRatio(16, 9)
+                .start(AddEventActivity.this);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
+            imagePath = UCrop.getOutput(data);
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
+                selectedImage.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (resultCode == UCrop.RESULT_ERROR) {
+            final Throwable cropError = UCrop.getError(data);
         }
     }
+
 }

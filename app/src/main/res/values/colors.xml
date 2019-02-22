@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <color name="colorPrimary">#343890</color>
     <color name="colorPrimaryTransparent">#90343890</color>
     <color name="colorPrimaryDark">#2A2D77</color>
@@ -9,4 +9,6 @@
     <color name="verdehojainterno">#00913e</color>
     <color name="verdehojaexterno">#00ce53</color>
     <color name="botonPressed">#f800ff</color>
+    <color name="ucrop_color_toolbar" tools:override="true">@color/colorPrimary</color>
+    <color name="ucrop_color_statusbar" tools:override="true">@color/colorPrimaryTransparent</color>
 </resources>
