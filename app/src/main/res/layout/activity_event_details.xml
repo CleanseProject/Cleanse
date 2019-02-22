@@ -36,7 +36,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/ToolBarStyle" />
+                app:popupTheme="@style/ToolBarStyle"
+                />
 
 
         </android.support.design.widget.CollapsingToolbarLayout>
@@ -44,13 +45,56 @@
 
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
+        android:id="@+id/fabchat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabCustomSize="50dp"
+        android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="@color/colorPrimary"
+        app:backgroundTint="@color/colorPrimary"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end"
+        app:maxImageSize="30dp"
+        app:srcCompat="@drawable/chat" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabequis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:backgroundTint="#FF2D2D"
+        app:backgroundTint="#FF2D2D"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end"
+        app:srcCompat="@drawable/equis"
+        app:maxImageSize="30dp"
+        app:fabCustomSize="50dp"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabcheck"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        app:layout_anchor="@id/app_bar"
+        android:backgroundTint="#00FF88"
+        app:backgroundTint="#00FF88"
+        app:layout_anchorGravity="bottom|end"
+        app:srcCompat="@drawable/check"
+        app:maxImageSize="30dp"
+        app:fabCustomSize="50dp"
+        />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabMenu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        app:maxImageSize="30dp"
+        app:srcCompat="@drawable/menu"
+        />
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
