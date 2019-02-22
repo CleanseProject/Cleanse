@@ -15,7 +15,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.AddEventActivity;
@@ -40,7 +42,6 @@ public class HomeFragment extends Fragment {
     private RecyclerView rvEventos;
     private ProgressBar progressBar;
     private FloatingActionButton fab;
-
     private ArrayList<Event> events;
     private ArrayList<String> favouriteEvents;
 

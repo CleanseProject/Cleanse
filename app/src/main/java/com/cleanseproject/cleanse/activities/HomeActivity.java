@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
@@ -17,18 +18,37 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
+import com.cleanseproject.cleanse.callbacks.UserNameLoadCallback;
+import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.fragments.ChatListFragment;
 import com.cleanseproject.cleanse.fragments.HomeFragment;
 import com.cleanseproject.cleanse.fragments.MapFragment;
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.mikhaellopez.circularimageview.CircularImageView;
+
+import java.util.concurrent.atomic.AtomicMarkableReference;
 
 public class HomeActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
+    private CircularImageView imagenUsuario;
+    private TextView nombreUsuario;
+    private FirebaseDatabase firebaseDatabase;
+    private FirebaseAuth mAuth;
+    private Context context;
 
     @Override
     public void onStart() {
@@ -44,6 +64,8 @@ public class HomeActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_home);
+        context = this;
+        firebaseDatabase=FirebaseDatabase.getInstance();
         initializeUI();
     }
 
@@ -99,6 +121,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
+        mAuth=FirebaseAuth.getInstance();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -107,6 +130,24 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(0).setChecked(true);
+        View headerLayout=navigationView.getHeaderView(0);
+        imagenUsuario = (CircularImageView) headerLayout.findViewById(R.id.nav_header_imagen);
+        nombreUsuario = headerLayout.findViewById(R.id.nav_header_usuario);
+        imagenUsuario.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, UserProfileActivity.class);
+                intent.putExtra("userId", mAuth.getCurrentUser().getUid());
+                startActivity(intent);
+            }
+        });
+        getNombreUsuario(mAuth.getCurrentUser().getUid(),
+                new UserNameLoadCallback() {
+                    @Override
+                    public void onUsernameLoaded(String username) {
+                        nombreUsuario.setText(username);
+                    }
+                });
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             drawerLayout.closeDrawers();
@@ -138,5 +179,20 @@ public class HomeActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    private void getNombreUsuario(String userId, UserNameLoadCallback callback) {
+        DatabaseReference userRef = firebaseDatabase.getReference("users").child(userId);
+        userRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                User user = dataSnapshot.getValue(User.class);
+                callback.onUsernameLoaded(user.getName() + " " + user.getSurname());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
 
 }
