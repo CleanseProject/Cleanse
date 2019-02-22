@@ -9,4 +9,6 @@
     <color name="verdehojainterno">#00913e</color>
     <color name="verdehojaexterno">#00ce53</color>
     <color name="botonPressed">#f800ff</color>
+    <color name="ucrop_color_toolbar">@color/colorPrimary</color>
+    <color name="ucrop_color_statusbar">@color/colorPrimaryTransparent</color>
 </resources>
