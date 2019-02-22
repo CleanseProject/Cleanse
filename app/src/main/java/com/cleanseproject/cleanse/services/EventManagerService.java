@@ -73,6 +73,10 @@ public class EventManagerService {
         });
     }
 
+    public void removeEvent(String key) {
+        firebaseDatabase.getReference("events").child(key).removeValue();
+    }
+
     public void getCloseEvents(GeoLocation location, double radius, EventLoadCallback callback) {
         GeoQuery geoQuery = geoFire.queryAtLocation(location, radius);
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
