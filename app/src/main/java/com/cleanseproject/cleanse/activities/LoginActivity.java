@@ -46,7 +46,6 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth firebaseAuth;
     private FirebaseDatabase firebaseDatabase;
     private final int RC_GOOGLE_SIGN_IN = 9001;
-    private PhoneAuthProvider.OnVerificationStateChangedCallbacks callBacks;
 
     private String phoneVerificationId;
     private PhoneAuthProvider.ForceResendingToken phoneToken;
@@ -69,26 +68,6 @@ public class LoginActivity extends AppCompatActivity {
         btnPhone.setOnClickListener(v -> phoneDialog());
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        callBacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            @Override
-            public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                authWithPhone(phoneAuthCredential);
-            }
-
-            @Override
-            public void onVerificationFailed(FirebaseException e) {
-                e.printStackTrace();
-                Toast.makeText(LoginActivity.this, "Verification failed", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
-                phoneVerificationId = verificationId;
-                phoneToken = token;
-                final EditText txtPhone = findViewById(R.id.txt_phone);
-                btn_Login_phone.setOnClickListener(v -> authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString())));
-            }
-        };
     }
 
     /**
@@ -135,7 +114,26 @@ public class LoginActivity extends AppCompatActivity {
                 60,
                 TimeUnit.SECONDS,
                 LoginActivity.this,
-                callBacks);
+                new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+                    @Override
+                    public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
+                        authWithPhone(phoneAuthCredential);
+                    }
+
+                    @Override
+                    public void onVerificationFailed(FirebaseException e) {
+                        e.printStackTrace();
+                        Toast.makeText(LoginActivity.this, "Verification failed", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
+                        phoneVerificationId = verificationId;
+                        phoneToken = token;
+                        final EditText txtPhone = findViewById(R.id.txt_phone);
+                        btn_Login_phone.setOnClickListener(v -> authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString())));
+                    }
+                });
     }
 
     /**
