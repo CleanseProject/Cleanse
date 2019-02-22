@@ -1,15 +1,23 @@
 package com.cleanseproject.cleanse.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.location.Location;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.AlphaAnimation;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,27 +48,82 @@ public class EventDetailsActivity extends AppCompatActivity {
     private TextView txtDescripcion, txtDistancia, txtJoinChat;
     private RecyclerView rvUsuarios;
     private UsersInEventAdapter adapter;
+    private FloatingActionButton fab_menu;
+    private FloatingActionButton fab_chat;
+    private FloatingActionButton fab_equis;
+    private FloatingActionButton fab_check;
+    private boolean fabAbierto;
+    private boolean suscrito;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details);
         CollapsingToolbarLayout Coltoolbar = findViewById(R.id.event_details_toolbar);
-        Toolbar toolbar= findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-       imagenEvento = findViewById(R.id.imagenEventoSeleccionado);
+        fabAbierto = false;
+        suscrito = false;
+        imagenEvento = findViewById(R.id.imagenEventoSeleccionado);
         txtDescripcion = findViewById(R.id.txtDescripcion);
-       // txtDistancia = findViewById(R.id.txtDistancia);
+        // txtDistancia = findViewById(R.id.txtDistancia);
         txtJoinChat = findViewById(R.id.txt_join_chat);
         rvUsuarios = findViewById(R.id.rvUsuarios);
+        fab_menu = findViewById(R.id.fabMenu);
+        fab_chat = findViewById(R.id.fabchat);
+        fab_equis = findViewById(R.id.fabequis);
+        fab_check = findViewById(R.id.fabcheck);
+        fab_menu.setOnClickListener(v -> {
+            if (fabAbierto) {
+                fab_chat.animate().translationX(0);
+                fab_equis.animate().translationY(0);
+                fab_check.animate().translationY(0);
+                fabAbierto = false;
+
+            } else if (!fabAbierto) {
+                fab_chat.animate().translationX(-180);
+                fab_equis.animate().translationY(170);
+                fab_check.animate().translationY(170);
+                fabAbierto = true;
+            }
+        });
+        if (suscrito == true) {
+            fab_check.setAlpha(0f);
+            fab_equis.setAlpha(1.0f);
+            fab_equis.setEnabled(true);
+            fab_check.setEnabled(false);
+        } else if (suscrito == false) {
+            fab_check.setAlpha(1.0f);
+            fab_equis.setAlpha(0f);
+            fab_equis.setEnabled(false);
+            fab_check.setEnabled(true);
+        }
+
+        fab_check.setOnClickListener(v -> {
+            fab_check.animate().alpha(0f);
+            fab_equis.animate().alpha(1.0f);
+            fab_equis.setEnabled(true);
+            fab_check.setEnabled(false);
+            suscrito = false;
+        });
+
+        fab_equis.setOnClickListener(v -> {
+            fab_check.animate().alpha(1.0f);
+            fab_equis.animate().alpha(0f);
+            fab_equis.setEnabled(false);
+            fab_check.setEnabled(true);
+            suscrito = true;
+        });
+
         eventManagerService = new EventManagerService();
         chatManagerService = new ChatManagerService();
         imageManagerService = new ImageManagerService();
         locationService = new LocationService(this);
         firebaseAuth = FirebaseAuth.getInstance();
-        txtJoinChat.setOnClickListener(v -> startChat());
+        fab_chat.setOnClickListener(v -> startChat());
         txtDescripcion.setMovementMethod(new ScrollingMovementMethod());
         Intent intent = getIntent();
         String idEvento = intent.getStringExtra("Evento");
