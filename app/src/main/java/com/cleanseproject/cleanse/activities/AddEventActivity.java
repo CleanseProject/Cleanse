@@ -19,6 +19,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
+import com.asksira.bsimagepicker.BSImagePicker;
+import com.asksira.bsimagepicker.Utils;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.fragments.MapFragment;
@@ -30,12 +32,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class AddEventActivity extends AppCompatActivity {
+public class AddEventActivity extends AppCompatActivity implements BSImagePicker.OnSingleImageSelectedListener {
 
     private LocationService locationService;
     private EventManagerService eventManagerService;
-
-    public static final int PICK_IMAGE = 1;
 
     private DatePickerDialog mDateSetListener;
     private Button btnSelectDate;
@@ -48,8 +48,6 @@ public class AddEventActivity extends AppCompatActivity {
     private EditText txtTitle, txtDescription;
 
     private Uri imagePath;
-
-    private Uri filePath;
 
     private boolean frameAbierto;
     private LatLng eventLatLng;
@@ -114,10 +112,12 @@ public class AddEventActivity extends AppCompatActivity {
         });
 
         selectedImage.setOnClickListener(v -> {
+            BSImagePicker singleSelectionPicker = new BSImagePicker.Builder("com.cleanseproject.fileprovider")
+                    .build();
+            singleSelectionPicker.show(getSupportFragmentManager(), "picker");
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
         });
         btnAdd.setOnClickListener(v -> {
             //TODO: Comprobar que se han insertado todos los datos
@@ -131,21 +131,6 @@ public class AddEventActivity extends AppCompatActivity {
         });
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_IMAGE) {
-            if (data != null) {
-                imagePath = data.getData();
-                try {
-                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
-                    selectedImage.setImageBitmap(bitmap);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
     public void setFrameAbierto(boolean frameAbierto) {
         this.frameAbierto = frameAbierto;
     }
@@ -154,4 +139,14 @@ public class AddEventActivity extends AppCompatActivity {
         this.eventLatLng = eventLatLng;
     }
 
+    @Override
+    public void onSingleImageSelected(Uri uri, String tag) {
+        imagePath = uri;
+        try {
+            Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
+            selectedImage.setImageBitmap(bitmap);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

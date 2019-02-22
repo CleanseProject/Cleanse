@@ -50,7 +50,7 @@ dependencies {
     implementation 'com.mikhaellopez:circularimageview:3.2.0'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'com.google.android.libraries.places:places:1.0.0'
-
+    implementation 'com.asksira.android:bsimagepicker:1.1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'
