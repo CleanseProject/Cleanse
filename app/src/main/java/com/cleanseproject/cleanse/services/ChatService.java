@@ -82,7 +82,7 @@ public class ChatService {
 
     public void getMessages() {
         DatabaseReference chatMessages = firebaseDatabase.getReference("chatMessages").child(chat.getChatUid());
-        chatMessages.addValueEventListener(new ValueEventListener() {
+        chatMessages.orderByChild("createdAt").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 ArrayList<Message> messages = new ArrayList<>();
