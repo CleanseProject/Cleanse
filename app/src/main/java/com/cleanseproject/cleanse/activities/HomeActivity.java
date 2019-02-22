@@ -24,10 +24,14 @@ import com.cleanseproject.cleanse.fragments.ChatListFragment;
 import com.cleanseproject.cleanse.fragments.HomeFragment;
 import com.cleanseproject.cleanse.fragments.MapFragment;
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
+import com.cleanseproject.cleanse.services.NotificationManager;
 import com.google.firebase.auth.FirebaseAuth;
+
+import java.util.HashSet;
 
 public class HomeActivity extends AppCompatActivity {
 
+    private NotificationManager notificationManager;
     private DrawerLayout drawerLayout;
 
     @Override
@@ -45,6 +49,7 @@ public class HomeActivity extends AppCompatActivity {
         setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_home);
         initializeUI();
+        notificationManager = new NotificationManager(this);
     }
 
     @Override
@@ -54,20 +59,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private BroadcastReceiver onEvent = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent i) {
-            //if (i.getAction() != null && i.getAction() != MyFirebaseMessagingService.NOTIFICATION) {
-            String title = i.getStringExtra("title");
-            String body = i.getStringExtra("body");
-            String mensaje = "";
-            if (body != null && title != null) {
-                mensaje = title + ": " + body;
-            } else if (body != null) {
-                mensaje = body;
-            } else if (title != null) {
-                mensaje = title;
-            }
-            Snackbar.make(findViewById(R.id.homeCoordinatorLayout), mensaje,
-                    Snackbar.LENGTH_LONG)
-                    .show();
+            notificationManager.showNotification(i);
         }
     };
 
