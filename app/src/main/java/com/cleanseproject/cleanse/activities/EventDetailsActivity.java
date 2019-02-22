@@ -45,7 +45,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private Event event;
 
     private ImageView imagenEvento;
-    private TextView txtDescripcion, txtDistancia, txtJoinChat;
+    private TextView txtDescripcion, txtDistancia;
     private RecyclerView rvUsuarios;
     private UsersInEventAdapter adapter;
     private FloatingActionButton fab_menu;
@@ -70,7 +70,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         imagenEvento = findViewById(R.id.imagenEventoSeleccionado);
         txtDescripcion = findViewById(R.id.txtDescripcion);
         // txtDistancia = findViewById(R.id.txtDistancia);
-        txtJoinChat = findViewById(R.id.txt_join_chat);
+
         rvUsuarios = findViewById(R.id.rvUsuarios);
         fab_menu = findViewById(R.id.fabMenu);
         fab_chat = findViewById(R.id.fabchat);
