@@ -58,7 +58,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                 ((SentMessageHolder) viewHolder).bind(message);
                 break;
             case VIEW_TYPE_MESSAGE_RECEIVED:
-                boolean showUser = !(position > 1 && getItemViewType(position - 1) == VIEW_TYPE_MESSAGE_RECEIVED);
+                boolean showUser = !(position > 1 && getItemViewType(position - 1) == VIEW_TYPE_MESSAGE_RECEIVED)
+                        && !messages.get(position - 1).getUser().equals(messages.get(position).getUser());
                 ((ReceivedMessageHolder) viewHolder).bind(message, showUser);
         }
     }
