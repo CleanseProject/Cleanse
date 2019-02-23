@@ -205,7 +205,10 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     @Override
     public void onSingleImageSelected(Uri uri, String tag) {
         String tempPath = AddEventActivity.this.getCacheDir().toURI().toString() + UUID.randomUUID();
+        UCrop.Options options = new UCrop.Options();
+        options.setActiveWidgetColor(getResources().getColor(R.color.colorAccent));
         UCrop.of(uri, Uri.parse(tempPath))
+                .withOptions(options)
                 .withAspectRatio(16, 9)
                 .start(AddEventActivity.this);
     }
