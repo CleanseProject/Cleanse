@@ -118,9 +118,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         }
     }
 
-    private String formatDate(long time){
+    private String formatDate(long time) {
         Date date = new Date(time);
-        DateFormat dateFormat = SimpleDateFormat.getTimeInstance();
+        DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.SHORT);
         return dateFormat.format(date);
     }
 
