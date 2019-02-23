@@ -46,7 +46,12 @@
         <activity
             android:name=".activities.ChatActivity"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="OPEN_CHAT_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activities.UserDataActivity"
             android:screenOrientation="portrait" />

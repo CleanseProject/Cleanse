@@ -43,7 +43,12 @@ public class ChatActivity extends AppCompatActivity {
         messageRecycler.setHasFixedSize(true);
         messageRecycler.setLayoutManager(new GridLayoutManager(this, 1));
         chatService = new ChatService(this::updateMessages);
-        chatService.inicializar(getIntent().getStringExtra("chatuid"));
+        String chatId = getIntent().getStringExtra("chatuid");
+        if (chatId == null) {
+            Bundle b = getIntent().getExtras();// add these lines of code to get data from notification
+            chatId = b.getString("chatuid");
+        }
+        chatService.inicializar(chatId);
     }
 
     @Override

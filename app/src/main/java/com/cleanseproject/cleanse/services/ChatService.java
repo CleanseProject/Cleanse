@@ -101,13 +101,14 @@ public class ChatService {
         firebaseDatabase.getReference("userChats").child(firebaseUser.getUid()).child(chat.getChatUid()).child("unread").setValue(false);
     }
 
-    public static void sendNotificationToUser(String user, String title, final String message) {
+    private void sendNotificationToUser(String user, String title, final String message) {
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
         final DatabaseReference notifications = ref.child("notificationRequests");
         Map<String, String> notification = new HashMap<>();
         notification.put("username", user);
         notification.put("title", title);
         notification.put("message", message);
+        notification.put("chatuid", chat.getChatUid());
         notifications.push().setValue(notification);
     }
 
