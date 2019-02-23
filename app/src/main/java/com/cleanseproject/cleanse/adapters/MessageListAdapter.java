@@ -53,13 +53,13 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         Message message = messages.get(position);
-
         switch (viewHolder.getItemViewType()) {
             case VIEW_TYPE_MESSAGE_SENT:
                 ((SentMessageHolder) viewHolder).bind(message);
                 break;
             case VIEW_TYPE_MESSAGE_RECEIVED:
-                ((ReceivedMessageHolder) viewHolder).bind(message);
+                boolean showUser = !(position > 1 && getItemViewType(position - 1) == VIEW_TYPE_MESSAGE_RECEIVED);
+                ((ReceivedMessageHolder) viewHolder).bind(message, showUser);
         }
     }
 
@@ -108,11 +108,13 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             profileImage = itemView.findViewById(R.id.image_message_profile);
         }
 
-        void bind(Message message) {
+        void bind(Message message, boolean showUser) {
             messageText.setText(message.getMessage());
             timeText.setText(formatDate(message.getCreatedAt()));
-            chatManagerService.getUserName(message.getUser(), username -> nameText.setText(username));
-
+            if (showUser)
+                chatManagerService.getUserName(message.getUser(), username -> nameText.setText(username));
+            else
+                profileImage.setVisibility(View.GONE);
             // Insert the profile image from the URL into the ImageView.
             //Utils.displayRoundImageFromUrl(context, message.getSender().getProfileUrl(), profileImage);
         }
