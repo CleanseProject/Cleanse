@@ -175,7 +175,6 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(onEvent);
-        unregisterReceiver(onEvent);
         super.onPause();
     }
 
