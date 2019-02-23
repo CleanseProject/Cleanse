@@ -17,9 +17,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
@@ -56,13 +58,22 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     private ImageView imgEstado;
     private EditText txtTitle, txtDescription;
 
+    private Boolean limpio;
+    private Boolean sucio;
+    private Boolean critico;
+
+    private RadioButton rdbtn_limpio;
+    private RadioButton rdbtn_sucio;
+    private RadioButton rdbtn_critico;
+
+
     private Uri imagePath;
 
     private boolean frameAbierto;
     private LatLng eventLatLng;
 
     @Override
-    public void onStart(){
+    public void onStart() {
         super.onStart();
         IntentFilter f = new IntentFilter(CleanseFirebaseMessagingService.NOTIFICATION);
         LocalBroadcastManager.getInstance(this)
@@ -79,6 +90,9 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         btnSelectDate = findViewById(R.id.btn_set_date);
         btnAdd = findViewById(R.id.btn_event_add);
         selectedImage = findViewById(R.id.imagen_evento);
+        rdbtn_limpio = findViewById(R.id.radiobtn_limpio);
+        rdbtn_sucio = findViewById(R.id.radiobtn_sucio);
+        rdbtn_critico = findViewById(R.id.radiobtn_critico);
         eventManagerService = new EventManagerService();
         locationService = new LocationService(this);
         ////////////////// Intent
@@ -96,6 +110,39 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         lista.add("Limpio");
         lista.add("Sucio");
         lista.add("Critico");
+        rdbtn_limpio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                rdbtn_sucio.setChecked(false);
+                rdbtn_critico.setChecked(false);
+                rdbtn_limpio.setChecked(isChecked);
+                sucio = false;
+                critico = false;
+                limpio = true;
+            }
+        });
+        rdbtn_sucio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                rdbtn_limpio.setChecked(false);
+                rdbtn_critico.setChecked(false);
+                rdbtn_sucio.setChecked(isChecked);
+                sucio = true;
+                critico = false;
+                limpio = false;
+            }
+        });
+        rdbtn_critico.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                rdbtn_sucio.setChecked(false);
+                rdbtn_limpio.setChecked(false);
+                rdbtn_critico.setChecked(isChecked);
+                sucio = false;
+                critico = true;
+                limpio = false;
+            }
+        });
         FrameLayout addEvent = findViewById(R.id.FrameLayout_add_event);
         btnSelectDate.setOnClickListener(v -> {
             Calendar cal = Calendar.getInstance();
