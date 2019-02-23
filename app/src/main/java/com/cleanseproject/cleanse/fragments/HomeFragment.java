@@ -62,9 +62,14 @@ public class HomeFragment extends Fragment {
         fab.setOnClickListener(v -> v.getContext().startActivity(
                 new Intent(v.getContext(), AddEventActivity.class)));
         swipeRefresh.setOnRefreshListener(() -> {
-            //swipeRefresh.setRefreshing(true);
+            swipeRefresh.setRefreshing(true);
             updateRecycleView();
         });
+        cargarDatos();
+
+    }
+
+    private void cargarDatos() {
         LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
         rvEventos.setLayoutManager(llm);
         eventManagerService = new EventManagerService();
@@ -101,6 +106,8 @@ public class HomeFragment extends Fragment {
 
     private void updateRecycleView() {
         // TODO: Conexion con Firebase para updatear la lista de eventos
+
+        cargarDatos();
         swipeRefresh.setRefreshing(false);
     }
 
