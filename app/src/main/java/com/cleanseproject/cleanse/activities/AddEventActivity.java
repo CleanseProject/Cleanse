@@ -172,9 +172,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             BSImagePicker singleSelectionPicker = new BSImagePicker.Builder("com.cleanseproject.fileprovider")
                     .build();
             singleSelectionPicker.show(getSupportFragmentManager(), "picker");
-            Intent intent = new Intent();
-            intent.setType("image/*");
-            intent.setAction(Intent.ACTION_GET_CONTENT);
         });
         btnAdd.setOnClickListener(v -> {
             //TODO: Comprobar que se han insertado todos los datos
