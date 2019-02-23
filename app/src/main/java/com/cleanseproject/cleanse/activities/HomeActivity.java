@@ -19,7 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
@@ -31,15 +30,12 @@ import com.cleanseproject.cleanse.fragments.MapFragment;
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
 import com.cleanseproject.cleanse.services.NotificationManager;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
-
-import java.util.concurrent.atomic.AtomicMarkableReference;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -120,23 +116,15 @@ public class HomeActivity extends AppCompatActivity {
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(0).setChecked(true);
         View headerLayout=navigationView.getHeaderView(0);
-        imagenUsuario = (CircularImageView) headerLayout.findViewById(R.id.nav_header_imagen);
+        imagenUsuario = headerLayout.findViewById(R.id.nav_header_imagen);
         nombreUsuario = headerLayout.findViewById(R.id.nav_header_usuario);
-        imagenUsuario.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, UserProfileActivity.class);
-                intent.putExtra("userId", mAuth.getCurrentUser().getUid());
-                startActivity(intent);
-            }
+        imagenUsuario.setOnClickListener(v -> {
+            Intent intent = new Intent(context, UserProfileActivity.class);
+            intent.putExtra("userId", mAuth.getCurrentUser().getUid());
+            startActivity(intent);
         });
         getNombreUsuario(mAuth.getCurrentUser().getUid(),
-                new UserNameLoadCallback() {
-                    @Override
-                    public void onUsernameLoaded(String username) {
-                        nombreUsuario.setText(username);
-                    }
-                });
+                username -> nombreUsuario.setText(username));
         navigationView.setNavigationItemSelectedListener(menuItem -> {
             menuItem.setChecked(true);
             drawerLayout.closeDrawers();
@@ -183,6 +171,7 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(onEvent);
