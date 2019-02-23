@@ -1,6 +1,8 @@
 package com.cleanseproject.cleanse.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -55,7 +57,9 @@ public class ChatActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                Intent intent = NavUtils.getParentActivityIntent(this);
+                intent.putExtra("fragment", "chats");
+                NavUtils.navigateUpTo(this, intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

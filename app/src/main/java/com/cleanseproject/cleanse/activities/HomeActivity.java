@@ -62,7 +62,7 @@ public class HomeActivity extends AppCompatActivity {
         setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_home);
         context = this;
-        firebaseDatabase=FirebaseDatabase.getInstance();
+        firebaseDatabase = FirebaseDatabase.getInstance();
         initializeUI();
         notificationManager = new NotificationManager(findViewById(R.id.homeCoordinatorLayout));
     }
@@ -106,7 +106,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void initializeUI() {
-        mAuth=FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance();
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -115,7 +115,7 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(0).setChecked(true);
-        View headerLayout=navigationView.getHeaderView(0);
+        View headerLayout = navigationView.getHeaderView(0);
         imagenUsuario = headerLayout.findViewById(R.id.nav_header_imagen);
         nombreUsuario = headerLayout.findViewById(R.id.nav_header_usuario);
         imagenUsuario.setOnClickListener(v -> {
@@ -129,7 +129,12 @@ public class HomeActivity extends AppCompatActivity {
             menuItem.setChecked(true);
             drawerLayout.closeDrawers();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            switch (menuItem.getItemId()) {
+            Intent intent = getIntent();
+            int openFragment = menuItem.getItemId();
+            String fragment = intent.getStringExtra("fragment");
+            if (fragment != null && fragment.equals("chats"))
+                openFragment = R.id.nav_chats;
+            switch (openFragment) {
                 case R.id.nav_home:
                     transaction.replace(R.id.content_frame, new HomeFragment());
                     break;
