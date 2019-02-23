@@ -1,25 +1,24 @@
 package com.cleanseproject.cleanse.services;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
-
-import com.cleanseproject.cleanse.R;
+import android.util.Log;
+import android.view.View;
 
 import java.util.HashSet;
 
 public class NotificationManager {
 
-    private Context context;
+    private View coordinatorLayout;
     private HashSet<String> shownNotifications;
 
-    public NotificationManager(Context context) {
-        this.context = context;
+    public NotificationManager(View coordinatorLayout) {
+        this.coordinatorLayout = coordinatorLayout;
         shownNotifications = new HashSet<>();
     }
 
     public void showNotification(Intent intent) {
+        Log.d("notification", "");
         String title = intent.getStringExtra("title");
         String body = intent.getStringExtra("body");
         String mensaje = "";
@@ -31,7 +30,7 @@ public class NotificationManager {
             mensaje = title;
         }
         if (!shownNotifications.contains(mensaje))
-            Snackbar.make(((Activity) context).findViewById(R.id.homeCoordinatorLayout), mensaje,
+            Snackbar.make(coordinatorLayout, mensaje,
                     Snackbar.LENGTH_LONG)
                     .show();
         shownNotifications.add(mensaje);

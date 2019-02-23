@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -26,8 +25,6 @@ import com.cleanseproject.cleanse.fragments.MapFragment;
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
 import com.cleanseproject.cleanse.services.NotificationManager;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.util.HashSet;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -49,7 +46,7 @@ public class HomeActivity extends AppCompatActivity {
         setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_home);
         initializeUI();
-        notificationManager = new NotificationManager(this);
+        notificationManager = new NotificationManager(findViewById(R.id.homeCoordinatorLayout));
     }
 
     @Override
@@ -130,5 +127,11 @@ public class HomeActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(onEvent);
+        unregisterReceiver(onEvent);
+        super.onPause();
+    }
 
 }

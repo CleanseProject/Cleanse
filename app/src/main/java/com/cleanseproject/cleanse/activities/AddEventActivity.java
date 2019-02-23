@@ -1,12 +1,16 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.app.DatePickerDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -24,8 +28,10 @@ import com.asksira.bsimagepicker.Utils;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.fragments.MapFragment;
+import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
+import com.cleanseproject.cleanse.services.NotificationManager;
 import com.google.android.gms.maps.model.LatLng;
 import com.yalantis.ucrop.UCrop;
 
@@ -38,6 +44,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
 
     private LocationService locationService;
     private EventManagerService eventManagerService;
+    private NotificationManager notificationManager;
 
     private DatePickerDialog mDateSetListener;
     private Button btnSelectDate;
@@ -55,15 +62,22 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     private LatLng eventLatLng;
 
     @Override
+    public void onStart(){
+        super.onStart();
+        IntentFilter f = new IntentFilter(CleanseFirebaseMessagingService.NOTIFICATION);
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(onEvent, f);
+        notificationManager = new NotificationManager(findViewById(R.id.event_details_coordinator_layout));
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
         imgExit = findViewById(R.id.imgExit);
         btnSelectLocation = findViewById(R.id.btn_set_location);
-
         btnSelectDate = findViewById(R.id.btn_set_date);
         btnAdd = findViewById(R.id.btn_event_add);
-
         selectedImage = findViewById(R.id.imagen_evento);
         eventManagerService = new EventManagerService();
         locationService = new LocationService(this);
@@ -82,7 +96,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         lista.add("Limpio");
         lista.add("Sucio");
         lista.add("Critico");
-
         FrameLayout addEvent = findViewById(R.id.FrameLayout_add_event);
         btnSelectDate.setOnClickListener(v -> {
             Calendar cal = Calendar.getInstance();
@@ -133,6 +146,12 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         });
     }
 
+    private BroadcastReceiver onEvent = new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent i) {
+            notificationManager.showNotification(i);
+        }
+    };
+
     public void setFrameAbierto(boolean frameAbierto) {
         this.frameAbierto = frameAbierto;
     }
@@ -163,6 +182,12 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         } else if (resultCode == UCrop.RESULT_ERROR) {
             final Throwable cropError = UCrop.getError(data);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(onEvent);
+        super.onPause();
     }
 
 }
