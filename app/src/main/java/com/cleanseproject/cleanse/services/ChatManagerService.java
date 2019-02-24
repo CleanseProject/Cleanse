@@ -51,7 +51,7 @@ public class ChatManagerService {
 
     public void createGroupChat(String eventId, String name) {
         DatabaseReference chat = firebaseDatabase.getReference("chats").child(eventId);
-        chat.setValue(new Chat(eventId, name, null, "", true, 0));
+        chat.setValue(new Chat(eventId, name, null, "", true, System.currentTimeMillis()));
     }
 
     public void getUserChats(ChatListLoadCallback callback) {
