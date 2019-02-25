@@ -58,9 +58,10 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                 ((SentMessageHolder) viewHolder).bind(message);
                 break;
             case VIEW_TYPE_MESSAGE_RECEIVED:
-                boolean showUser = !(position > 1 && getItemViewType(position - 1) == VIEW_TYPE_MESSAGE_RECEIVED)
-                        && !messages.get(position - 1).getUser().equals(messages.get(position).getUser());
-                ((ReceivedMessageHolder) viewHolder).bind(message, showUser);
+                //TODO: Fix this line
+                //boolean showUser = !(position > 1 && getItemViewType(position - 1) == VIEW_TYPE_MESSAGE_RECEIVED)
+                //        && !messages.get(position - 1).getUser().equals(messages.get(position).getUser());
+                ((ReceivedMessageHolder) viewHolder).bind(message, true);
         }
     }
 
@@ -114,8 +115,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             timeText.setText(formatDate(message.getCreatedAt()));
             if (showUser)
                 chatManagerService.getUserName(message.getUser(), username -> nameText.setText(username));
-            else
-                profileImage.setVisibility(View.GONE);
+            //else
+                //TODO: Hide Image and TextView
+                //profileImage.setVisibility(View.GONE);
             // Insert the profile image from the URL into the ImageView.
             //Utils.displayRoundImageFromUrl(context, message.getSender().getProfileUrl(), profileImage);
         }
