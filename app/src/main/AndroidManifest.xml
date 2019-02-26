@@ -15,6 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.SliderActivity"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -50,8 +51,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cleanseproject.cleanse.activities.HomeActivity" />
+
             <intent-filter>
                 <action android:name="OPEN_CHAT_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
