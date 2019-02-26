@@ -1,8 +1,11 @@
 package com.cleanseproject.cleanse.adapters;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +49,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                     .inflate(R.layout.item_message_received, parent, false);
             return new ReceivedMessageHolder(view);
         }
-
         return null;
     }
 
@@ -59,9 +61,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
                 break;
             case VIEW_TYPE_MESSAGE_RECEIVED:
                 //TODO: Fix this line
-                //boolean showUser = !(position > 1 && getItemViewType(position - 1) == VIEW_TYPE_MESSAGE_RECEIVED)
-                //        && !messages.get(position - 1).getUser().equals(messages.get(position).getUser());
-                ((ReceivedMessageHolder) viewHolder).bind(message, true);
+                boolean showUser = position > 1 && !(getItemViewType(position - 1) == VIEW_TYPE_MESSAGE_RECEIVED)
+                        && !messages.get(position - 1).getUser().equals(messages.get(position).getUser());
+                ((ReceivedMessageHolder) viewHolder).bind(message, showUser);
         }
     }
 
@@ -85,7 +87,6 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     private class SentMessageHolder extends RecyclerView.ViewHolder {
         TextView messageText, timeText;
-
         SentMessageHolder(View itemView) {
             super(itemView);
             messageText = itemView.findViewById(R.id.text_message_body);
@@ -115,9 +116,9 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             timeText.setText(formatDate(message.getCreatedAt()));
             if (showUser)
                 chatManagerService.getUserName(message.getUser(), username -> nameText.setText(username));
-            //else
+            else
                 //TODO: Hide Image and TextView
-                //profileImage.setVisibility(View.GONE);
+                profileImage.setVisibility(View.GONE);
             // Insert the profile image from the URL into the ImageView.
             //Utils.displayRoundImageFromUrl(context, message.getSender().getProfileUrl(), profileImage);
         }
