@@ -76,6 +76,7 @@ public class ChatActivity extends AppCompatActivity {
         Intent intent = NavUtils.getParentActivityIntent(this);
         intent.putExtra("fragment", "chats");
         NavUtils.navigateUpTo(this, intent);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
     private TextWatcher sendTextWatcher = new TextWatcher() {
