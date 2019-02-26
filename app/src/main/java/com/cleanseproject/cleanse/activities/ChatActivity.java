@@ -60,13 +60,22 @@ public class ChatActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = NavUtils.getParentActivityIntent(this);
-                intent.putExtra("fragment", "chats");
-                NavUtils.navigateUpTo(this, intent);
+                navigateUp();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        navigateUp();
+    }
+
+    private void navigateUp() {
+        Intent intent = NavUtils.getParentActivityIntent(this);
+        intent.putExtra("fragment", "chats");
+        NavUtils.navigateUpTo(this, intent);
     }
 
     private TextWatcher sendTextWatcher = new TextWatcher() {
