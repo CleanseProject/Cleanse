@@ -1,9 +1,13 @@
 package com.cleanseproject.cleanse.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,9 +23,11 @@ import com.cleanseproject.cleanse.adapters.UsersInEventAdapter;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.services.ChatManagerService;
+import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.ImageManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
+import com.cleanseproject.cleanse.services.NotificationManager;
 import com.cleanseproject.cleanse.services.UserManagerService;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -34,6 +40,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private ChatManagerService chatManagerService;
     private ImageManagerService imageManagerService;
     private UserManagerService userManagerService;
+    private NotificationManager notificationManager;
     private LocationService locationService;
     private Toolbar toolbar;
     private Event event;
@@ -49,6 +56,13 @@ public class EventDetailsActivity extends AppCompatActivity {
     private boolean fabAbierto;
     private boolean suscrito;
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        IntentFilter f = new IntentFilter(CleanseFirebaseMessagingService.NOTIFICATION);
+        LocalBroadcastManager.getInstance(this)
+                .registerReceiver(onEvent, f);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,6 +129,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         chatManagerService = new ChatManagerService();
         imageManagerService = new ImageManagerService();
         userManagerService = new UserManagerService();
+        notificationManager = new NotificationManager(findViewById(R.id.event_details_coordinator_layout));
         locationService = new LocationService(this);
         firebaseAuth = FirebaseAuth.getInstance();
         fab_chat.setOnClickListener(v -> startChat());
@@ -156,6 +171,12 @@ public class EventDetailsActivity extends AppCompatActivity {
         rvUsuarios.setAdapter(adapter);
     }
 
+    private BroadcastReceiver onEvent = new BroadcastReceiver() {
+        public void onReceive(Context ctxt, Intent i) {
+            notificationManager.showNotification(i);
+        }
+    };
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -173,6 +194,12 @@ public class EventDetailsActivity extends AppCompatActivity {
         intent.putExtra("chatuid", event.getId());
         intent.putExtra("chatname", event.getName());
         startActivity(intent);
+    }
+
+    @Override
+    protected void onPause() {
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(onEvent);
+        super.onPause();
     }
 
 }
