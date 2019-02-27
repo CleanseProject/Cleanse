@@ -3,7 +3,8 @@
     <color name="colorPrimary">#343890</color>
     <color name="colorPrimaryTransparent">#90343890</color>
     <color name="colorPrimaryDark">#2A2D77</color>
-    <color name="colorSecundario">#9081F1B2</color>
+    <color name="colorSecundario">#81F1B2</color>
+    <color name="colorSecundarioTransparente">#9081F1B2</color>
     <color name="colorBlanco">#FFFFFF</color>
     <color name="colorAccent">#81F1B2</color>
     <color name="verdehojainterno">#00913e</color>
