@@ -39,7 +39,6 @@ public class HomeFragment extends Fragment {
     private ProgressBar progressBar;
     private FloatingActionButton fab;
     private ArrayList<Event> events;
-    private ArrayList<String> favouriteEvents;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,8 +70,7 @@ public class HomeFragment extends Fragment {
         eventManagerService = new EventManagerService();
         locationService = new LocationService(getContext());
         events = new ArrayList<>();
-        favouriteEvents = new ArrayList<>();
-        adaptador = new EventListAdapter(events, favouriteEvents);
+        adaptador = new EventListAdapter(events);
         rvEventos.setAdapter(adaptador);
         rvEventos.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -112,13 +110,21 @@ public class HomeFragment extends Fragment {
         location.setLatitude(event.getLatitude());
         location.setLongitude(event.getLongitude());
         event.setDistance(locationService.distance(location));
+        event.setFavourite(false);
         events.add(event);
-        if (event.isFavourite())
-            favouriteEvents.add(event.getId());
         Collections.sort(events);
         adaptador.notifyDataSetChanged();
         if (progressBar.getVisibility() == View.VISIBLE)
             progressBar.setVisibility(View.GONE);
+        eventManagerService.getFavouriteEvents(this::setFavourites);
+    }
+
+    private void setFavourites(Event event) {
+        for (Event arrayEvent : events) {
+            if (event.getId().equals(arrayEvent.getId()))
+                arrayEvent.setFavourite(true);
+        }
+        adaptador.notifyDataSetChanged();
     }
 
 }

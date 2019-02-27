@@ -24,7 +24,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
 
     private ArrayList<Event> listaEventos;
 
-    public EventListAdapter(ArrayList<Event> listaEventos, ArrayList<String> eventosFavoritos) {
+    public EventListAdapter(ArrayList<Event> listaEventos) {
         this.listaEventos = listaEventos;
     }
 
