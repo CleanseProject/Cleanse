@@ -16,7 +16,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="76dp"
+        android:layout_height="63dp"
         android:background="@color/colorSecundario"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -37,29 +37,28 @@
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="56dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:id="@+id/tvTitulo"
                         android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_marginStart="15dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginRight="5dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginTop="10dp"
                         android:layout_weight="1"
                         android:inputType="textLongMessage"
                         android:paddingEnd="16dp"
                         android:text="Prueba"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="#FFFFFF"
-                        android:textSize="24sp" />
+                        android:textSize="18sp" />
                 </HorizontalScrollView>
 
                 <TextView
                     android:id="@+id/txtDistancia"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
+                    android:layout_marginLeft="16dp"
                     android:layout_weight="1"
                     android:text="5 km"
                     android:textColor="#FFFFFF" />
@@ -73,10 +72,10 @@
             android:layout_width="52dp"
             android:layout_height="49dp"
             android:layout_marginStart="0dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="10dp"
             android:layout_weight="1"
             android:background="@null"
-            app:srcCompat="@drawable/corazon_blanco"
+            app:srcCompat="@drawable/corazon_transparente"
 
             />
 
@@ -84,11 +83,11 @@
             android:id="@+id/btnShare"
             android:layout_width="54dp"
             android:layout_height="49dp"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_weight="1"
             android:background="@null"
-            android:tint="#FFFFFF"
+            android:tint="@color/colorBlanco"
             app:srcCompat="@drawable/icono_share_boton" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
