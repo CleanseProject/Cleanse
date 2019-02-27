@@ -158,9 +158,12 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             double longitude = eventLatLng.longitude;
             eventManagerService.createEvent(
                     new Event("", title, description, latitude, longitude, 0, false, "", selectedState),
-                    imagePath);
-            //TODO: Mostrar evento creado
-            finish();
+                    imagePath,
+                    event -> {
+                        Intent intent = new Intent(AddEventActivity.this, EventDetailsActivity.class);
+                        intent.putExtra("Evento", event.getId());
+                        startActivity(intent);
+                    });
         });
     }
 

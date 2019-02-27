@@ -35,7 +35,7 @@ public class EventManagerService {
         geoFire = new GeoFire(geoFireRef);
     }
 
-    public void createEvent(Event event, Uri image) {
+    public void createEvent(Event event, Uri image, EventLoadCallback callback) {
         DatabaseReference events = firebaseDatabase.getReference("events");
         String eventKey = events.push().getKey();
         event.setId(eventKey);
@@ -50,6 +50,7 @@ public class EventManagerService {
         if (image != null) {
             imageManagerService.uploadEventImage(eventKey, image);
         }
+        callback.onEventLoaded(event);
     }
 
     public void getEvent(String key, EventLoadCallback callback) {
