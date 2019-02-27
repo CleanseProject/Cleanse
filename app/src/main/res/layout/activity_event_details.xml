@@ -100,11 +100,10 @@
         android:clipToPadding="false"
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-        <!--tools:context=".activities.EventDetailsActivity"-->
 
 
         <LinearLayout
-            android:id="@+id/linearLayout18"
+            android:id="@+id/content_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:descendantFocusability="blocksDescendants"
@@ -159,7 +158,6 @@
                         android:layout_marginLeft="72dp"
                         android:layout_marginTop="30dp"
                         android:layout_weight="1"
-                        android:text="Carlos Ruiz"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -227,7 +225,6 @@
 
 
             </LinearLayout>
-            <!--alignparentButton-->
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

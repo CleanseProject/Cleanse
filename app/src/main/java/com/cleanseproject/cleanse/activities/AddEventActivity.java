@@ -53,15 +53,11 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     private ImageView imgEstado;
     private EditText txtTitle, txtDescription;
 
-    private Boolean limpio;
-    private Boolean sucio;
-    private Boolean critico;
-
     private RadioButton rdbtn_limpio;
     private RadioButton rdbtn_sucio;
     private RadioButton rdbtn_critico;
 
-
+    private int selectedState = -1;
     private Uri imagePath;
 
     private boolean frameAbierto;
@@ -101,42 +97,23 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             eventLatLng = new LatLng(lat, lon);
             btnSelectLocation.setText(locationService.localityName(lat, lon));
         }
-        ArrayList<String> lista = new ArrayList<>();
-        lista.add("Limpio");
-        lista.add("Sucio");
-        lista.add("Critico");
-        rdbtn_limpio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                rdbtn_sucio.setChecked(false);
-                rdbtn_critico.setChecked(false);
-                rdbtn_limpio.setChecked(isChecked);
-                sucio = false;
-                critico = false;
-                limpio = true;
-            }
+        rdbtn_limpio.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            rdbtn_sucio.setChecked(false);
+            rdbtn_critico.setChecked(false);
+            rdbtn_limpio.setChecked(isChecked);
+            selectedState = 0;
         });
-        rdbtn_sucio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                rdbtn_limpio.setChecked(false);
-                rdbtn_critico.setChecked(false);
-                rdbtn_sucio.setChecked(isChecked);
-                sucio = true;
-                critico = false;
-                limpio = false;
-            }
+        rdbtn_sucio.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            rdbtn_limpio.setChecked(false);
+            rdbtn_critico.setChecked(false);
+            rdbtn_sucio.setChecked(isChecked);
+            selectedState = 1;
         });
-        rdbtn_critico.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                rdbtn_sucio.setChecked(false);
-                rdbtn_limpio.setChecked(false);
-                rdbtn_critico.setChecked(isChecked);
-                sucio = false;
-                critico = true;
-                limpio = false;
-            }
+        rdbtn_critico.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            rdbtn_sucio.setChecked(false);
+            rdbtn_limpio.setChecked(false);
+            rdbtn_critico.setChecked(isChecked);
+            selectedState = 2;
         });
         FrameLayout addEvent = findViewById(R.id.FrameLayout_add_event);
         btnSelectDate.setOnClickListener(v -> {
@@ -179,7 +156,9 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             String description = txtDescription.getText().toString();
             double latitude = eventLatLng.latitude;
             double longitude = eventLatLng.longitude;
-            eventManagerService.createEvent(new Event("", title, description, latitude, longitude, 0, false), imagePath);
+            eventManagerService.createEvent(
+                    new Event("", title, description, latitude, longitude, 0, false, "", selectedState),
+                    imagePath);
             //TODO: Mostrar evento creado
             finish();
         });

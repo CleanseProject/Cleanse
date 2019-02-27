@@ -39,6 +39,7 @@ public class EventManagerService {
         DatabaseReference events = firebaseDatabase.getReference("events");
         String eventKey = events.push().getKey();
         event.setId(eventKey);
+        event.setCreatorId(firebaseUser.getUid());
         events.child(eventKey).setValue(event);
         geoFire.setLocation(eventKey, new GeoLocation(event.getLatitude(),
                         event.getLongitude()),

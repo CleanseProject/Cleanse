@@ -22,6 +22,7 @@ import com.cleanseproject.cleanse.services.ChatManagerService;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.ImageManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
+import com.cleanseproject.cleanse.services.UserManagerService;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -32,12 +33,13 @@ public class EventDetailsActivity extends AppCompatActivity {
     private EventManagerService eventManagerService;
     private ChatManagerService chatManagerService;
     private ImageManagerService imageManagerService;
+    private UserManagerService userManagerService;
     private LocationService locationService;
     private Toolbar toolbar;
     private Event event;
 
     private ImageView imagenEvento;
-    private TextView txtDescripcion, txtDistancia;
+    private TextView txtDescripcion, txtDistancia, txtAutor;
     private RecyclerView rvUsuarios;
     private UsersInEventAdapter adapter;
     private FloatingActionButton fab_menu;
@@ -62,12 +64,12 @@ public class EventDetailsActivity extends AppCompatActivity {
         imagenEvento = findViewById(R.id.imagenEventoSeleccionado);
         txtDescripcion = findViewById(R.id.txtDescripcion);
         // txtDistancia = findViewById(R.id.txtDistancia);
-
         rvUsuarios = findViewById(R.id.rvUsuarios);
         fab_menu = findViewById(R.id.fabMenu);
         fab_chat = findViewById(R.id.fabchat);
         fab_equis = findViewById(R.id.fabequis);
         fab_check = findViewById(R.id.fabcheck);
+        txtAutor = findViewById(R.id.txtAutor);
         fab_menu.setOnClickListener(v -> {
             if (fabAbierto) {
                 fab_chat.animate().translationX(0);
@@ -109,27 +111,32 @@ public class EventDetailsActivity extends AppCompatActivity {
             fab_check.setEnabled(true);
             suscrito = true;
         });
-
         eventManagerService = new EventManagerService();
         chatManagerService = new ChatManagerService();
         imageManagerService = new ImageManagerService();
+        userManagerService = new UserManagerService();
         locationService = new LocationService(this);
         firebaseAuth = FirebaseAuth.getInstance();
         fab_chat.setOnClickListener(v -> startChat());
         txtDescripcion.setMovementMethod(new ScrollingMovementMethod());
         Intent intent = getIntent();
         String idEvento = intent.getStringExtra("Evento");
-        eventManagerService.getEvent(idEvento, event -> {
-            this.event = event;
-            Coltoolbar.setTitle(event.getName());
-            txtDescripcion.setText(event.getDescription());
-            String distancia;
-            if (event.getDistance() >= 1000)
-                distancia = Math.round(event.getDistance() / 1000) + " km";
-            else
-                distancia = Math.round(event.getDistance()) + " m";
-            //txtDistancia.setText(distancia);
-        });
+        eventManagerService.getEvent(
+                idEvento,
+                event -> {
+                    this.event = event;
+                    Coltoolbar.setTitle(event.getName());
+                    txtDescripcion.setText(event.getDescription());
+                    userManagerService.getUser(
+                            event.getCreatorId(),
+                            user -> txtAutor.setText(String.format("%s %s", user.getName(), user.getSurname())));
+                    String distancia;
+                    if (event.getDistance() >= 1000)
+                        distancia = Math.round(event.getDistance() / 1000) + " km";
+                    else
+                        distancia = Math.round(event.getDistance()) + " m";
+                    //txtDistancia.setText(distancia);
+                });
         imageManagerService.eventImageDownloadUrl(
                 idEvento,
                 imageUrl -> {

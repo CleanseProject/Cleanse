@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -52,7 +51,6 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
         public Holder(View v) {
             super(v);
             ivUser = v.findViewById(R.id.ivUser);
-
             context = v.getContext();
         }
 
