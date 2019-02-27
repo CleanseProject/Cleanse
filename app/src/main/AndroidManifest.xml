@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.cleanseproject.cleanse">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -15,6 +16,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".activities.SliderActivity" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -50,8 +52,10 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.cleanseproject.cleanse.activities.HomeActivity" />
+
             <intent-filter>
                 <action android:name="OPEN_CHAT_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
