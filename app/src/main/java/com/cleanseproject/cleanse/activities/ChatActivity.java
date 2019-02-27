@@ -1,6 +1,7 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
@@ -19,6 +20,8 @@ import com.cleanseproject.cleanse.dataClasses.Message;
 import com.cleanseproject.cleanse.services.ChatService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
 
 public class ChatActivity extends AppCompatActivity {
 
@@ -57,13 +60,23 @@ public class ChatActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                Intent intent = NavUtils.getParentActivityIntent(this);
-                intent.putExtra("fragment", "chats");
-                NavUtils.navigateUpTo(this, intent);
+                navigateUp();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        navigateUp();
+    }
+
+    private void navigateUp() {
+        Intent intent = NavUtils.getParentActivityIntent(this);
+        intent.putExtra("fragment", "chats");
+        NavUtils.navigateUpTo(this, intent);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
     private TextWatcher sendTextWatcher = new TextWatcher() {
@@ -87,7 +100,13 @@ public class ChatActivity extends AppCompatActivity {
     };
 
     public void updateMessages(ArrayList<Message> messages) {
-        MessageListAdapter messageListAdapter = new MessageListAdapter(messages);
+        HashMap<String, Integer> userColors = new HashMap<>();
+        for (Message message : messages) {
+            Random rnd = new Random();
+            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+            userColors.put(message.getUser(), color);
+        }
+        MessageListAdapter messageListAdapter = new MessageListAdapter(messages, userColors);
         messageRecycler.setAdapter(messageListAdapter);
         messageRecycler.scrollToPosition(messageRecycler.getAdapter().getItemCount() - 1);
     }

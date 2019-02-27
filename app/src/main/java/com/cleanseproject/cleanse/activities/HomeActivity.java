@@ -63,8 +63,8 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         context = this;
         firebaseDatabase = FirebaseDatabase.getInstance();
-        initializeUI();
         notificationManager = new NotificationManager(findViewById(R.id.homeCoordinatorLayout));
+        initializeUI();
     }
 
     @Override
@@ -114,7 +114,6 @@ public class HomeActivity extends AppCompatActivity {
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
-        navigationView.getMenu().getItem(0).setChecked(true);
         View headerLayout = navigationView.getHeaderView(0);
         imagenUsuario = headerLayout.findViewById(R.id.nav_header_imagen);
         nombreUsuario = headerLayout.findViewById(R.id.nav_header_usuario);
@@ -129,12 +128,7 @@ public class HomeActivity extends AppCompatActivity {
             menuItem.setChecked(true);
             drawerLayout.closeDrawers();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            Intent intent = getIntent();
-            int openFragment = menuItem.getItemId();
-            String fragment = intent.getStringExtra("fragment");
-            if (fragment != null && fragment.equals("chats"))
-                openFragment = R.id.nav_chats;
-            switch (openFragment) {
+            switch (menuItem.getItemId()) {
                 case R.id.nav_home:
                     transaction.replace(R.id.content_frame, new HomeFragment());
                     break;
@@ -155,8 +149,16 @@ public class HomeActivity extends AppCompatActivity {
             transaction.commit();
             return true;
         });
+        Intent intent = getIntent();
+        String fragment = intent.getStringExtra("fragment");
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.content_frame, new HomeFragment());
+        if (fragment != null && fragment.equals("chats")) {
+            transaction.replace(R.id.content_frame, new ChatListFragment());
+            navigationView.getMenu().getItem(3).setChecked(true);
+        } else {
+            transaction.replace(R.id.content_frame, new HomeFragment());
+            navigationView.getMenu().getItem(0).setChecked(true);
+        }
         transaction.addToBackStack(null);
         transaction.commit();
     }
