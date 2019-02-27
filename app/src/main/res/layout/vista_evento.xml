@@ -1,104 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="10dp"
-    android:orientation="vertical"
-    android:padding="20dp"
-    app:cardUseCompatPadding="true">
+    android:layout_height="wrap_content"
+    android:paddingBottom="5dp">
 
-    <android.support.constraint.ConstraintLayout
+    <ImageView
+        android:id="@+id/ivEvento"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="250dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/ivEvento"
-            android:layout_width="match_parent"
-            android:layout_height="250dp"
-            android:scaleType="centerCrop"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="76dp"
+        android:background="@color/colorSecundario"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="85dp"
-            android:layout_marginTop="165dp"
-            android:background="@color/colorPrimaryTransparent"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_width="213dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
 
             <LinearLayout
-                android:layout_width="213dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingRight="10dp">
 
-
-                <LinearLayout
+                <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingRight="10dp">
-
-                    <HorizontalScrollView
-                        android:layout_width="match_parent"
-                        android:layout_height="56dp">
-
-                        <TextView
-                            android:id="@+id/tvTitulo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="40dp"
-                            android:layout_marginStart="15dp"
-                            android:layout_marginTop="5dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_weight="1"
-                            android:inputType="textLongMessage"
-                            android:paddingEnd="16dp"
-                            android:text="Prueba"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textColor="#FFFFFF"
-                            android:textSize="24sp" />
-                    </HorizontalScrollView>
+                    android:layout_height="56dp">
 
                     <TextView
-                        android:id="@+id/txtDistancia"
+                        android:id="@+id/tvTitulo"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_height="40dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="5dp"
                         android:layout_weight="1"
+                        android:inputType="textLongMessage"
+                        android:paddingEnd="16dp"
+                        android:text="Prueba"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="#FFFFFF"
-                        android:text="5 km" />
-                </LinearLayout>
+                        android:textSize="24sp" />
+                </HorizontalScrollView>
 
-
+                <TextView
+                    android:id="@+id/txtDistancia"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:text="5 km"
+                    android:textColor="#FFFFFF" />
             </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/btnLike"
-                android:layout_width="52dp"
-                android:layout_height="49dp"
-                android:layout_marginStart="0dp"
-                android:layout_marginTop="20dp"
-                android:layout_weight="1"
-                android:background="@null"
-                app:srcCompat="@drawable/corazon_blanco"
 
-                />
-
-            <ImageButton
-                android:id="@+id/btnShare"
-                android:layout_width="54dp"
-                android:layout_height="49dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="10dp"
-                android:layout_weight="1"
-                android:background="@null"
-                android:tint="#FFFFFF"
-                app:srcCompat="@drawable/icono_share_boton" />
         </LinearLayout>
 
-    </android.support.constraint.ConstraintLayout>
-</android.support.v7.widget.CardView>
+        <ImageButton
+            android:id="@+id/btnLike"
+            android:layout_width="52dp"
+            android:layout_height="49dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="18dp"
+            android:layout_weight="1"
+            android:background="@null"
+            app:srcCompat="@drawable/corazon_blanco"
+
+            />
+
+        <ImageButton
+            android:id="@+id/btnShare"
+            android:layout_width="54dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:background="@null"
+            android:tint="#FFFFFF"
+            app:srcCompat="@drawable/icono_share_boton" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
