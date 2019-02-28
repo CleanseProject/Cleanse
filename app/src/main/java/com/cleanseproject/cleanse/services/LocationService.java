@@ -30,7 +30,7 @@ public class LocationService {
         geocoder = new Geocoder(context, Locale.getDefault());
     }
 
-    private boolean checkPermission() {
+    public boolean checkPermission() {
         return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
