@@ -90,10 +90,11 @@ public class HomeFragment extends Fragment {
                 eventManagerService.getFavouriteEvents(this::rellenarEventos);
             }
         } else {
-            eventManagerService.getCloseEvents(
-                    new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                    8587,
-                    this::rellenarEventos);
+            if (locationService.checkPermission())
+                eventManagerService.getCloseEvents(
+                        new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                        8587,
+                        this::rellenarEventos);
         }
     }
 
