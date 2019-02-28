@@ -60,6 +60,5 @@ public class SplashScreen extends AppCompatActivity {
             }
             finish();
         }, 2000);
-        Crashlytics.getInstance().crash();
     }
 }
