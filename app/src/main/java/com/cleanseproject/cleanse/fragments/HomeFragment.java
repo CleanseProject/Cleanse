@@ -95,6 +95,9 @@ public class HomeFragment extends Fragment {
                         new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
                         8587,
                         this::rellenarEventos);
+            else {
+                //TODO: Mostrar petición de localización
+            }
         }
     }
 
