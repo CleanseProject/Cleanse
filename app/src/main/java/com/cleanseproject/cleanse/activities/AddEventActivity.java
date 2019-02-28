@@ -1,20 +1,15 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.app.DatePickerDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -25,7 +20,6 @@ import com.asksira.bsimagepicker.BSImagePicker;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.fragments.MapFragment;
-import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
 import com.cleanseproject.cleanse.services.NotificationManager;
@@ -33,7 +27,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -53,28 +46,15 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     private ImageView imgEstado;
     private EditText txtTitle, txtDescription;
 
-    private Boolean limpio;
-    private Boolean sucio;
-    private Boolean critico;
-
     private RadioButton rdbtn_limpio;
     private RadioButton rdbtn_sucio;
     private RadioButton rdbtn_critico;
 
-
+    private int selectedState = -1;
     private Uri imagePath;
 
     private boolean frameAbierto;
     private LatLng eventLatLng;
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        IntentFilter f = new IntentFilter(CleanseFirebaseMessagingService.NOTIFICATION);
-        LocalBroadcastManager.getInstance(this)
-                .registerReceiver(onEvent, f);
-        notificationManager = new NotificationManager(findViewById(R.id.event_details_coordinator_layout));
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,42 +81,23 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             eventLatLng = new LatLng(lat, lon);
             btnSelectLocation.setText(locationService.localityName(lat, lon));
         }
-        ArrayList<String> lista = new ArrayList<>();
-        lista.add("Limpio");
-        lista.add("Sucio");
-        lista.add("Critico");
-        rdbtn_limpio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                rdbtn_sucio.setChecked(false);
-                rdbtn_critico.setChecked(false);
-                rdbtn_limpio.setChecked(isChecked);
-                sucio = false;
-                critico = false;
-                limpio = true;
-            }
+        rdbtn_limpio.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            rdbtn_sucio.setChecked(false);
+            rdbtn_critico.setChecked(false);
+            rdbtn_limpio.setChecked(isChecked);
+            selectedState = 0;
         });
-        rdbtn_sucio.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                rdbtn_limpio.setChecked(false);
-                rdbtn_critico.setChecked(false);
-                rdbtn_sucio.setChecked(isChecked);
-                sucio = true;
-                critico = false;
-                limpio = false;
-            }
+        rdbtn_sucio.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            rdbtn_limpio.setChecked(false);
+            rdbtn_critico.setChecked(false);
+            rdbtn_sucio.setChecked(isChecked);
+            selectedState = 1;
         });
-        rdbtn_critico.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                rdbtn_sucio.setChecked(false);
-                rdbtn_limpio.setChecked(false);
-                rdbtn_critico.setChecked(isChecked);
-                sucio = false;
-                critico = true;
-                limpio = false;
-            }
+        rdbtn_critico.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            rdbtn_sucio.setChecked(false);
+            rdbtn_limpio.setChecked(false);
+            rdbtn_critico.setChecked(isChecked);
+            selectedState = 2;
         });
         FrameLayout addEvent = findViewById(R.id.FrameLayout_add_event);
         btnSelectDate.setOnClickListener(v -> {
@@ -179,17 +140,17 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             String description = txtDescription.getText().toString();
             double latitude = eventLatLng.latitude;
             double longitude = eventLatLng.longitude;
-            eventManagerService.createEvent(new Event("", title, description, latitude, longitude, 0, false), imagePath);
-            //TODO: Mostrar evento creado
-            finish();
+            eventManagerService.createEvent(
+                    new Event("", title, description, latitude, longitude, 0, false, "", selectedState),
+                    imagePath,
+                    event -> {
+                        Intent intent = new Intent(AddEventActivity.this, EventDetailsActivity.class);
+                        intent.putExtra("Evento", event.getId());
+                        startActivity(intent);
+                    });
         });
     }
 
-    private BroadcastReceiver onEvent = new BroadcastReceiver() {
-        public void onReceive(Context ctxt, Intent i) {
-            notificationManager.showNotification(i);
-        }
-    };
 
     public void setFrameAbierto(boolean frameAbierto) {
         this.frameAbierto = frameAbierto;
@@ -222,14 +183,8 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
                 e.printStackTrace();
             }
         } else if (resultCode == UCrop.RESULT_ERROR) {
-            final Throwable cropError = UCrop.getError(data);
+            UCrop.getError(data).printStackTrace();
         }
-    }
-
-    @Override
-    protected void onPause() {
-        LocalBroadcastManager.getInstance(this).unregisterReceiver(onEvent);
-        super.onPause();
     }
 
 }

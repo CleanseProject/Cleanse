@@ -1,6 +1,5 @@
 package com.cleanseproject.cleanse.fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -11,13 +10,10 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.AddEventActivity;
@@ -43,7 +39,6 @@ public class HomeFragment extends Fragment {
     private ProgressBar progressBar;
     private FloatingActionButton fab;
     private ArrayList<Event> events;
-    private ArrayList<String> favouriteEvents;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -75,8 +70,7 @@ public class HomeFragment extends Fragment {
         eventManagerService = new EventManagerService();
         locationService = new LocationService(getContext());
         events = new ArrayList<>();
-        favouriteEvents = new ArrayList<>();
-        adaptador = new EventListAdapter(events, favouriteEvents);
+        adaptador = new EventListAdapter(events);
         rvEventos.setAdapter(adaptador);
         rvEventos.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -116,13 +110,21 @@ public class HomeFragment extends Fragment {
         location.setLatitude(event.getLatitude());
         location.setLongitude(event.getLongitude());
         event.setDistance(locationService.distance(location));
+        event.setFavourite(false);
         events.add(event);
-        if (event.isFavourite())
-            favouriteEvents.add(event.getId());
         Collections.sort(events);
         adaptador.notifyDataSetChanged();
         if (progressBar.getVisibility() == View.VISIBLE)
             progressBar.setVisibility(View.GONE);
+        eventManagerService.getFavouriteEvents(this::setFavourites);
+    }
+
+    private void setFavourites(Event event) {
+        for (Event arrayEvent : events) {
+            if (event.getId().equals(arrayEvent.getId()))
+                arrayEvent.setFavourite(true);
+        }
+        adaptador.notifyDataSetChanged();
     }
 
 }

@@ -15,7 +15,9 @@ data class Event(
         @Exclude
         var distance: Float = 0f,
         @Exclude
-        var isFavourite: Boolean = false
+        var isFavourite: Boolean = false,
+        var creatorId: String? = "",
+        var state: Int? = 0
 ) : Comparable<Event> {
 
     override fun compareTo(other: Event): Int {

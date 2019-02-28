@@ -1,7 +1,6 @@
 package com.cleanseproject.cleanse.services;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.cleanseproject.cleanse.callbacks.MessagesLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Chat;
