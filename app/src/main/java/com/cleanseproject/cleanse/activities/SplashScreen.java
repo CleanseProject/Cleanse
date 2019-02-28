@@ -14,8 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+
+import io.fabric.sdk.android.Fabric;
 
 public class SplashScreen extends AppCompatActivity {
 
@@ -31,6 +34,7 @@ public class SplashScreen extends AppCompatActivity {
             e.printStackTrace();
         }
         firebaseAuth = FirebaseAuth.getInstance();
+        Fabric.with(this, new Crashlytics());
         TextView txtTituloo = findViewById(R.id.txtTitulo);
         SpannableString ss = new SpannableString("C l e a n S e");
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
@@ -41,8 +45,6 @@ public class SplashScreen extends AppCompatActivity {
         ImageView imagenGota = findViewById(R.id.imgGota);
         Animation myanim = AnimationUtils.loadAnimation(this, R.anim.animation_abajo);
         imagenGota.startAnimation(myanim);
-
-
         new Handler().postDelayed(() -> {
             Animation fadeIn = AnimationUtils.loadAnimation(this, R.anim.fadein);
             txtTituloo.startAnimation(fadeIn);
@@ -59,6 +61,5 @@ public class SplashScreen extends AppCompatActivity {
             }
             finish();
         }, 2000);
-
     }
 }

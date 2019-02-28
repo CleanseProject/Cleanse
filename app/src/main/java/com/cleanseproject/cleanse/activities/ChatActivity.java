@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -75,7 +76,14 @@ public class ChatActivity extends AppCompatActivity {
     private void navigateUp() {
         Intent intent = NavUtils.getParentActivityIntent(this);
         intent.putExtra("fragment", "chats");
-        NavUtils.navigateUpTo(this, intent);
+        // Check if Activity has been opened from notification
+        if (NavUtils.shouldUpRecreateTask(this, intent) || isTaskRoot()) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(intent)
+                    .startActivities();
+        } else {
+            NavUtils.navigateUpTo(this, intent);
+        }
         overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
