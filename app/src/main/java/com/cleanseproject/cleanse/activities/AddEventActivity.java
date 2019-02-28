@@ -147,7 +147,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             mDateSetListener = new DatePickerDialog(AddEventActivity.this,
                     (view, year1, month1, dayOfMonth) ->
                             btnSelectDate.setText(dayOfMonth + "/" + (month1 + 1) + "/" + year1),
-                    2018, month, day);
+                    2019, month, day);
             mDateSetListener.show();
 
         });
