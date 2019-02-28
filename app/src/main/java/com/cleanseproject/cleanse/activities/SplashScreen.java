@@ -50,7 +50,6 @@ public class SplashScreen extends AppCompatActivity {
             txtTituloo.startAnimation(fadeIn);
             txtTituloo.setVisibility(View.VISIBLE);
         }, 1000);
-
         new Handler().postDelayed(() -> {
             if (firebaseAuth.getCurrentUser() != null) {
                 Intent intent = new Intent(SplashScreen.this, HomeActivity.class);
@@ -61,5 +60,6 @@ public class SplashScreen extends AppCompatActivity {
             }
             finish();
         }, 2000);
+        Crashlytics.getInstance().crash();
     }
 }
