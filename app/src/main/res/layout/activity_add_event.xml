@@ -44,20 +44,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/picture" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Select image"
-            android:textColor="@color/colorSecundario"
-            android:textSize="40dp" />
+            app:srcCompat="@drawable/playa_sucia"
+            />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@drawable/scrim" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+
+            android:text="Select image"
+            android:textColor="#fff"
+            android:textSize="40dp" />
 
         <EditText
             android:id="@+id/txt_add_event_title"
@@ -77,22 +79,34 @@
 
         <Button
             android:id="@+id/btn_set_location"
-            style="@style/ButtonConImagen"
+            android:background="#343890"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
+            android:textColor="#fff"
             android:drawableStart="@drawable/placeholder"
+            android:layout_marginTop="4dp"
+            android:layout_marginRight="2dp"
+            android:paddingLeft="20dp"
+            android:textAllCaps="false"
+            android:paddingRight="20dp"
             android:text="@string/select_location" />
 
         <Button
             android:id="@+id/btn_set_date"
-            style="@style/ButtonConImagen"
+            android:background="#343890"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
             android:drawableStart="@drawable/calendar"
+            android:paddingLeft="20dp"
+            android:textColor="#fff"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="2dp"
+            android:textAllCaps="false"
+            android:paddingRight="20dp"
             android:text="@string/select_date" />
 
 
@@ -102,68 +116,78 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-
-
-        android:paddingLeft="10dp">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
+            android:layout_gravity="left"
             android:layout_weight="1"
-            android:layout_gravity="left">
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/marcadorverde_vector"
-                android:text="Limpio" />
+                android:src="@drawable/marcadorlimpio_vector" />
 
             <RadioButton
                 android:id="@+id/radiobtn_limpio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Limpio" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
+            android:layout_gravity="right"
             android:layout_weight="1"
-            android:layout_gravity="right">
+            android:gravity="center"
+            android:orientation="vertical">
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/marcadornaranja_vector"
-                android:text="Sucio" />
+                android:src="@drawable/marcadorsucio_vector" />
 
             <RadioButton
                 android:id="@+id/radiobtn_sucio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sucio" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_gravity="right"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_gravity="right">
+            android:orientation="vertical">
 
-            <TextView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:drawableLeft="@drawable/marcadorrojo_vector"
-                android:text="Critico" />
+                android:src="@drawable/marcadorcritico_vector" />
 
             <RadioButton
                 android:id="@+id/radiobtn_critico"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Critico" />
         </LinearLayout>
 
     </LinearLayout>

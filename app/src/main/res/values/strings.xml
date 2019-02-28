@@ -2,7 +2,7 @@
     <string name="app_name" translatable="false">Cleanse</string>
     <string name="app_name_lower" translatable="false">CleanSe</string>
     <string name="welcome_button">Comenzar</string>
-    <string name="sign_in" translatable="false">sign in</string>
+    <string name="sign_in" translatable="false">Sign in</string>
     <string name="google_login" translatable="false">Google</string>
     <string name="phone_login" translatable="false">Phone</string>
     <string name="email_login" translatable="false">E-Mail</string>

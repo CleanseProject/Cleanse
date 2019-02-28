@@ -8,36 +8,21 @@
     <path
         android:name="path_3"
         android:pathData="M 46 4 L 46 8 L 39 8 L 39 4 L 15 4 L 15 8 L 8 8 L 8 4 L 0 4 L 0 15 L 54 15 L 54 4 Z"
-        android:fillColor="#f05565"
+        android:fillColor="#ffffff"
         android:strokeWidth="1"/>
     <path
         android:name="path_4"
         android:pathData="M 8 15 L 0 15 L 0 58 L 54 58 L 54 15 L 15 15 Z"
-        android:fillColor="#efebde"
+        android:fillColor="#C8C8C8"
         android:strokeWidth="1"/>
     <path
         android:name="path_5"
         android:pathData="M 37 22 L 8 22 L 8 51 L 46 51 L 46 22 L 37 22 Z M 28 24 L 35 24 L 35 31 L 28 31 L 28 24 Z M 35 40 L 28 40 L 28 33 L 35 33 L 35 40 Z M 19 33 L 26 33 L 26 40 L 19 40 L 19 33 Z M 19 24 L 26 24 L 26 31 L 19 31 L 19 24 Z M 10 24 L 17 24 L 17 31 L 10 31 L 10 24 Z M 10 33 L 17 33 L 17 40 L 10 40 L 10 33 Z M 17 49 L 10 49 L 10 42 L 17 42 L 17 49 Z M 26 49 L 19 49 L 19 42 L 26 42 L 26 49 Z M 35 49 L 28 49 L 28 42 L 35 42 L 35 49 Z M 44 49 L 37 49 L 37 42 L 44 42 L 44 49 Z M 44 40 L 37 40 L 37 33 L 44 33 L 44 40 Z M 37 31 L 37 24 L 44 24 L 44 31 L 37 31 Z"
-        android:fillColor="#d5d0bb"
+        android:fillColor="#ffffff"
         android:strokeWidth="1"/>
     <path
         android:name="path_6"
         android:pathData="M 8 0 L 15 0 L 15 8 L 8 8 Z M 39 0 L 46 0 L 46 8 L 39 8 Z"
-        android:fillColor="#36495e"
-        android:strokeWidth="1"/>
-    <path
-        android:name="path_7"
-        android:pathData="M 19 33 L 26 33 L 26 40 L 19 40 Z"
-        android:fillColor="#7f6e5d"
-        android:strokeWidth="1"/>
-    <path
-        android:name="path_8"
-        android:pathData="M 46 33 C 42.819 33 39.764 34.265 37.515 36.515 C 35.265 38.764 34 41.819 34 45 C 34 48.181 35.265 51.236 37.515 53.485 C 39.764 55.735 42.819 57 46 57 C 49.181 57 52.236 55.735 54.485 53.485 C 56.735 51.236 58 48.181 58 45 C 58 41.819 56.735 38.764 54.485 36.515 C 52.236 34.265 49.181 33 46 33 Z"
-        android:fillColor="#71c386"
-        android:strokeWidth="1"/>
-    <path
-        android:name="path_9"
-        android:pathData="M 52 44 L 47 44 L 47 39 C 47 38.4 46.6 38 46 38 C 45.4 38 45 38.4 45 39 L 45 44 L 40 44 C 39.4 44 39 44.4 39 45 C 39 45.6 39.4 46 40 46 L 45 46 L 45 51 C 45 51.6 45.4 52 46 52 C 46.6 52 47 51.6 47 51 L 47 46 L 52 46 C 52.6 46 53 45.6 53 45 C 53 44.4 52.6 44 52 44 Z"
-        android:fillColor="#ffffff"
+        android:fillColor="#949494"
         android:strokeWidth="1"/>
 </vector>
