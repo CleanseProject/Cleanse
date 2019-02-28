@@ -21,7 +21,7 @@
             android:layout_marginRight="25dp"
             android:background="@drawable/login_shape"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="10dp">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -31,10 +31,9 @@
                     android:id="@+id/txt_email"
                     style="@style/CleanseEditText"
                     android:layout_width="match_parent"
-
                     android:layout_height="wrap_content"
                     android:autofillHints="emailAddress"
-                    android:drawableLeft="@drawable/email_lock_icon"
+                    android:drawableLeft="@drawable/mail"
                     android:drawablePadding="10dp"
                     android:ems="10"
                     android:hint="@string/e_mail"
@@ -85,6 +84,8 @@
                 android:drawableLeft="@drawable/signup_icon"
                 android:drawablePadding="5dp"
                 android:enabled="false"
+                android:background="@drawable/boton"
+                android:textColor="#ffffff"
                 android:text="@string/sign_up" />
 
             <Button
@@ -96,6 +97,8 @@
                 android:drawableLeft="@drawable/login_icon"
                 android:drawablePadding="5dp"
                 android:enabled="false"
+                android:background="@drawable/boton"
+                android:textColor="#ffffff"
                 android:text="@string/log_in" />
         </LinearLayout>
 

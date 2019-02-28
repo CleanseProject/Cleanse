@@ -21,10 +21,9 @@
             app:srcCompat="@drawable/hand_phone" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
             android:background="@drawable/login_shape"
             android:gravity="center"
             android:orientation="vertical"
@@ -57,16 +56,19 @@
         </LinearLayout>
 
         <Button
+            android:gravity="center"
+            android:layout_gravity="center"
             android:id="@+id/btn_login_phone"
             style="@style/ButtonConImagen"
-            android:layout_width="150dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:drawableLeft="@drawable/login_icon"
-            android:drawablePadding="10dp"
+            android:paddingRight="35dp"
             android:enabled="true"
-
+            android:textColor="#FFFFFF"
             android:text="@string/log_in"
+            android:background="@drawable/boton"
             android:visibility="visible" />
 
     </LinearLayout>
