@@ -62,7 +62,9 @@ dependencies {
     // AppIntro
     implementation 'com.github.AppIntro:AppIntro:v4.2.3'
     // Crashlytics
-    implementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    compile('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
+        transitive = true;
+    }
 }
 
 apply plugin: 'com.google.gms.google-services'
