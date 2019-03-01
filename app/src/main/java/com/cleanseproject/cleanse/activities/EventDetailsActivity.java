@@ -80,7 +80,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         fabAbierto = false;
         imagenEvento = findViewById(R.id.imagenEventoSeleccionado);
         txtDescripcion = findViewById(R.id.txtDescripcion);
-        txtDistancia = findViewById(R.id.txtDistancia);
+        txtDistancia = findViewById(R.id.txt_distancia);
         rvUsuarios = findViewById(R.id.rvUsuarios);
         fab_menu = findViewById(R.id.fabMenu);
         fab_chat = findViewById(R.id.fabchat);
@@ -141,7 +141,6 @@ public class EventDetailsActivity extends AppCompatActivity {
                         distancia = Math.round(event.getDistance() / 1000) + " km";
                     else
                         distancia = Math.round(event.getDistance()) + " m";
-                    txtDistancia.setText(distancia);
                     txtDistancia.setText(distancia);
                     eventManagerService.isUserAdmin(event.getId(), isAdmin -> {
                         if (isAdmin) {
