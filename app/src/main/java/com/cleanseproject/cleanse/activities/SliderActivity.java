@@ -32,7 +32,7 @@ public class SliderActivity extends AppIntro {
         sliderPage1.setTitle(getString(R.string.slider_titulo12));
         sliderPage1.setImageDrawable(R.drawable.help);
         sliderPage1.setDescription(getString(R.string.slider_descripcion12));
-        sliderPage1.setBgColor(ContextCompat.getColor(getApplicationContext(), R.color.skyblue_slider_color));
+        sliderPage1.setBgColor(ContextCompat.getColor(getApplicationContext(), R.color.verdehojaexterno));
         addSlide(AppIntroFragment.newInstance(sliderPage1));
 
         SliderPage sliderPage2 = new SliderPage();
