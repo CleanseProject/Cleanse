@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.cleanseproject.cleanse.callbacks.EventLoadCallback;
+import com.cleanseproject.cleanse.callbacks.IsAdminCallback;
 import com.cleanseproject.cleanse.callbacks.KeysLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.firebase.geofire.GeoFire;
@@ -86,6 +87,22 @@ public class EventManagerService {
         });
     }
 
+    public void isUserAdmin(String key, IsAdminCallback callback) {
+        firebaseDatabase.getReference("events").child(key).child("creatorId")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        callback.onLoad(dataSnapshot.getValue().toString()
+                                .equals(firebaseUser.getUid()));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
     public void getEvent(String key, EventLoadCallback callback) {
         DatabaseReference eventsRef = firebaseDatabase.getReference("events").child(key);
         eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -105,10 +122,6 @@ public class EventManagerService {
 
             }
         });
-    }
-
-    public void removeEvent(String key) {
-        firebaseDatabase.getReference("events").child(key).removeValue();
     }
 
     public void getCloseEvents(GeoLocation location, double radius, EventLoadCallback callback) {
