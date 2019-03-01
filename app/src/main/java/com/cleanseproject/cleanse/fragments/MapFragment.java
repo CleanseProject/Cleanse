@@ -22,6 +22,7 @@ import android.widget.FrameLayout;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.AddEventActivity;
+import com.cleanseproject.cleanse.activities.EventDetailsActivity;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
@@ -36,6 +37,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.HashMap;
+
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -45,6 +48,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private double latitud;
     private double longitud;
     private Marker selectedMarker;
+    private HashMap<Marker, String> markers;
 
 
     @Override
@@ -67,6 +71,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             followUser = false;
             return false;
         });
+        markers = new HashMap<>();
         eventManagerService = new EventManagerService();
         locationService = new LocationService(getContext());
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);  //use SuppoprtMapFragment for using in fragment instead of activity  MapFragment = activity   SupportMapFragment = fragment
@@ -101,34 +106,40 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 selectedMarker.showInfoWindow();
                 latitud = latLng.latitude;
                 longitud = latLng.longitude;
-                mMap.setOnInfoWindowClickListener(marker -> {
-                    double lat = latLng.latitude;
-                    double lon = latLng.longitude;
-                    if (getActivity().getClass() == AddEventActivity.class) {
-                        AddEventActivity addEventActivity = (AddEventActivity) getActivity();
-                        Button btnLocalizacion = addEventActivity.findViewById(R.id.btn_set_location);
-                        if (lat != 0 && lon != 0) {
-                            addEventActivity.setEventLatLng(latLng);
-                            btnLocalizacion.setText(locationService.localityName(lat, lon));
-                        }
-                        FrameLayout frameLayout = addEventActivity.findViewById(R.id.FrameLayout_add_event);
-                        frameLayout.setVisibility(View.GONE);
-                        addEventActivity.setFrameAbierto(false);
-                    } else {
-                        Intent i = new Intent(getContext(), AddEventActivity.class);
-                        i.putExtra("latitude", lat);
-                        i.putExtra("longitude", lon);
-                        startActivity(i);
-                    }
-                });
             }
         });
-
         Location currentLocation = locationService.getCurrentLocation();
         eventManagerService.getCloseEvents(
                 new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
                 8587,
                 this::addEventToMap);
+        mMap.setOnInfoWindowClickListener(marker -> {
+            if (selectedMarker != null) {
+                LatLng latLng = marker.getPosition();
+                double lat = latLng.latitude;
+                double lon = latLng.longitude;
+                if (getActivity().getClass() == AddEventActivity.class) {
+                    AddEventActivity addEventActivity = (AddEventActivity) getActivity();
+                    Button btnLocalizacion = addEventActivity.findViewById(R.id.btn_set_location);
+                    if (lat != 0 && lon != 0) {
+                        addEventActivity.setEventLatLng(latLng);
+                        btnLocalizacion.setText(locationService.localityName(lat, lon));
+                    }
+                    FrameLayout frameLayout = addEventActivity.findViewById(R.id.FrameLayout_add_event);
+                    frameLayout.setVisibility(View.GONE);
+                    addEventActivity.setFrameAbierto(false);
+                } else {
+                    Intent i = new Intent(getContext(), AddEventActivity.class);
+                    i.putExtra("latitude", lat);
+                    i.putExtra("longitude", lon);
+                    startActivity(i);
+                }
+            } else {
+                Intent intent = new Intent(getContext(), EventDetailsActivity.class);
+                intent.putExtra("Evento", markers.get(marker));
+                startActivity(intent);
+            }
+        });
     }
 
 
@@ -149,10 +160,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 markerType = R.drawable.marcadorlimpio_vector;
         }
         LatLng latLng = new LatLng(event.getLatitude(), event.getLongitude());
-        mMap.addMarker(new MarkerOptions()
+        Marker marker = mMap.addMarker(new MarkerOptions()
                 .position(latLng)
                 .title(event.getName())
                 .icon(bitmapDescriptorFromVector(getContext(), markerType)));
+        markers.put(marker, event.getId());
     }
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
