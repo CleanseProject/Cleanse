@@ -88,34 +88,6 @@ public class EventDetailsActivity extends AppCompatActivity {
         fab_check = findViewById(R.id.fabcheck);
         txtAutor = findViewById(R.id.txtAutor);
         btnDelete = findViewById(R.id.btn_delete);
-        fab_menu.setOnClickListener(v -> {
-            if (fabAbierto) {
-                fab_chat.animate().translationX(0);
-                fab_equis.animate().translationY(0);
-                fab_check.animate().translationY(0);
-                fabAbierto = false;
-
-            } else {
-                fab_chat.animate().translationX(-180);
-                fab_equis.animate().translationY(170);
-                fab_check.animate().translationY(170);
-                fabAbierto = true;
-            }
-        });
-        fab_check.setOnClickListener(v -> {
-            fab_check.animate().alpha(0f);
-            fab_equis.animate().alpha(1.0f);
-            fab_equis.setEnabled(true);
-            fab_check.setEnabled(false);
-            eventManagerService.deleteFavouriteEvent(event.getId());
-        });
-        fab_equis.setOnClickListener(v -> {
-            fab_check.animate().alpha(1.0f);
-            fab_equis.animate().alpha(0f);
-            fab_equis.setEnabled(false);
-            fab_check.setEnabled(true);
-            eventManagerService.setEventAsFavourite(event.getId());
-        });
         eventManagerService = new EventManagerService();
         chatManagerService = new ChatManagerService();
         imageManagerService = new ImageManagerService();
@@ -187,6 +159,34 @@ public class EventDetailsActivity extends AppCompatActivity {
         lista.add(u2);
         adapter = new UsersInEventAdapter(lista);
         rvUsuarios.setAdapter(adapter);
+        fab_menu.setOnClickListener(v -> {
+            if (fabAbierto) {
+                fab_chat.animate().translationX(0);
+                fab_equis.animate().translationY(0);
+                fab_check.animate().translationY(0);
+                fabAbierto = false;
+
+            } else {
+                fab_chat.animate().translationX(-180);
+                fab_equis.animate().translationY(170);
+                fab_check.animate().translationY(170);
+                fabAbierto = true;
+            }
+        });
+        fab_check.setOnClickListener(v -> {
+            fab_check.animate().alpha(0f);
+            fab_equis.animate().alpha(1.0f);
+            fab_equis.setEnabled(true);
+            fab_check.setEnabled(false);
+            eventManagerService.setEventAsFavourite(event.getId());
+        });
+        fab_equis.setOnClickListener(v -> {
+            fab_check.animate().alpha(1.0f);
+            fab_equis.animate().alpha(0f);
+            fab_equis.setEnabled(false);
+            fab_check.setEnabled(true);
+            eventManagerService.deleteFavouriteEvent(event.getId());
+        });
     }
 
     private BroadcastReceiver onEvent = new BroadcastReceiver() {
