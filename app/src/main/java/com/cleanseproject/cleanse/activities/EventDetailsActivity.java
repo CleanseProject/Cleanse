@@ -16,6 +16,8 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -55,6 +57,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private FloatingActionButton fab_chat;
     private FloatingActionButton fab_equis;
     private FloatingActionButton fab_check;
+    private Button btnDelete;
     private boolean fabAbierto;
     private boolean suscrito;
 
@@ -86,6 +89,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         fab_equis = findViewById(R.id.fabequis);
         fab_check = findViewById(R.id.fabcheck);
         txtAutor = findViewById(R.id.txtAutor);
+        btnDelete = findViewById(R.id.btn_delete);
         fab_menu.setOnClickListener(v -> {
             if (fabAbierto) {
                 fab_chat.animate().translationX(0);
@@ -153,6 +157,15 @@ public class EventDetailsActivity extends AppCompatActivity {
                     else
                         distancia = Math.round(event.getDistance()) + " m";
                     //txtDistancia.setText(distancia);
+                    eventManagerService.isUserAdmin(event.getId(), isAdmin -> {
+                        if (isAdmin) {
+                            btnDelete.setVisibility(View.VISIBLE);
+                            btnDelete.setOnClickListener(v -> {
+                                eventManagerService.deleteEvent(event.getId());
+                                goBack();
+                            });
+                        }
+                    });
                 });
         imageManagerService.eventImageDownloadUrl(
                 idEvento,
