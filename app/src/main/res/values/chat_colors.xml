@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="chat_0">#0084ff</color>
+    <color name="chat_1">#44bec7</color>
+    <color name="chat_2">#ffc300</color>
+    <color name="chat_3">#fa3c4c</color>
+    <color name="chat_4">#d696bb</color>
+
+    <array name="chat_color_array">
+        <item>@color/chat_0</item>
+        <item>@color/chat_1</item>
+        <item>@color/chat_2</item>
+        <item>@color/chat_3</item>
+        <item>@color/chat_4</item>
+    </array>
+
+</resources>
