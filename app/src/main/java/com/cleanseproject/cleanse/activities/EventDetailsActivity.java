@@ -141,7 +141,8 @@ public class EventDetailsActivity extends AppCompatActivity {
                         distancia = Math.round(event.getDistance() / 1000) + " km";
                     else
                         distancia = Math.round(event.getDistance()) + " m";
-                    //txtDistancia.setText(distancia);
+                    txtDistancia.setText(distancia);
+                    txtDistancia.setText(distancia);
                     eventManagerService.isUserAdmin(event.getId(), isAdmin -> {
                         if (isAdmin) {
                             btnDelete.setVisibility(View.VISIBLE);
