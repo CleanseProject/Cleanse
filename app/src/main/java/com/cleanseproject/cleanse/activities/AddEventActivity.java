@@ -122,8 +122,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             rdbtn_critico.setChecked(isChecked);
             selectedState = 2;
         });
-
-
         addEvent = findViewById(R.id.FrameLayout_add_event);
         btnSelectDate.setOnClickListener(v -> {
             Calendar cal = Calendar.getInstance();
