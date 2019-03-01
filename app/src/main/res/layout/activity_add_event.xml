@@ -7,16 +7,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="15dp"
     tools:context=".activities.AddEventActivity">
 
-    <ImageView
-        android:id="@+id/imgExit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:contentDescription="@string/close"
-        android:src="@drawable/ic_close_black_30dp" />
+    <include
+        android:id="@+id/toolbar_addevent"
+        layout="@layout/toolbar_addevent"
+        />
+
+
 
     <FrameLayout
         android:id="@+id/FrameLayout_add_event"
@@ -25,15 +23,6 @@
         android:visibility="gone">
 
     </FrameLayout>
-
-    <TextView
-        android:id="@+id/lbl_add_event"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
-        android:text="@string/add_new_event"
-        android:textColor="#000"
-        android:textSize="20sp" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -44,8 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/playa_sucia"
-            />
+            app:srcCompat="@drawable/playa_sucia" />
 
         <View
             android:layout_width="match_parent"
@@ -66,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:gravity="right"
+            android:gravity="left"
             android:hint="Event title"
             android:textColor="#FFFFFF"
             android:textColorHint="#FFFFFF" />
@@ -79,35 +67,35 @@
 
         <Button
             android:id="@+id/btn_set_location"
-            android:background="#343890"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:layout_weight="1"
-            android:textColor="#fff"
-            android:drawableStart="@drawable/placeholder"
             android:layout_marginTop="4dp"
             android:layout_marginRight="2dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="1"
+            android:background="#343890"
+            android:drawableStart="@drawable/placeholder"
             android:paddingLeft="20dp"
-            android:textAllCaps="false"
             android:paddingRight="20dp"
-            android:text="@string/select_location" />
+            android:text="@string/select_location"
+            android:textAllCaps="false"
+            android:textColor="#fff" />
 
         <Button
             android:id="@+id/btn_set_date"
-            android:background="#343890"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="2dp"
+            android:layout_marginTop="4dp"
             android:layout_marginBottom="10dp"
             android:layout_weight="1"
+            android:background="#343890"
             android:drawableStart="@drawable/calendar"
             android:paddingLeft="20dp"
-            android:textColor="#fff"
-            android:layout_marginTop="4dp"
-            android:layout_marginLeft="2dp"
-            android:textAllCaps="false"
             android:paddingRight="20dp"
-            android:text="@string/select_date" />
+            android:text="@string/select_date"
+            android:textAllCaps="false"
+            android:textColor="#fff" />
 
 
     </LinearLayout>
@@ -115,8 +103,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -212,7 +199,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:text="@string/add" />
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:text="@string/add"
+        />
 
 </LinearLayout>
 
