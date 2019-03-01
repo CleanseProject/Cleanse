@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.cleanseproject.cleanse.callbacks.ChatListLoadCallback;
+import com.cleanseproject.cleanse.callbacks.ChatRemovedCallback;
 import com.cleanseproject.cleanse.callbacks.UnreadMessagesCallback;
 import com.cleanseproject.cleanse.callbacks.UserNameLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Chat;
@@ -52,6 +53,33 @@ public class ChatManagerService {
     public void createGroupChat(String eventId, String name) {
         DatabaseReference chat = firebaseDatabase.getReference("chats").child(eventId);
         chat.setValue(new Chat(eventId, name, null, "", true, System.currentTimeMillis()));
+    }
+
+    public void removeChat(String chatId, ChatRemovedCallback callback) {
+        DatabaseReference chatRef = firebaseDatabase.getReference("chats").child(chatId);
+        chatRef.child("members").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    firebaseDatabase.getReference("userChats")
+                            .child(userSnapshot.getValue().toString())
+                            .child(chatId)
+                            .removeValue();
+                }
+                firebaseDatabase.getReference("chatMessages")
+                        .child(chatId)
+                        .removeValue();
+                firebaseDatabase.getReference("chats")
+                        .child(chatId)
+                        .removeValue();
+                callback.chatRemoved();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     public void getUserChats(ChatListLoadCallback callback) {
