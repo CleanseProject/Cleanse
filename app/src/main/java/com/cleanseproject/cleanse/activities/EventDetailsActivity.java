@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -46,7 +47,6 @@ public class EventDetailsActivity extends AppCompatActivity {
     private UserManagerService userManagerService;
     private NotificationManager notificationManager;
     private LocationService locationService;
-    private Toolbar toolbar;
     private Event event;
 
     private ImageView imagenEvento;
@@ -131,6 +131,10 @@ public class EventDetailsActivity extends AppCompatActivity {
                 idEvento,
                 event -> {
                     this.event = event;
+                    Location location = new Location("");
+                    location.setLatitude(event.getLatitude());
+                    location.setLongitude(event.getLongitude());
+                    event.setDistance(locationService.distance(location));
                     Coltoolbar.setTitle(event.getName());
                     txtDescripcion.setText(event.getDescription());
                     userManagerService.getUser(
