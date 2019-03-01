@@ -37,9 +37,11 @@
     <string name="places">Places</string>
     <string name="chats">Chats</string>
     <string name="action_settings">Settings</string>
-    <string name="slider_descripcion_1">Cleanse se ha creado con la finalidad de conectar a la gente que se ha dado cuenta de que los espacios que nos rodean no siempre se encuentra en las mejores condiciones y están dispuestas a hacer algo para cambiarlo. En nuestra aplicación podrás unirte a eventos de recogida creados por otros usuarios, así como crearlos tú mismo.</string>
+    <string name="slider_descripcion_1">Cleanse se ha creado con la finalidad de conectar a la gente que se ha dado cuenta de que los espacios que nos rodean no siempre se encuentra en las mejores condiciones y están dispuestas a hacer algo para cambiarlo.</string>
     <string name="slider_titulo_1">¿Qué es Cleanse?</string>
     <string name="slider_titulo_2">Toc toc, ¿se puede?</string>
     <string name="slider_descripcion_2">Cleanse necesita acceder a tu localización para mostrarte los eventos mas cercanos a ti.</string>
+    <string name="slider_titulo12">¿Cómo funciona?</string>
+    <string name="slider_descripcion12">En nuestra aplicación podrás unirte a eventos de recogida creados por otros usuarios, así como crearlos tú mismo. Entre todos podemos salvar el planeta, ¡y hacer amigos por el camino!</string>
 
 </resources>
