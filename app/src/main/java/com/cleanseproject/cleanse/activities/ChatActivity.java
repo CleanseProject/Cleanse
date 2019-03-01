@@ -1,7 +1,6 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
@@ -32,6 +31,9 @@ public class ChatActivity extends AppCompatActivity {
     private EditText txtMessage;
     private RecyclerView messageRecycler;
 
+    private HashMap<String, Integer> userColors;
+    private int[] chatColors;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,6 +56,7 @@ public class ChatActivity extends AppCompatActivity {
             Bundle b = getIntent().getExtras();// add these lines of code to get data from notification
             chatId = b.getString("chatuid");
         }
+        chatColors = getResources().getIntArray(R.array.chat_color_array);
         chatService.inicializar(chatId);
     }
 
@@ -108,11 +111,14 @@ public class ChatActivity extends AppCompatActivity {
     };
 
     public void updateMessages(ArrayList<Message> messages) {
-        HashMap<String, Integer> userColors = new HashMap<>();
-        for (Message message : messages) {
-            Random rnd = new Random();
-            int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
-            userColors.put(message.getUser(), color);
+        if (userColors == null) {
+            userColors = new HashMap<>();
+            for (Message message : messages) {
+                String user = message.getUser();
+                if (!userColors.containsKey(user)) {
+                    userColors.put(message.getUser(), chatColors[new Random().nextInt(chatColors.length)]);
+                }
+            }
         }
         MessageListAdapter messageListAdapter = new MessageListAdapter(messages, userColors);
         messageRecycler.setAdapter(messageListAdapter);
