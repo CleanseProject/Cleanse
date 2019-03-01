@@ -77,6 +77,7 @@ public class EventManagerService {
                     firebaseDatabase.getReference("events")
                             .child(key)
                             .removeValue();
+                    geoFire.removeLocation(key);
                     imageManagerService.removeEventImage(key);
                 }
 
