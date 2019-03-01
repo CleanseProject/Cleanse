@@ -57,14 +57,16 @@ public class ChatManagerService {
 
     public void removeChat(String chatId, ChatRemovedCallback callback) {
         DatabaseReference chatRef = firebaseDatabase.getReference("chats").child(chatId);
-        chatRef.child("members").addListenerForSingleValueEvent(new ValueEventListener() {
+        chatRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    firebaseDatabase.getReference("userChats")
-                            .child(userSnapshot.getValue().toString())
-                            .child(chatId)
-                            .removeValue();
+                if (dataSnapshot.child("members").hasChildren()) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.child("members").getChildren()) {
+                        firebaseDatabase.getReference("userChats")
+                                .child(userSnapshot.getValue().toString())
+                                .child(chatId)
+                                .removeValue();
+                    }
                 }
                 firebaseDatabase.getReference("chatMessages")
                         .child(chatId)
