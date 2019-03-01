@@ -104,7 +104,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         eventLatLng = new LatLng(lat, lon);
         if (lat != 0 && lon != 0)
             btnSelectLocation.setText(locationService.localityName(lat, lon));
-        }
         rdbtn_limpio.setOnCheckedChangeListener((buttonView, isChecked) -> {
             rdbtn_sucio.setChecked(false);
             rdbtn_critico.setChecked(false);
@@ -157,7 +156,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             singleSelectionPicker.show(getSupportFragmentManager(), "picker");
         });
         btnAdd.setOnClickListener(v -> {
-            if (txtTitle.getText().toString().equals("") || eventLatLng==null || selectedState==-1 || btnSelectDate.getText().toString().equals("Select date")){
+            if (txtTitle.getText().toString().equals("") || eventLatLng == null || selectedState == -1 || btnSelectDate.getText().toString().equals("Select date")) {
                 new AlertDialog.Builder(this)
                         .setTitle("Faltan datos")
                         .setMessage("Por favor rellena todos los datos")
@@ -167,7 +166,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
                                 dialog.cancel();
                             }
                         }).show();
-            }  else {
+            } else {
                 String title = txtTitle.getText().toString();
                 String description = txtDescription.getText().toString();
                 double latitude = eventLatLng.latitude;
