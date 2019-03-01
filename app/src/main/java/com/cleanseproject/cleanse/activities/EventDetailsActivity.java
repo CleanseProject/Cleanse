@@ -7,6 +7,8 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -181,11 +183,29 @@ public class EventDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                onBackPressed();
+                goBack();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        goBack();
+    }
+
+    private void goBack() {
+        Intent intent = NavUtils.getParentActivityIntent(this);
+        // Check if Activity has been opened from notification
+        if (NavUtils.shouldUpRecreateTask(this, intent) || isTaskRoot()) {
+            TaskStackBuilder.create(this)
+                    .addNextIntentWithParentStack(intent)
+                    .startActivities();
+        } else {
+            NavUtils.navigateUpTo(this, intent);
+        }
+        overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
     private void startChat() {

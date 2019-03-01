@@ -39,7 +39,11 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.EventDetailsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.cleanseproject.cleanse.activities.HomeActivity" />
+        </activity>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
