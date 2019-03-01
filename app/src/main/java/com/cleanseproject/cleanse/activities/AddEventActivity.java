@@ -104,6 +104,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         eventLatLng = new LatLng(lat, lon);
         if (lat != 0 && lon != 0)
             btnSelectLocation.setText(locationService.localityName(lat, lon));
+        }
         rdbtn_limpio.setOnCheckedChangeListener((buttonView, isChecked) -> {
             rdbtn_sucio.setChecked(false);
             rdbtn_critico.setChecked(false);
