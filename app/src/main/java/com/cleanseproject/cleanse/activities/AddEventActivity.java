@@ -87,24 +87,19 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         rdbtn_sucio = findViewById(R.id.radiobtn_sucio);
         rdbtn_critico = findViewById(R.id.radiobtn_critico);
         toolbar = findViewById(R.id.toolbar_addevent);
-        toolbar.setTitle("Add new event");
-
+        toolbar.setTitle(R.string.add_new_event);
         setSupportActionBar(toolbar);
-
-
         eventManagerService = new EventManagerService();
         locationService = new LocationService(this);
-        ////////////////// Intent
         txtTitle = findViewById(R.id.txt_add_event_title);
         txtDescription = findViewById(R.id.txt_add_description);
         eventManagerService = new EventManagerService();
         Intent i = getIntent();
         double lat = i.getDoubleExtra("latitude", 0);
         double lon = i.getDoubleExtra("longitude", 0);
-        if (lat != 0 && lon != 0) {
-            eventLatLng = new LatLng(lat, lon);
+        eventLatLng = new LatLng(lat, lon);
+        if (lat != 0 && lon != 0)
             btnSelectLocation.setText(locationService.localityName(lat, lon));
-        }
         rdbtn_limpio.setOnCheckedChangeListener((buttonView, isChecked) -> {
             rdbtn_sucio.setChecked(false);
             rdbtn_critico.setChecked(false);
@@ -155,7 +150,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             singleSelectionPicker.show(getSupportFragmentManager(), "picker");
         });
         btnAdd.setOnClickListener(v -> {
-            //TODO: Comprobar que se han insertado todos los datos
             String title = txtTitle.getText().toString();
             String description = txtDescription.getText().toString();
             double latitude = eventLatLng.latitude;
