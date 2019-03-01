@@ -1,12 +1,14 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -136,19 +138,35 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         });
         btnAdd.setOnClickListener(v -> {
             //TODO: Comprobar que se han insertado todos los datos
-            String title = txtTitle.getText().toString();
-            String description = txtDescription.getText().toString();
-            double latitude = eventLatLng.latitude;
-            double longitude = eventLatLng.longitude;
-            eventManagerService.createEvent(
-                    new Event("", title, description, latitude, longitude, 0, false, "", selectedState),
-                    imagePath,
-                    event -> {
-                        Intent intent = new Intent(AddEventActivity.this, EventDetailsActivity.class);
-                        intent.putExtra("Evento", event.getId());
-                        startActivity(intent);
-                    });
+
+            if (txtTitle.getText().toString().equals("") || eventLatLng==null || selectedState==-1 || btnSelectDate.getText().toString().equals("Select date")){
+                new AlertDialog.Builder(this)
+                        .setTitle("Faltan datos")
+                        .setMessage("Por favor rellena todos los datos")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                dialog.cancel();
+                            }
+                        }).show();
+            }  else {
+
+
+                String title = txtTitle.getText().toString();
+                String description = txtDescription.getText().toString();
+                double latitude = eventLatLng.latitude;
+                double longitude = eventLatLng.longitude;
+                eventManagerService.createEvent(
+                        new Event("", title, description, latitude, longitude, 0, false, "", selectedState),
+                        imagePath,
+                        event -> {
+                            Intent intent = new Intent(AddEventActivity.this, EventDetailsActivity.class);
+                            intent.putExtra("Evento", event.getId());
+                            startActivity(intent);
+                        });
+            }
         });
+
     }
 
 
