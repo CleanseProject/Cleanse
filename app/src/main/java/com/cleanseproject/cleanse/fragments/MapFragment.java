@@ -95,6 +95,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             } else {
                 selectedMarker = mMap.addMarker(new MarkerOptions()
                         .position(latLng)
+                        .icon(bitmapDescriptorFromVector(getContext(), R.drawable.marcadorlimpio_vector))
                         .title(getString(R.string.add_event))
                         .snippet("Haz click para agregar este punto"));
                 selectedMarker.showInfoWindow();
