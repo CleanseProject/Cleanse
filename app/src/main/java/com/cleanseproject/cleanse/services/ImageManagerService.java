@@ -17,6 +17,10 @@ public class ImageManagerService {
         firebaseStorage.getReference("images/events/" + eventId).putFile(filePath);
     }
 
+    public void uploadUserImage(String eventId, Uri filePath) {
+        firebaseStorage.getReference("images/users/" + eventId).putFile(filePath);
+    }
+
     public void eventImageDownloadUrl(String eventId, ImageUrlLoadCallback callback) {
         firebaseStorage.getReference("images/events/" + eventId).getDownloadUrl()
                 .addOnSuccessListener(uri -> callback.onUrlLoaded(uri.toString()))
