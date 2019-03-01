@@ -2,9 +2,11 @@ package com.cleanseproject.cleanse.services;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.cleanseproject.cleanse.callbacks.EventLoadCallback;
+import com.cleanseproject.cleanse.callbacks.KeysLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
@@ -12,11 +14,14 @@ import com.firebase.geofire.GeoQuery;
 import com.firebase.geofire.GeoQueryEventListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 public class EventManagerService {
 
@@ -61,7 +66,6 @@ public class EventManagerService {
                 Event event = dataSnapshot.getValue(Event.class);
                 if (event != null) {
                     event.setId(dataSnapshot.getKey());
-                    event.setFavourite(dataSnapshot.child("members").child(firebaseUser.getUid()).exists());
                     callback.onEventLoaded(event);
                 } else {
                     Log.d("Firebase", "Null Event returned");
@@ -111,12 +115,48 @@ public class EventManagerService {
     }
 
     public void getFavouriteEvents(EventLoadCallback callback) {
-        firebaseDatabase.getReference("userEvents").child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference userEventsRef = firebaseDatabase.getReference("userEvents").child(firebaseUser.getUid());
+        userEventsRef.keepSynced(true);
+        userEventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for (DataSnapshot event : dataSnapshot.getChildren()) {
                     getEvent(event.getKey(), callback);
                 }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void getFavouriteKeys(KeysLoadCallback callback) {
+        ArrayList<String> keys = new ArrayList<>();
+        DatabaseReference userEventsRef = firebaseDatabase.getReference("userEvents").child(firebaseUser.getUid());
+        userEventsRef.keepSynced(true);
+        userEventsRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                keys.add(dataSnapshot.getValue().toString());
+                if (keys.size()>=dataSnapshot.getChildrenCount())
+                    callback.onKeysLoad(keys);
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
             }
 
             @Override

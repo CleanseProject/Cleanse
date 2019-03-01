@@ -43,5 +43,8 @@
     <string name="slider_descripcion_2">Cleanse necesita acceder a tu localización para mostrarte los eventos mas cercanos a ti.</string>
     <string name="slider_titulo12">¿Cómo funciona?</string>
     <string name="slider_descripcion12">En nuestra aplicación podrás unirte a eventos de recogida creados por otros usuarios, así como crearlos tú mismo. Entre todos podemos salvar el planeta, ¡y hacer amigos por el camino!</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_photo">Change photo</string>
+    <string name="save_changes">Save changes</string>
 
 </resources>

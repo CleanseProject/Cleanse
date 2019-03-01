@@ -10,6 +10,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,6 @@ public class HomeFragment extends Fragment {
 
     private EventManagerService eventManagerService;
     private LocationService locationService;
-
     private SwipeRefreshLayout swipeRefresh;
     private EventListAdapter adaptador;
     private RecyclerView rvEventos;
@@ -104,7 +104,6 @@ public class HomeFragment extends Fragment {
 
     private void updateRecycleView() {
         // TODO: Conexion con Firebase para updatear la lista de eventos
-
         cargarDatos();
         swipeRefresh.setRefreshing(false);
     }
@@ -120,13 +119,17 @@ public class HomeFragment extends Fragment {
         adaptador.notifyDataSetChanged();
         if (progressBar.getVisibility() == View.VISIBLE)
             progressBar.setVisibility(View.GONE);
-        eventManagerService.getFavouriteEvents(this::setFavourites);
+        eventManagerService.getFavouriteKeys(this::setFavourites);
     }
 
-    private void setFavourites(Event event) {
-        for (Event arrayEvent : events) {
-            if (event.getId().equals(arrayEvent.getId()))
-                arrayEvent.setFavourite(true);
+    private void setFavourites(ArrayList<String> keys) {
+        for (String key : keys) {
+            for (Event arrayEvent : events) {
+                if (key.equals(arrayEvent.getId())) {
+                    arrayEvent.setFavourite(true);
+                    Log.d("favourite", arrayEvent.getName());
+                }
+            }
         }
         adaptador.notifyDataSetChanged();
     }
