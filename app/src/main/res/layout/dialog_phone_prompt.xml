@@ -19,9 +19,7 @@
             android:contentDescription="@string/phone_login"
             android:paddingBottom="20dp"
             android:tint="@color/quantum_white_text"
-            app:srcCompat="@drawable/telephone"
-
-            />
+            app:srcCompat="@drawable/telephone" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -59,18 +57,18 @@
         </LinearLayout>
 
         <Button
-            android:gravity="center"
-            android:layout_gravity="center"
             android:id="@+id/btn_login_phone"
             style="@style/ButtonSinImagen"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginTop="25dp"
+            android:background="@drawable/boton"
 
             android:enabled="true"
-            android:textColor="#FFFFFF"
+            android:gravity="center"
             android:text="@string/log_in"
-            android:background="@drawable/boton"
+            android:textColor="#FFFFFF"
             android:visibility="visible" />
 
     </LinearLayout>
