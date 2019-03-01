@@ -59,7 +59,6 @@ public class EventDetailsActivity extends AppCompatActivity {
     private FloatingActionButton fab_check;
     private Button btnDelete;
     private boolean fabAbierto;
-    private boolean suscrito;
 
     @Override
     public void onStart() {
@@ -79,10 +78,9 @@ public class EventDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         fabAbierto = false;
-        suscrito = false;
         imagenEvento = findViewById(R.id.imagenEventoSeleccionado);
         txtDescripcion = findViewById(R.id.txtDescripcion);
-        // txtDistancia = findViewById(R.id.txtDistancia);
+        txtDistancia = findViewById(R.id.txtDistancia);
         rvUsuarios = findViewById(R.id.rvUsuarios);
         fab_menu = findViewById(R.id.fabMenu);
         fab_chat = findViewById(R.id.fabchat);
@@ -97,39 +95,26 @@ public class EventDetailsActivity extends AppCompatActivity {
                 fab_check.animate().translationY(0);
                 fabAbierto = false;
 
-            } else if (!fabAbierto) {
+            } else {
                 fab_chat.animate().translationX(-180);
                 fab_equis.animate().translationY(170);
                 fab_check.animate().translationY(170);
                 fabAbierto = true;
             }
         });
-        if (suscrito == true) {
-            fab_check.setAlpha(0f);
-            fab_equis.setAlpha(1.0f);
-            fab_equis.setEnabled(true);
-            fab_check.setEnabled(false);
-        } else if (suscrito == false) {
-            fab_check.setAlpha(1.0f);
-            fab_equis.setAlpha(0f);
-            fab_equis.setEnabled(false);
-            fab_check.setEnabled(true);
-        }
-
         fab_check.setOnClickListener(v -> {
             fab_check.animate().alpha(0f);
             fab_equis.animate().alpha(1.0f);
             fab_equis.setEnabled(true);
             fab_check.setEnabled(false);
-            suscrito = false;
+            eventManagerService.deleteFavouriteEvent(event.getId());
         });
-
         fab_equis.setOnClickListener(v -> {
             fab_check.animate().alpha(1.0f);
             fab_equis.animate().alpha(0f);
             fab_equis.setEnabled(false);
             fab_check.setEnabled(true);
-            suscrito = true;
+            eventManagerService.setEventAsFavourite(event.getId());
         });
         eventManagerService = new EventManagerService();
         chatManagerService = new ChatManagerService();
@@ -163,6 +148,20 @@ public class EventDetailsActivity extends AppCompatActivity {
                             btnDelete.setOnClickListener(v -> {
                                 eventManagerService.deleteEvent(event.getId());
                                 goBack();
+                            });
+                        } else {
+                            eventManagerService.isEventFavourite(event.getId(), isFavourite -> {
+                                if (isFavourite) {
+                                    fab_check.setAlpha(0f);
+                                    fab_equis.setAlpha(1.0f);
+                                    fab_equis.setEnabled(true);
+                                    fab_check.setEnabled(false);
+                                } else {
+                                    fab_check.setAlpha(1.0f);
+                                    fab_equis.setAlpha(0f);
+                                    fab_equis.setEnabled(false);
+                                    fab_check.setEnabled(true);
+                                }
                             });
                         }
                     });

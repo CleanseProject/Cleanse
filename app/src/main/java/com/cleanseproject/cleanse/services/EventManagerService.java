@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.cleanseproject.cleanse.callbacks.EventLoadCallback;
 import com.cleanseproject.cleanse.callbacks.IsAdminCallback;
+import com.cleanseproject.cleanse.callbacks.IsFavouriteCallback;
 import com.cleanseproject.cleanse.callbacks.KeysLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.firebase.geofire.GeoFire;
@@ -205,6 +206,22 @@ public class EventManagerService {
 
             }
         });
+    }
+
+    public void isEventFavourite(String eventId, IsFavouriteCallback callback) {
+        String userId = firebaseUser.getUid();
+        firebaseDatabase.getReference("userEvents").child(userId)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        callback.onLoad(dataSnapshot.child(eventId).exists());
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     public void setEventAsFavourite(String eventId) {
