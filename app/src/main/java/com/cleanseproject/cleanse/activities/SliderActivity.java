@@ -25,6 +25,13 @@ public class SliderActivity extends AppIntro {
         showSkipButton(false);
         addSlide(AppIntroFragment.newInstance(sliderPage));
 
+        SliderPage sliderPage1 = new SliderPage();
+        sliderPage1.setTitle(getString(R.string.slider_titulo12));
+        sliderPage1.setImageDrawable(R.drawable.help);
+        sliderPage1.setDescription(getString(R.string.slider_descripcion12));
+        sliderPage1.setBgColor(ContextCompat.getColor(getApplicationContext(), R.color.skyblue_slider_color));
+        addSlide(AppIntroFragment.newInstance(sliderPage1));
+
         SliderPage sliderPage2 = new SliderPage();
         sliderPage2.setTitle(getString(R.string.slider_titulo_2));
         sliderPage2.setImageDrawable(R.drawable.world);
@@ -32,12 +39,20 @@ public class SliderActivity extends AppIntro {
         sliderPage2.setBgColor(ContextCompat.getColor(getApplicationContext(), R.color.verdehojainterno));
         addSlide(AppIntroFragment.newInstance(sliderPage2));
 
+        showSkipButton(true);
 
     }
 
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
+        Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onSkipPressed(Fragment currentFragment) {
+        super.onSkipPressed(currentFragment);
         Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
         startActivity(intent);
     }
