@@ -19,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 public class UserProfileActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private ImageView imagenPerfil;
-    private TextView txtNombre, txtCorreo,txtTelefono;
+    private TextView txtNombre;
     private FirebaseAuth mAuth;
 
     @Override
@@ -27,8 +27,7 @@ public class UserProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.vista_perfil_usuario);
         txtNombre = findViewById(R.id.txtNombreUsuario);
-        txtCorreo = findViewById(R.id.txtCorreoUsuario);
-        txtTelefono = findViewById(R.id.txtTelefonoUsuario);
+
         mAuth=FirebaseAuth.getInstance();
         firebaseDatabase=FirebaseDatabase.getInstance();
         getDatosUsuario(mAuth.getCurrentUser().getUid(),

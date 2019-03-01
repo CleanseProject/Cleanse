@@ -19,6 +19,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
@@ -46,6 +47,7 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private FirebaseAuth mAuth;
     private Context context;
+    private Button btnEditarPerfil;
 
     @Override
     public void onStart() {
@@ -61,6 +63,7 @@ public class HomeActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_home);
+
         context = this;
         firebaseDatabase = FirebaseDatabase.getInstance();
         notificationManager = new NotificationManager(findViewById(R.id.homeCoordinatorLayout));
@@ -113,11 +116,13 @@ public class HomeActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         drawerLayout = findViewById(R.id.drawer_layout);
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerLayout = navigationView.getHeaderView(0);
+        btnEditarPerfil = headerLayout.findViewById(R.id.btn_EditarPerfil);
         imagenUsuario = headerLayout.findViewById(R.id.nav_header_imagen);
         nombreUsuario = headerLayout.findViewById(R.id.nav_header_usuario);
-        imagenUsuario.setOnClickListener(v -> {
+        btnEditarPerfil.setOnClickListener(v -> {
             Intent intent = new Intent(context, UserProfileActivity.class);
             intent.putExtra("userId", mAuth.getCurrentUser().getUid());
             startActivity(intent);
