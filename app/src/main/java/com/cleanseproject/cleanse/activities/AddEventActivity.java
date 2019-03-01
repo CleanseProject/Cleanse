@@ -32,6 +32,7 @@ import com.yalantis.ucrop.UCrop;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 public class AddEventActivity extends AppCompatActivity implements BSImagePicker.OnSingleImageSelectedListener {
@@ -57,6 +58,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     private LatLng eventLatLng;
     private Toolbar toolbar;
     private FrameLayout addEvent;
+    private long timeStamp;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -132,9 +134,11 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             int month = cal.get(Calendar.MONTH);
             int day = cal.get(Calendar.DAY_OF_MONTH);
             mDateSetListener = new DatePickerDialog(AddEventActivity.this,
-                    (view, year1, month1, dayOfMonth) ->
-                            btnSelectDate.setText(dayOfMonth + "/" + (month1 + 1) + "/" + year1),
-                    2019, month, day);
+                    (view, year1, month1, dayOfMonth) -> {
+                        btnSelectDate.setText(dayOfMonth + "/" + (month1 + 1) + "/" + year1);
+                        timeStamp = new GregorianCalendar(year1, month1, dayOfMonth).getTimeInMillis();
+                    },
+                    year, month, day);
             mDateSetListener.show();
 
         });
@@ -161,7 +165,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             double latitude = eventLatLng.latitude;
             double longitude = eventLatLng.longitude;
             eventManagerService.createEvent(
-                    new Event("", title, description, latitude, longitude, 0, false, "", selectedState),
+                    new Event("", title, description, latitude, longitude, 0, false, timeStamp, "", selectedState),
                     imagePath,
                     event -> {
                         Intent intent = new Intent(AddEventActivity.this, EventDetailsActivity.class);
