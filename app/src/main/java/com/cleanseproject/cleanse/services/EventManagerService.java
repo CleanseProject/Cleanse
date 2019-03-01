@@ -58,6 +58,34 @@ public class EventManagerService {
         callback.onEventLoaded(event);
     }
 
+    public void deleteEvent(String key) {
+        chatManagerService.removeChat(key, () -> {
+            DatabaseReference eventRef = firebaseDatabase.getReference("events").child(key);
+            eventRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.child("members").hasChildren()) {
+                        for (DataSnapshot userSnapshot : dataSnapshot.child("members").getChildren()) {
+                            firebaseDatabase.getReference("userEvents")
+                                    .child(userSnapshot.getValue().toString())
+                                    .child(key)
+                                    .removeValue();
+                        }
+                    }
+                    firebaseDatabase.getReference("events")
+                            .child(key)
+                            .removeValue();
+                    imageManagerService.removeEventImage(key);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                }
+            });
+        });
+    }
+
     public void getEvent(String key, EventLoadCallback callback) {
         DatabaseReference eventsRef = firebaseDatabase.getReference("events").child(key);
         eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -140,7 +168,7 @@ public class EventManagerService {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
                 keys.add(dataSnapshot.getValue().toString());
-                if (keys.size()>=dataSnapshot.getChildrenCount())
+                if (keys.size() >= dataSnapshot.getChildrenCount())
                     callback.onKeysLoad(keys);
             }
 
