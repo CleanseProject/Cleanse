@@ -208,6 +208,13 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
+                <Button
+                    android:id="@+id/btn_delete"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Button"
+                    android:visibility="gone"/>
+
                 <TextView
                     android:id="@+id/txtDescripcion"
                     android:layout_width="match_parent"
