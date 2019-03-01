@@ -126,6 +126,7 @@
         android:gravity="center">
 
         <Button
+            android:id="@+id/btnSaveChanges"
             style="@style/boton"
             android:layout_width="222dp"
             android:layout_height="wrap_content"
