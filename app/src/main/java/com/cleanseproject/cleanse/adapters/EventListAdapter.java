@@ -77,6 +77,8 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
             txtDistancia.setText(distancia);
             if (event.isFavourite())
                 btnLike.setImageResource(R.drawable.corazon_pressed);
+            else
+                btnLike.setImageResource(R.drawable.corazon_transparente);
             imageManagerService.eventImageDownloadUrl(
                     event.getId(),
                     imageUrl -> {

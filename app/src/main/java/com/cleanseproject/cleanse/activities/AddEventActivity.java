@@ -10,6 +10,9 @@ import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+
 
 import com.asksira.bsimagepicker.BSImagePicker;
 import com.cleanseproject.cleanse.R;
@@ -37,7 +41,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     private LocationService locationService;
     private EventManagerService eventManagerService;
     private NotificationManager notificationManager;
-
     private DatePickerDialog mDateSetListener;
     private Button btnSelectDate;
     private Button btnSelectLocation;
@@ -47,22 +50,37 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     private Spinner spn_estado;
     private ImageView imgEstado;
     private EditText txtTitle, txtDescription;
-
     private RadioButton rdbtn_limpio;
     private RadioButton rdbtn_sucio;
     private RadioButton rdbtn_critico;
-
     private int selectedState = -1;
     private Uri imagePath;
-
     private boolean frameAbierto;
     private LatLng eventLatLng;
+    private Toolbar toolbar;
+    private FrameLayout addEvent;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar_addevent_con_exit, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.imgExitt:
+                cerrar_ventanas();
+                break;
+
+        }
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
-        imgExit = findViewById(R.id.imgExit);
         btnSelectLocation = findViewById(R.id.btn_set_location);
         btnSelectDate = findViewById(R.id.btn_set_date);
         btnAdd = findViewById(R.id.btn_event_add);
@@ -70,6 +88,12 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         rdbtn_limpio = findViewById(R.id.radiobtn_limpio);
         rdbtn_sucio = findViewById(R.id.radiobtn_sucio);
         rdbtn_critico = findViewById(R.id.radiobtn_critico);
+        toolbar = findViewById(R.id.toolbar_addevent);
+        toolbar.setTitle("Add new event");
+
+        setSupportActionBar(toolbar);
+
+
         eventManagerService = new EventManagerService();
         locationService = new LocationService(this);
         ////////////////// Intent
@@ -101,7 +125,9 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             rdbtn_critico.setChecked(isChecked);
             selectedState = 2;
         });
-        FrameLayout addEvent = findViewById(R.id.FrameLayout_add_event);
+
+
+        addEvent = findViewById(R.id.FrameLayout_add_event);
         btnSelectDate.setOnClickListener(v -> {
             Calendar cal = Calendar.getInstance();
             int year = cal.get(Calendar.YEAR);
@@ -114,14 +140,8 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             mDateSetListener.show();
 
         });
-        imgExit.setOnClickListener(v -> {
-            if (frameAbierto) {
-                addEvent.setVisibility(View.GONE);
-                frameAbierto = false;
-            } else {
-                finish();
-            }
-        });
+
+
         btnSelectLocation.setOnClickListener(v -> {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.FrameLayout_add_event, new MapFragment());
@@ -169,6 +189,15 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
 
     }
 
+    public void cerrar_ventanas() {
+        if (frameAbierto) {
+            addEvent.setVisibility(View.GONE);
+            frameAbierto = false;
+        } else {
+            finish();
+        }
+
+    }
 
     public void setFrameAbierto(boolean frameAbierto) {
         this.frameAbierto = frameAbierto;

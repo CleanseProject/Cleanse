@@ -29,7 +29,7 @@ public class SplashScreen extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_screen);
         try {
-            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+            FirebaseDatabase.getInstance().setPersistenceEnabled(false);
         } catch (Exception e) {
             e.printStackTrace();
         }
