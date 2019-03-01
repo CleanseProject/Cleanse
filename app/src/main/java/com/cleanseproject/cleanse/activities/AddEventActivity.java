@@ -1,12 +1,14 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -32,6 +34,7 @@ import com.yalantis.ucrop.UCrop;
 
 import java.io.IOException;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.UUID;
 
 public class AddEventActivity extends AppCompatActivity implements BSImagePicker.OnSingleImageSelectedListener {
@@ -57,6 +60,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     private LatLng eventLatLng;
     private Toolbar toolbar;
     private FrameLayout addEvent;
+    private long timeStamp;
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -127,9 +131,11 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             int month = cal.get(Calendar.MONTH);
             int day = cal.get(Calendar.DAY_OF_MONTH);
             mDateSetListener = new DatePickerDialog(AddEventActivity.this,
-                    (view, year1, month1, dayOfMonth) ->
-                            btnSelectDate.setText(dayOfMonth + "/" + (month1 + 1) + "/" + year1),
-                    2019, month, day);
+                    (view, year1, month1, dayOfMonth) -> {
+                        btnSelectDate.setText(dayOfMonth + "/" + (month1 + 1) + "/" + year1);
+                        timeStamp = new GregorianCalendar(year1, month1, dayOfMonth).getTimeInMillis();
+                    },
+                    year, month, day);
             mDateSetListener.show();
 
         });
@@ -150,18 +156,30 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             singleSelectionPicker.show(getSupportFragmentManager(), "picker");
         });
         btnAdd.setOnClickListener(v -> {
-            String title = txtTitle.getText().toString();
-            String description = txtDescription.getText().toString();
-            double latitude = eventLatLng.latitude;
-            double longitude = eventLatLng.longitude;
-            eventManagerService.createEvent(
-                    new Event("", title, description, latitude, longitude, 0, false, "", selectedState),
-                    imagePath,
-                    event -> {
-                        Intent intent = new Intent(AddEventActivity.this, EventDetailsActivity.class);
-                        intent.putExtra("Evento", event.getId());
-                        startActivity(intent);
-                    });
+            if (txtTitle.getText().toString().equals("") || eventLatLng==null || selectedState==-1 || btnSelectDate.getText().toString().equals("Select date")){
+                new AlertDialog.Builder(this)
+                        .setTitle("Faltan datos")
+                        .setMessage("Por favor rellena todos los datos")
+                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                                dialog.cancel();
+                            }
+                        }).show();
+            }  else {
+                String title = txtTitle.getText().toString();
+                String description = txtDescription.getText().toString();
+                double latitude = eventLatLng.latitude;
+                double longitude = eventLatLng.longitude;
+                eventManagerService.createEvent(
+                        new Event("", title, description, latitude, longitude, 0, false, timeStamp, "", selectedState),
+                        imagePath,
+                        event -> {
+                            Intent intent = new Intent(AddEventActivity.this, EventDetailsActivity.class);
+                            intent.putExtra("Evento", event.getId());
+                            startActivity(intent);
+                        });
+            }
         });
     }
 
