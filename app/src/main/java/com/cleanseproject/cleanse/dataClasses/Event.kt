@@ -16,6 +16,8 @@ data class Event(
         var distance: Float = 0f,
         @Exclude
         var isFavourite: Boolean = false,
+        @Exclude
+        var eventDate: Long = 0,
         var creatorId: String? = "",
         var state: Int? = 0
 ) : Comparable<Event> {
