@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.User;
@@ -14,6 +15,7 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import java.util.ArrayList;
 
 public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapter.Holder> {
+
     private ArrayList<User> listaUsuarios;
     private Context context;
 
@@ -25,16 +27,13 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
     @Override
     public UsersInEventAdapter.Holder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_user_photo, null, false);
-
-
         return new UsersInEventAdapter.Holder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Holder holder, int i) {
-        holder.setPhotos();
+    public void onBindViewHolder(@NonNull Holder holder, int position) {
+        holder.bind(listaUsuarios.get(position));
     }
-
 
     @Override
     public int getItemCount() {
@@ -45,19 +44,20 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
     public static class Holder extends RecyclerView.ViewHolder {
 
         private CircularImageView ivUser;
+        private TextView lblUsername;
 
         private Context context;
 
-        public Holder(View v) {
-            super(v);
-            ivUser = v.findViewById(R.id.ivUser);
-            context = v.getContext();
+        public Holder(View view) {
+            super(view);
+            ivUser = view.findViewById(R.id.ivUser);
+            lblUsername = view.findViewById(R.id.event_user_name);
+            context = view.getContext();
         }
 
-
-        public void setPhotos() {
+        public void bind(User user) {
             // TODO: Cambiar por la foto de User en Firebase
-            ivUser.setImageResource(R.drawable.imagen);
+            lblUsername.setText(user.getName());
         }
     }
 }

@@ -142,6 +142,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                             });
                         }
                     });
+                    eventManagerService.getEventUsers(event.getId(), this::addMemberUser);
                 });
         imageManagerService.eventImageDownloadUrl(
                 idEvento,
