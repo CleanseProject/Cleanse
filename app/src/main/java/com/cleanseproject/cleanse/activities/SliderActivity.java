@@ -2,7 +2,6 @@ package com.cleanseproject.cleanse.activities;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -14,12 +13,12 @@ import com.github.paolorotolo.appintro.model.SliderPage;
 
 
 public class SliderActivity extends AppIntro {
-    private final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 901;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        askForPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 3);
         SliderPage sliderPage = new SliderPage();
         sliderPage.setTitle(getString(R.string.whats_cleanse));
         sliderPage.setImageDrawable(R.drawable.logo_vector);
@@ -41,12 +40,6 @@ public class SliderActivity extends AppIntro {
         sliderPage2.setDescription(getString(R.string.slider_descripcion_2));
         sliderPage2.setBgColor(ContextCompat.getColor(getApplicationContext(), R.color.verdehojainterno));
         addSlide(AppIntroFragment.newInstance(sliderPage2));
-
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED){
-        askForPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 3);
-    }
         showSkipButton(false);
 
     }
@@ -54,14 +47,14 @@ public class SliderActivity extends AppIntro {
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
-        Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
     }
 
     @Override
     public void onSkipPressed(Fragment currentFragment) {
         super.onSkipPressed(currentFragment);
-        Intent intent = new Intent(getApplicationContext(),LoginActivity.class);
+        Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
         startActivity(intent);
     }
 }
