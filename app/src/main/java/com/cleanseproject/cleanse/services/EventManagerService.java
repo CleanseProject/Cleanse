@@ -9,6 +9,7 @@ import com.cleanseproject.cleanse.callbacks.EventLoadCallback;
 import com.cleanseproject.cleanse.callbacks.IsAdminCallback;
 import com.cleanseproject.cleanse.callbacks.IsFavouriteCallback;
 import com.cleanseproject.cleanse.callbacks.KeysLoadCallback;
+import com.cleanseproject.cleanse.callbacks.UserLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
@@ -29,6 +30,7 @@ public class EventManagerService {
 
     private ChatManagerService chatManagerService;
     private ImageManagerService imageManagerService;
+    private UserManagerService userManagerService;
     private FirebaseUser firebaseUser;
     private FirebaseDatabase firebaseDatabase;
     private GeoFire geoFire;
@@ -37,6 +39,7 @@ public class EventManagerService {
         chatManagerService = new ChatManagerService();
         imageManagerService = new ImageManagerService();
         firebaseDatabase = FirebaseDatabase.getInstance();
+        userManagerService = new UserManagerService();
         firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference geoFireRef = firebaseDatabase.getReference("geofire");
         geoFire = new GeoFire(geoFireRef);
@@ -207,6 +210,36 @@ public class EventManagerService {
 
             }
         });
+    }
+
+    public void getEventUsers(String eventId, UserLoadCallback callback) {
+        firebaseDatabase.getReference("events").child(eventId).child("members")
+                .addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                        userManagerService.getUser(dataSnapshot.getValue().toString(), callback);
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     public void isEventFavourite(String eventId, IsFavouriteCallback callback) {

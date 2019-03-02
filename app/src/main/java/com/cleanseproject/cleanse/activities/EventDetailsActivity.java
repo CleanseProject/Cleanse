@@ -48,6 +48,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private NotificationManager notificationManager;
     private LocationService locationService;
     private Event event;
+    private ArrayList<User> users;
 
     private ImageView imagenEvento;
     private TextView txtDescripcion, txtDistancia, txtAutor;
@@ -152,13 +153,6 @@ public class EventDetailsActivity extends AppCompatActivity {
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvUsuarios.setLayoutManager(layoutManager);
-        User u1 = new User();
-        User u2 = new User();
-        ArrayList<User> lista = new ArrayList<>();
-        lista.add(u1);
-        lista.add(u2);
-        adapter = new UsersInEventAdapter(lista);
-        rvUsuarios.setAdapter(adapter);
         fab_menu.setOnClickListener(v -> {
             if (fabAbierto) {
                 fab_chat.animate().translationX(0);
@@ -187,6 +181,14 @@ public class EventDetailsActivity extends AppCompatActivity {
             fab_check.setEnabled(true);
             eventManagerService.deleteFavouriteEvent(event.getId());
         });
+        users = new ArrayList<>();
+        adapter = new UsersInEventAdapter(users);
+        rvUsuarios.setAdapter(adapter);
+    }
+
+    public void addMemberUser(User user) {
+        users.add(user);
+        adapter.notifyDataSetChanged();
     }
 
     private BroadcastReceiver onEvent = new BroadcastReceiver() {
