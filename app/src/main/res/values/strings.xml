@@ -47,5 +47,10 @@
     <string name="change_photo" translatable="false">Change photo</string>
     <string name="save_changes" translatable="false">Save changes</string>
     <string name="creator">Creador:</string>
+    <string name="TituloAlertDialog">Faltan datos</string>
+    <string name="MensajeAlertDialog">Por favor rellena todos los datos</string>
+    <string name="ButtonAlertDialog">OK</string>
+
+
 
 </resources>
