@@ -96,7 +96,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         locationService = new LocationService(this);
         txtTitle = findViewById(R.id.txt_add_event_title);
         txtDescription = findViewById(R.id.txt_add_description);
-        eventManagerService = new EventManagerService();
         Intent i = getIntent();
         double lat = i.getDoubleExtra("latitude", 0);
         double lon = i.getDoubleExtra("longitude", 0);
