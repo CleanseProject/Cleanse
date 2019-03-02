@@ -10,7 +10,6 @@ import com.cleanseproject.cleanse.callbacks.IsAdminCallback;
 import com.cleanseproject.cleanse.callbacks.IsFavouriteCallback;
 import com.cleanseproject.cleanse.callbacks.KeysLoadCallback;
 import com.cleanseproject.cleanse.callbacks.UserChangedCallback;
-import com.cleanseproject.cleanse.callbacks.UserLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
