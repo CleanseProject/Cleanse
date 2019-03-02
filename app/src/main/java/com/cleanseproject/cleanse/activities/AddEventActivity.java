@@ -155,9 +155,9 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         btnAdd.setOnClickListener(v -> {
             if (txtTitle.getText().toString().equals("") || eventLatLng == null || selectedState == -1 || btnSelectDate.getText().toString().equals("Select date")) {
                 new AlertDialog.Builder(this)
-                        .setTitle(R.string.TituloAlertDialog)
-                        .setMessage(R.string.MensajeAlertDialog)
-                        .setPositiveButton(R.string.ButtonAlertDialog, new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.missing_data)
+                        .setMessage(R.string.fill_all_data)
+                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
                                 dialog.cancel();

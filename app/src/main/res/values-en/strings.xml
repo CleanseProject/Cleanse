@@ -31,4 +31,12 @@
     <string name="creator">Creador:</string>
     <string name="members">Members:</string>
     <string name="selected_event_image">Selected event image</string>
+    <string name="missing_data">Missing data</string>
+    <string name="fill_all_data">Please fill all data</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="change_photo">Change photo</string>
+    <string name="save_changes">Save changes</string>
+    <string name="whats_cleanse">What\'s Cleanse?</string>
+    <string name="knock_knock">Knock Knock</string>
+    <string name="how_does_it_work">How does it work?</string>
 </resources>

@@ -21,7 +21,7 @@ public class SliderActivity extends AppIntro {
         super.onCreate(savedInstanceState);
 
         SliderPage sliderPage = new SliderPage();
-        sliderPage.setTitle(getString(R.string.slider_titulo_1));
+        sliderPage.setTitle(getString(R.string.whats_cleanse));
         sliderPage.setImageDrawable(R.drawable.logo_vector);
         sliderPage.setDescription(getString(R.string.slider_descripcion_1));
         sliderPage.setBgColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
@@ -29,14 +29,14 @@ public class SliderActivity extends AppIntro {
         addSlide(AppIntroFragment.newInstance(sliderPage));
 
         SliderPage sliderPage1 = new SliderPage();
-        sliderPage1.setTitle(getString(R.string.slider_titulo12));
+        sliderPage1.setTitle(getString(R.string.how_does_it_work));
         sliderPage1.setImageDrawable(R.drawable.help);
         sliderPage1.setDescription(getString(R.string.slider_descripcion12));
         sliderPage1.setBgColor(ContextCompat.getColor(getApplicationContext(), R.color.verdehojaexterno));
         addSlide(AppIntroFragment.newInstance(sliderPage1));
 
         SliderPage sliderPage2 = new SliderPage();
-        sliderPage2.setTitle(getString(R.string.slider_titulo_2));
+        sliderPage2.setTitle(getString(R.string.knock_knock));
         sliderPage2.setImageDrawable(R.drawable.world);
         sliderPage2.setDescription(getString(R.string.slider_descripcion_2));
         sliderPage2.setBgColor(ContextCompat.getColor(getApplicationContext(), R.color.verdehojainterno));
