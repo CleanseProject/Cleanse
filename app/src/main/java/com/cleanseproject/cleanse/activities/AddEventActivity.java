@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
-
 import com.asksira.bsimagepicker.BSImagePicker;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Event;
