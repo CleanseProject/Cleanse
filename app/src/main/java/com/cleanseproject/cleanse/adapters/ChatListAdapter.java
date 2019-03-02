@@ -59,6 +59,7 @@ public class ChatListAdapter extends BaseAdapter {
                     imageUrl -> {
                         Glide.with(view)
                                 .load(imageUrl)
+                                .placeholder(R.drawable.ic_user)
                                 .apply(RequestOptions.circleCropTransform())
                                 .into(chatImage);
                     });
