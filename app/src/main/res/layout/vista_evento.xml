@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingRight="10dp">
+                android:paddingEnd="10dp">
 
                 <HorizontalScrollView
                     android:layout_width="match_parent"
@@ -43,12 +43,10 @@
                         android:id="@+id/tvTitulo"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
+                        android:layout_marginStart="15dp"
                         android:layout_marginTop="10dp"
                         android:layout_weight="1"
-                        android:inputType="textLongMessage"
                         android:paddingEnd="16dp"
-                        android:text="Prueba"
                         android:textAppearance="?android:attr/textAppearanceLarge"
                         android:textColor="#FFFFFF"
                         android:textSize="18sp" />
