@@ -25,6 +25,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.adapters.UsersInEventAdapter;
+import com.cleanseproject.cleanse.callbacks.UserChangedCallback;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.services.ChatManagerService;
@@ -37,6 +38,7 @@ import com.cleanseproject.cleanse.services.UserManagerService;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class EventDetailsActivity extends AppCompatActivity {
 
@@ -142,7 +144,20 @@ public class EventDetailsActivity extends AppCompatActivity {
                             });
                         }
                     });
-                    eventManagerService.getEventUsers(event.getId(), this::addMemberUser);
+                    eventManagerService.getEventUsers(
+                            event.getId(),
+                            new UserChangedCallback() {
+                                @Override
+                                public void onUserLoad(User user) {
+                                    addMemberUser(user);
+                                }
+
+                                @Override
+                                public void userRemoved(String userId) {
+                                    removeMemberUser(userId);
+                                }
+                            }
+                    );
                 });
         imageManagerService.eventImageDownloadUrl(
                 idEvento,
@@ -189,6 +204,16 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     public void addMemberUser(User user) {
         users.add(user);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void removeMemberUser(String userId) {
+        Iterator<User> i = users.iterator();
+        while (i.hasNext()) {
+            User user = i.next();
+            if (user.getUserId().equals(userId))
+                i.remove();
+        }
         adapter.notifyDataSetChanged();
     }
 

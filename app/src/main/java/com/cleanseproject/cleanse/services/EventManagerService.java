@@ -9,6 +9,7 @@ import com.cleanseproject.cleanse.callbacks.EventLoadCallback;
 import com.cleanseproject.cleanse.callbacks.IsAdminCallback;
 import com.cleanseproject.cleanse.callbacks.IsFavouriteCallback;
 import com.cleanseproject.cleanse.callbacks.KeysLoadCallback;
+import com.cleanseproject.cleanse.callbacks.UserChangedCallback;
 import com.cleanseproject.cleanse.callbacks.UserLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.firebase.geofire.GeoFire;
@@ -212,12 +213,12 @@ public class EventManagerService {
         });
     }
 
-    public void getEventUsers(String eventId, UserLoadCallback callback) {
+    public void getEventUsers(String eventId, UserChangedCallback loadCallback) {
         firebaseDatabase.getReference("events").child(eventId).child("members")
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                        userManagerService.getUser(dataSnapshot.getValue().toString(), callback);
+                        userManagerService.getUser(dataSnapshot.getValue().toString(), loadCallback::onUserLoad);
                     }
 
                     @Override
@@ -227,7 +228,7 @@ public class EventManagerService {
 
                     @Override
                     public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
-
+                        loadCallback.userRemoved(dataSnapshot.getValue().toString());
                     }
 
                     @Override
