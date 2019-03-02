@@ -101,7 +101,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         ////////////////// Intent
         txtTitle = findViewById(R.id.txt_add_event_title);
         txtDescription = findViewById(R.id.txt_add_description);
-        eventManagerService = new EventManagerService();
         Intent i = getIntent();
         double lat = i.getDoubleExtra("latitude", 0);
         double lon = i.getDoubleExtra("longitude", 0);
@@ -164,9 +163,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             //TODO: Comprobar que se han insertado todos los datos
 
 
-
-
-            if (txtTitle.getText().toString().equals("") || eventLatLng==null || selectedState==-1 || btnSelectDate.getText().toString().equals("Select date")){
+            if (txtTitle.getText().toString().equals("") || eventLatLng == null || selectedState == -1 || btnSelectDate.getText().toString().equals("Select date")) {
                 new AlertDialog.Builder(this)
                         .setTitle("Faltan datos")
                         .setMessage("Por favor rellena todos los datos")
@@ -176,7 +173,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
                                 dialog.cancel();
                             }
                         }).show();
-            }  else {
+            } else {
                 String title = txtTitle.getText().toString();
                 String description = txtDescription.getText().toString();
                 double latitude = eventLatLng.latitude;
@@ -190,9 +187,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
                             startActivity(intent);
                         });
             }
-
         });
-
     }
 
     public void cerrar_ventanas() {
