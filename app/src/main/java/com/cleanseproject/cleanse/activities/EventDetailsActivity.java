@@ -27,7 +27,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.adapters.UsersInEventAdapter;
 import com.cleanseproject.cleanse.callbacks.UserChangedCallback;
-import com.cleanseproject.cleanse.callbacks.EventLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.services.ChatManagerService;
@@ -98,7 +97,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         chatManagerService = new ChatManagerService();
         imageManagerService = new ImageManagerService();
         userManagerService = new UserManagerService();
-        notificationManager = new NotificationManager(this, findViewById(R.id.event_details_coordinator_layout));
+        notificationManager = new NotificationManager(this);
         locationService = new LocationService(this);
         firebaseAuth = FirebaseAuth.getInstance();
         fab_chat.setOnClickListener(v -> startChat());
