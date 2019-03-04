@@ -54,6 +54,7 @@ public class ChatListAdapter extends BaseAdapter {
         TextView lblLastMessage = view.findViewById(R.id.chat_list_last_message);
         ImageView chatImage = view.findViewById(R.id.chat_row_user_img);
         ImageView imgUnread = view.findViewById(R.id.chat_list_unread);
+        TextView txtUnreadNum = view.findViewById(R.id.txt_unread_num);
         if (chat.getGroupChat()) {
             imageManagerService.eventImageDownloadUrl(chat.getChatUid(),
                     imageUrl -> {
@@ -67,7 +68,10 @@ public class ChatListAdapter extends BaseAdapter {
         lblName.setText(chat.getChatName());
         lblLastMessage.setText(chat.getLastMessageSent());
         chatManagerService.hasUnreadMessages(chat.getChatUid(),
-                unread -> imgUnread.setVisibility(unread ? View.VISIBLE : View.GONE));
+                unread -> {
+                    imgUnread.setVisibility(unread > 0 ? View.VISIBLE : View.GONE);
+                    txtUnreadNum.setText(String.valueOf(unread));
+                });
         return view;
     }
 
