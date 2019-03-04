@@ -3,6 +3,7 @@ package com.cleanseproject.cleanse.adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
+import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -82,8 +83,13 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
             imageManagerService.eventImageDownloadUrl(
                     event.getId(),
                     imageUrl -> {
+                        CircularProgressDrawable progressDrawable = new CircularProgressDrawable(itemView.getContext());
+                        progressDrawable.setStrokeWidth(7);
+                        progressDrawable.setCenterRadius(50);
+                        progressDrawable.start();
                         Glide.with(context)
                                 .load(imageUrl)
+                                .placeholder(progressDrawable)
                                 .into(ivFoto);
                     });
             ivFoto.setOnClickListener(v -> {

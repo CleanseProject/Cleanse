@@ -17,8 +17,12 @@ public class ImageManagerService {
         firebaseStorage.getReference("images/events/" + eventId).putFile(filePath);
     }
 
-    public void uploadUserImage(String userid, Uri filePath) {
-        firebaseStorage.getReference("images/users/" + userid).putFile(filePath);
+    public void removeEventImage(String eventId) {
+        firebaseStorage.getReference("images/events/" + eventId).delete();
+    }
+
+    public void uploadUserImage(String eventId, Uri filePath) {
+        firebaseStorage.getReference("images/users/" + eventId).putFile(filePath);
     }
 
     public void eventImageDownloadUrl(String eventId, ImageUrlLoadCallback callback) {

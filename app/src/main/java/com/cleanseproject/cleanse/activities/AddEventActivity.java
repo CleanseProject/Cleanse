@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
-
 import com.asksira.bsimagepicker.BSImagePicker;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Event;
@@ -91,23 +90,18 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         rdbtn_sucio = findViewById(R.id.radiobtn_sucio);
         rdbtn_critico = findViewById(R.id.radiobtn_critico);
         toolbar = findViewById(R.id.toolbar_addevent);
-        toolbar.setTitle("Add new event");
-
+        toolbar.setTitle(R.string.add_new_event);
         setSupportActionBar(toolbar);
-
-
         eventManagerService = new EventManagerService();
         locationService = new LocationService(this);
-        ////////////////// Intent
         txtTitle = findViewById(R.id.txt_add_event_title);
         txtDescription = findViewById(R.id.txt_add_description);
         Intent i = getIntent();
         double lat = i.getDoubleExtra("latitude", 0);
         double lon = i.getDoubleExtra("longitude", 0);
-        if (lat != 0 && lon != 0) {
-            eventLatLng = new LatLng(lat, lon);
+        eventLatLng = new LatLng(lat, lon);
+        if (lat != 0 && lon != 0)
             btnSelectLocation.setText(locationService.localityName(lat, lon));
-        }
         rdbtn_limpio.setOnCheckedChangeListener((buttonView, isChecked) -> {
             rdbtn_sucio.setChecked(false);
             rdbtn_critico.setChecked(false);
@@ -126,8 +120,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             rdbtn_critico.setChecked(isChecked);
             selectedState = 2;
         });
-
-
         addEvent = findViewById(R.id.FrameLayout_add_event);
         btnSelectDate.setOnClickListener(v -> {
             Calendar cal = Calendar.getInstance();
@@ -160,14 +152,11 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             singleSelectionPicker.show(getSupportFragmentManager(), "picker");
         });
         btnAdd.setOnClickListener(v -> {
-            //TODO: Comprobar que se han insertado todos los datos
-
-
             if (txtTitle.getText().toString().equals("") || eventLatLng == null || selectedState == -1 || btnSelectDate.getText().toString().equals("Select date")) {
                 new AlertDialog.Builder(this)
-                        .setTitle("Faltan datos")
-                        .setMessage("Por favor rellena todos los datos")
-                        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                        .setTitle(R.string.TituloAlertDialog)
+                        .setMessage(R.string.MensajeAlertDialog)
+                        .setPositiveButton(R.string.ButtonAlertDialog, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
 
                                 dialog.cancel();

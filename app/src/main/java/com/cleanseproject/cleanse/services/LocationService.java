@@ -89,7 +89,9 @@ public class LocationService {
         try {
             List<Address> addresses = geocoder.getFromLocation(lat, lng, 1);
             if (addresses != null && addresses.size() > 0) {
-                return addresses.get(0).getLocality();
+                String localityName = addresses.get(0).getLocality();
+                String country = addresses.get(0).getCountryName();
+                return localityName != null ? localityName : country;
             }
         } catch (IOException e) {
             e.printStackTrace();

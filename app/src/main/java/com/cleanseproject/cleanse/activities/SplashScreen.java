@@ -34,7 +34,11 @@ public class SplashScreen extends AppCompatActivity {
             e.printStackTrace();
         }
         firebaseAuth = FirebaseAuth.getInstance();
-        Fabric.with(this, new Crashlytics());
+        final Fabric fabric = new Fabric.Builder(this)
+                .kits(new Crashlytics())
+                .debuggable(true)
+                .build();
+        Fabric.with(fabric);
         TextView txtTituloo = findViewById(R.id.txtTitulo);
         SpannableString ss = new SpannableString("C l e a n S e");
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {

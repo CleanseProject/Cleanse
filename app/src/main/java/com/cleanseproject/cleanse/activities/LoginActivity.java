@@ -48,7 +48,6 @@ public class LoginActivity extends AppCompatActivity {
     private final int RC_GOOGLE_SIGN_IN = 9001;
 
     private String phoneVerificationId;
-    private PhoneAuthProvider.ForceResendingToken phoneToken;
 
     private Button btnGoogle;
     private Button btnPhone;
@@ -129,7 +128,6 @@ public class LoginActivity extends AppCompatActivity {
                     @Override
                     public void onCodeSent(String verificationId, PhoneAuthProvider.ForceResendingToken token) {
                         phoneVerificationId = verificationId;
-                        phoneToken = token;
                         final EditText txtPhone = findViewById(R.id.txt_phone);
                         btn_Login_phone.setOnClickListener(v -> authWithPhone(PhoneAuthProvider.getCredential(phoneVerificationId, txtPhone.getText().toString())));
                     }
