@@ -61,8 +61,11 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
         public void bind(User user) {
             // TODO: Cambiar por la foto de User en Firebase
             lblUsername.setText(user.getName());
-            new ImageManagerService().userImageDownloadUrl(user.getUserId(), url
-                    -> Glide.with(context).load(url).apply(RequestOptions.centerCropTransform().circleCropTransform()).into(ivUser));
+            new ImageManagerService().userImageDownloadUrl(user.getUserId(), url ->
+                    Glide.with(context)
+                            .load(url)
+                            .apply(RequestOptions.centerCropTransform().circleCropTransform())
+                            .into(ivUser));
         }
     }
 }
