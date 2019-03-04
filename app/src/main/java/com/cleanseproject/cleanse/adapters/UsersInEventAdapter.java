@@ -64,7 +64,7 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
             new ImageManagerService().userImageDownloadUrl(user.getUserId(), url ->
                     Glide.with(context)
                             .load(url)
-                            .apply(RequestOptions.centerCropTransform().circleCropTransform())
+                            .apply(RequestOptions.circleCropTransform())
                             .into(ivUser));
         }
     }

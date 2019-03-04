@@ -10,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.Message;
 import com.cleanseproject.cleanse.services.ChatManagerService;
+import com.cleanseproject.cleanse.services.ImageManagerService;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.DateFormat;
@@ -29,10 +32,12 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private List<Message> messages;
     private ChatManagerService chatManagerService;
     private HashMap<String, Integer> userColors;
+    private ImageManagerService imageManagerService;
 
     public MessageListAdapter(List<Message> messages, HashMap<String, Integer> userColors) {
         this.userColors = userColors;
         this.messages = messages;
+        imageManagerService = new ImageManagerService();
         chatManagerService = new ChatManagerService();
     }
 
@@ -124,8 +129,13 @@ public class MessageListAdapter extends RecyclerView.Adapter {
             timeText.setText(formatDate(message.getCreatedAt()));
             chatManagerService.getUserName(message.getUser(), username -> nameText.setText(username));
             setBubbleColor(itemView, messageText, userColors.get(message.getUser()));
-            // Insert the profile image from the URL into the ImageView.
-            //Utils.displayRoundImageFromUrl(context, message.getSender().getProfileUrl(), profileImage);
+            imageManagerService.userImageDownloadUrl(message.getUser(), url ->
+                    Glide.with(itemView)
+                            .load(url)
+                            .placeholder(R.drawable.ic_user)
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(profileImage)
+            );
         }
 
     }
