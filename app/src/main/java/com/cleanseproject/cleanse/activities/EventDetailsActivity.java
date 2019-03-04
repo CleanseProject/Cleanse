@@ -23,9 +23,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.adapters.UsersInEventAdapter;
 import com.cleanseproject.cleanse.callbacks.UserChangedCallback;
+import com.cleanseproject.cleanse.callbacks.EventLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.services.ChatManagerService;
@@ -52,7 +54,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     private Event event;
     private ArrayList<User> users;
 
-    private ImageView imagenEvento;
+    private ImageView imagenEvento, imageAutor;
     private TextView txtDescripcion, txtDistancia, txtAutor;
     private RecyclerView rvUsuarios;
     private UsersInEventAdapter adapter;
@@ -82,6 +84,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         fabAbierto = false;
         imagenEvento = findViewById(R.id.imagenEventoSeleccionado);
+        imageAutor = findViewById(R.id.ivAutor);
         txtDescripcion = findViewById(R.id.txtDescripcion);
         txtDistancia = findViewById(R.id.txt_distancia);
         rvUsuarios = findViewById(R.id.rvUsuarios);
@@ -106,6 +109,8 @@ public class EventDetailsActivity extends AppCompatActivity {
                 idEvento,
                 event -> {
                     this.event = event;
+                    imageManagerService.userImageDownloadUrl(event.getCreatorId(), url
+                            -> Glide.with(this).load(url).apply(RequestOptions.circleCropTransform().centerCrop()).into(imageAutor));
                     Location location = new Location("");
                     location.setLatitude(event.getLatitude());
                     location.setLongitude(event.getLongitude());
@@ -159,6 +164,8 @@ public class EventDetailsActivity extends AppCompatActivity {
                             }
                     );
                 });
+
+
         imageManagerService.eventImageDownloadUrl(
                 idEvento,
                 imageUrl -> {

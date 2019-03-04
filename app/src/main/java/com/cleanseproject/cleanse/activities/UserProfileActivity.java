@@ -15,8 +15,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.asksira.bsimagepicker.BSImagePicker;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.callbacks.UserNameLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.User;
@@ -68,17 +71,13 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
         cambio_de_imagen = false;
         cambio_de_nombre = false;
         mAuth = FirebaseAuth.getInstance();
+        imageManagerService.userImageDownloadUrl(mAuth.getCurrentUser().getUid(), url
+                -> Glide.with(this).load(url).apply(RequestOptions.circleCropTransform()).into(imagenPerfil));
         currentUserID = mAuth.getCurrentUser().getUid();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        Log.v("Cambio3", mAuth.getCurrentUser().getUid() + "");
-        getDatosUsuario(currentUserID,
-                new UserNameLoadCallback() {
-                    @Override
-                    public void onUsernameLoaded(String username) {
-                        editTextNombre.setText(username);
 
-                    }
-                });
+        getDatosUsuario(currentUserID,
+                username -> editTextNombre.setText(username));
 
         editTextNombre.addTextChangedListener(new TextWatcher() {
             @Override
@@ -115,7 +114,10 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
             txtUsuario.setText(mAuth.getCurrentUser().getPhoneNumber());
         } else if (mAuth.getCurrentUser().getEmail() != null) {
             txtUsuario.setText(mAuth.getCurrentUser().getEmail());
+        } else {
+            txtUsuario.setText("error");
         }
+
 
         btn_changepic.setOnClickListener(v -> {
             BSImagePicker singleSelectionPicker = new BSImagePicker.Builder("com.cleanseproject.fileprovider")
@@ -123,33 +125,39 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
             singleSelectionPicker.show(getSupportFragmentManager(), "picker");
         });
 
-        btn_savechanges.setOnClickListener(new View.OnClickListener() {
+        btn_savechanges.setOnClickListener(v -> {
+            guardarCambios();
 
-
-            @Override
-            public void onClick(View v) {
-
-                String[] nombre_dividido = new String[2];
-                if (cambio_de_nombre == true && cambio_de_imagen == true) {
-
-                    imageManagerService.uploadUserImage(mAuth.getCurrentUser().getUid(), imagePath);
-                    nombre_dividido = nombreCompletoNuevo.split(" ", 2);
-                    nombre = nombre_dividido[0];
-                    apellido = nombre_dividido[1];
-                    userManagerService.updateUserData(nombre, apellido);
-                    nombreCompletoAnterior = nombre + " " + apellido;
-                } else if (cambio_de_nombre == true) {
-                    nombre_dividido = nombreCompletoNuevo.split(" ", 2);
-                    nombre = nombre_dividido[0];
-                    apellido = nombre_dividido[1];
-                    userManagerService.updateUserData(nombre, apellido);
-                    nombreCompletoAnterior = nombre + " " + apellido;
-                } else if (cambio_de_imagen == true) {
-                    imageManagerService.uploadUserImage(mAuth.getCurrentUser().getUid(), imagePath);
-                }
-            }
         });
+
+
+
     }
+
+    private void guardarCambios() {
+        String[] nombre_dividido = new String[2];
+        if (cambio_de_nombre == true && cambio_de_imagen == true) {
+
+            imageManagerService.uploadUserImage(mAuth.getCurrentUser().getUid(), imagePath);
+            nombre_dividido = nombreCompletoNuevo.split(" ", 2);
+            nombre = nombre_dividido[0];
+            apellido = nombre_dividido[1];
+            userManagerService.updateUserData(nombre, apellido);
+            nombreCompletoAnterior = nombre + " " + apellido;
+            Toast.makeText(this, "Changes saved successfully!", Toast.LENGTH_LONG).show();
+        } else if (cambio_de_nombre == true) {
+            nombre_dividido = nombreCompletoNuevo.split(" ", 2);
+            nombre = nombre_dividido[0];
+            apellido = nombre_dividido[1];
+            userManagerService.updateUserData(nombre, apellido);
+            nombreCompletoAnterior = nombre + " " + apellido;
+            Toast.makeText(this, "Changes saved successfully!", Toast.LENGTH_LONG).show();
+        } else if (cambio_de_imagen == true) {
+            imageManagerService.uploadUserImage(mAuth.getCurrentUser().getUid(), imagePath);
+            Toast.makeText(this, "Changes saved successfully!", Toast.LENGTH_LONG).show();
+        }
+    }
+
 
     @Override
     public void onBackPressed() {
