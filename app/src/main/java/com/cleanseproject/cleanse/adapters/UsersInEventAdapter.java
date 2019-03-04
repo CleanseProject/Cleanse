@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.dataClasses.User;
+import com.cleanseproject.cleanse.services.ImageManagerService;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
