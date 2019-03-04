@@ -38,7 +38,8 @@ public class NotificationManager {
                     .setTitle(title)
                     .setText(body)
                     .setIcon(R.drawable.ic_chat)
-                    .setBackgroundColorInt(R.color.colorAccent)
+                    .setBackgroundColorRes(R.color.colorAccent)
+                    .setDuration(6000)
                     .enableSwipeToDismiss()
                     .setOnClickListener(v -> {
                         Intent i = new Intent(context, ChatActivity.class);
