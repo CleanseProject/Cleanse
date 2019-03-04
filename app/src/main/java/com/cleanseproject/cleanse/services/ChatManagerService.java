@@ -139,7 +139,7 @@ public class ChatManagerService {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        callback.loadUnreadMessages(dataSnapshot.getValue(Boolean.class));
+                        callback.loadUnreadMessages(dataSnapshot.getValue(Integer.class) > 0);
                     }
 
                     @Override
