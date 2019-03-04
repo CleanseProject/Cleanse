@@ -11,6 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -31,6 +32,8 @@ public class ChatActivity extends AppCompatActivity {
     private EditText txtMessage;
     private RecyclerView messageRecycler;
 
+    private ArrayList<Message> messages;
+    private MessageListAdapter messageListAdapter;
     private HashMap<String, Integer> userColors;
     private int[] chatColors;
 
@@ -49,7 +52,18 @@ public class ChatActivity extends AppCompatActivity {
         txtMessage.addTextChangedListener(sendTextWatcher);
         messageRecycler = findViewById(R.id.reyclerview_message_list);
         messageRecycler.setHasFixedSize(true);
+        messageRecycler.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) -> {
+            if (bottom < oldBottom) {
+                messageRecycler.postDelayed(
+                        () -> messageRecycler.scrollToPosition(
+                                messageRecycler.getAdapter().getItemCount() - 1), 100);
+            }
+        });
         messageRecycler.setLayoutManager(new GridLayoutManager(this, 1));
+        messages = new ArrayList<>();
+        userColors = new HashMap<>();
+        messageListAdapter = new MessageListAdapter(messages, userColors);
+        messageRecycler.setAdapter(messageListAdapter);
         chatService = new ChatService(this::updateMessages);
         String chatId = getIntent().getStringExtra("chatuid");
         if (chatId == null) {
@@ -98,7 +112,7 @@ public class ChatActivity extends AppCompatActivity {
 
         @Override
         public void onTextChanged(CharSequence text, int start, int before, int count) {
-            if (text.equals(""))
+            if (text.toString().trim().equals(""))
                 btnSend.setEnabled(false);
             else
                 btnSend.setEnabled(true);
@@ -110,23 +124,18 @@ public class ChatActivity extends AppCompatActivity {
         }
     };
 
-    public void updateMessages(ArrayList<Message> messages) {
-        if (userColors == null) {
-            userColors = new HashMap<>();
-            for (Message message : messages) {
-                String user = message.getUser();
-                if (!userColors.containsKey(user)) {
-                    userColors.put(message.getUser(), chatColors[new Random().nextInt(chatColors.length)]);
-                }
-            }
+    public void updateMessages(Message message) {
+        String user = message.getUser();
+        if (!userColors.containsKey(user)) {
+            userColors.put(message.getUser(), chatColors[new Random().nextInt(chatColors.length)]);
         }
-        MessageListAdapter messageListAdapter = new MessageListAdapter(messages, userColors);
-        messageRecycler.setAdapter(messageListAdapter);
+        messages.add(message);
+        messageListAdapter.notifyDataSetChanged();
         messageRecycler.scrollToPosition(messageRecycler.getAdapter().getItemCount() - 1);
     }
 
     private void sendMessage() {
-        chatService.sendMessage(txtMessage.getText().toString());
+        chatService.sendMessage(txtMessage.getText().toString().trim());
         messageRecycler.scrollToPosition(messageRecycler.getAdapter().getItemCount() - 1);
         txtMessage.setText("");
         btnSend.setEnabled(false);

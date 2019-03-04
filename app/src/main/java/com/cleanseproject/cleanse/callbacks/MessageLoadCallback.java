@@ -4,8 +4,8 @@ import com.cleanseproject.cleanse.dataClasses.Message;
 
 import java.util.ArrayList;
 
-public interface MessagesLoadCallback {
+public interface MessageLoadCallback {
 
-    void onMessagesLoaded(ArrayList<Message> messages);
+    void onMessageLoaded(Message message);
 
 }

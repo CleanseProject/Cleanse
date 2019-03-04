@@ -1,7 +1,6 @@
 package com.cleanseproject.cleanse.services;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.cleanseproject.cleanse.callbacks.ChatListLoadCallback;
 import com.cleanseproject.cleanse.callbacks.ChatRemovedCallback;
@@ -95,7 +94,6 @@ public class ChatManagerService {
                 ArrayList<Chat> chats = new ArrayList<>();
                 for (DataSnapshot objChatId : userChatsData.getChildren()) {
                     String chatId = objChatId.getKey();
-                    Log.d("chatid", chatId);
                     Chat chat = dataSnapshot.child("chats").child(chatId).getValue(Chat.class);
                     if (!chat.getGroupChat()) {
                         for (String memberKey : chat.getMembers().keySet()) {
