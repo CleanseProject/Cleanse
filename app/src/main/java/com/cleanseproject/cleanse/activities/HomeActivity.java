@@ -78,7 +78,7 @@ public class HomeActivity extends AppCompatActivity {
         context = this;
         firebaseDatabase = FirebaseDatabase.getInstance();
         imageUserManagerService = new ImageManagerService();
-        notificationManager = new NotificationManager(findViewById(R.id.homeCoordinatorLayout));
+        notificationManager = new NotificationManager(this, findViewById(R.id.homeCoordinatorLayout));
         initializeUI();
     }
 

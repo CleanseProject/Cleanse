@@ -42,6 +42,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         Toolbar toolbar = findViewById(R.id.chat_toolbar);
+        //TODO: Set chatname from service
         toolbar.setTitle(getIntent().getStringExtra("chatname"));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

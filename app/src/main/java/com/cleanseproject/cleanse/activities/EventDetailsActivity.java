@@ -98,7 +98,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         chatManagerService = new ChatManagerService();
         imageManagerService = new ImageManagerService();
         userManagerService = new UserManagerService();
-        notificationManager = new NotificationManager(findViewById(R.id.event_details_coordinator_layout));
+        notificationManager = new NotificationManager(this, findViewById(R.id.event_details_coordinator_layout));
         locationService = new LocationService(this);
         firebaseAuth = FirebaseAuth.getInstance();
         fab_chat.setOnClickListener(v -> startChat());
