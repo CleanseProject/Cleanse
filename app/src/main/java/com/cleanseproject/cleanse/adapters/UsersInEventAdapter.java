@@ -9,7 +9,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
+import com.cleanseproject.cleanse.callbacks.ImageUrlLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.User;
+import com.cleanseproject.cleanse.services.ImageManagerService;
+import com.cleanseproject.cleanse.services.UserManagerService;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
@@ -58,6 +61,12 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
         public void bind(User user) {
             // TODO: Cambiar por la foto de User en Firebase
             lblUsername.setText(user.getName());
+           /* ivUser.setImageURI(new ImageManagerService().userImageDownloadUrl(user.getUserId(), new ImageUrlLoadCallback() {
+                @Override
+                public void onUrlLoaded(String url) {
+                    ivUser.setImageURI(url);
+                }
+            }));*/
         }
     }
 }
