@@ -22,13 +22,18 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.android.volley.RequestQueue;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cleanseproject.cleanse.R;
+import com.cleanseproject.cleanse.callbacks.ImageUrlLoadCallback;
 import com.cleanseproject.cleanse.callbacks.UserNameLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.fragments.ChatListFragment;
 import com.cleanseproject.cleanse.fragments.HomeFragment;
 import com.cleanseproject.cleanse.fragments.MapFragment;
 import com.cleanseproject.cleanse.services.CleanseFirebaseMessagingService;
+import com.cleanseproject.cleanse.services.ImageManagerService;
 import com.cleanseproject.cleanse.services.NotificationManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -39,6 +44,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 public class HomeActivity extends AppCompatActivity {
@@ -51,6 +58,8 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Context context;
     private Button btnEditarPerfil;
+    private ImageManagerService imageUserManagerService;
+    private StorageReference storageReference;
 
     @Override
     public void onStart() {
@@ -68,6 +77,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         context = this;
         firebaseDatabase = FirebaseDatabase.getInstance();
+        imageUserManagerService = new ImageManagerService();
         notificationManager = new NotificationManager(findViewById(R.id.homeCoordinatorLayout));
         initializeUI();
     }
@@ -118,6 +128,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private void initializeUI() {
         mAuth = FirebaseAuth.getInstance();
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -129,6 +140,8 @@ public class HomeActivity extends AppCompatActivity {
         View headerLayout = navigationView.getHeaderView(0);
         btnEditarPerfil = headerLayout.findViewById(R.id.btn_EditarPerfil);
         imagenUsuario = headerLayout.findViewById(R.id.nav_header_imagen);
+        imageUserManagerService.userImageDownloadUrl(mAuth.getCurrentUser().getUid(), url
+                -> Glide.with(context).load(url).apply(RequestOptions.circleCropTransform()).into(imagenUsuario));
         nombreUsuario = headerLayout.findViewById(R.id.nav_header_usuario);
         btnEditarPerfil.setOnClickListener(v -> {
             Intent intent = new Intent(context, UserProfileActivity.class);

@@ -12,12 +12,16 @@
         android:layout_width="72dp"
         android:layout_height="65dp"
         android:layout_marginBottom="8dp"
-        android:src="@drawable/imagen" />
+        android:src="@drawable/ic_user"
+        android:layout_gravity="center"
+        />
 
     <TextView
         android:id="@+id/event_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Julen" />
+        android:text="Julen"
+        android:gravity="center"
+        android:layout_gravity="center"/>
 
 </LinearLayout>

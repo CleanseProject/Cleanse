@@ -33,4 +33,12 @@ public class ImageManagerService {
                 });
     }
 
+    public void userImageDownloadUrl(String eventId, ImageUrlLoadCallback callback) {
+        firebaseStorage.getReference("images/users/" + eventId).getDownloadUrl()
+                .addOnSuccessListener(uri -> callback.onUrlLoaded(uri.toString()))
+                .addOnFailureListener(e -> {
+                    //TODO: Set default image
+                });
+    }
+
 }
