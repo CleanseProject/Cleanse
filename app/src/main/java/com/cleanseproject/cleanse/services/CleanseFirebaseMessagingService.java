@@ -18,7 +18,9 @@ public class CleanseFirebaseMessagingService extends FirebaseMessagingService {
             intent.putExtra("title", notificationTitle);
         intent.putExtra("body", remoteMessage.getNotification().getBody());
         String chatId = remoteMessage.getData().get("chatuid");
+        String notificationId = remoteMessage.getData().get("notificationid");
         intent.putExtra("chatuid", chatId);
+        intent.putExtra("notificationid", notificationId);
         LocalBroadcastManager.getInstance(this)
                 .sendBroadcast(intent);
     }

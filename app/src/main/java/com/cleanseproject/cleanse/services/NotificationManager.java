@@ -6,7 +6,6 @@ import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 
-import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.ChatActivity;
 
 import java.util.HashSet;
@@ -28,6 +27,7 @@ public class NotificationManager {
         String title = intent.getStringExtra("title");
         String body = intent.getStringExtra("body");
         String chatId = intent.getStringExtra("chatuid");
+        String notificationid = intent.getStringExtra("notificationid");
         String mensaje = "";
         if (body != null && title != null) {
             mensaje = title + ": " + body;
@@ -36,10 +36,10 @@ public class NotificationManager {
         } else if (title != null) {
             mensaje = title;
         }
-        if (!shownNotifications.contains(mensaje)) {
+        if (!shownNotifications.contains(notificationid)) {
             Snackbar snackbar = Snackbar.make(coordinatorLayout, mensaje,
                     Snackbar.LENGTH_LONG);
-            shownNotifications.add(mensaje);
+            shownNotifications.add(notificationid);
             View sbView = snackbar.getView();
             sbView.setClickable(true);
             sbView.setFocusable(true);
