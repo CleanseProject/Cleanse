@@ -62,9 +62,11 @@ dependencies {
     // AppIntro
     implementation 'com.github.AppIntro:AppIntro:v4.2.3'
     // Crashlytics
-    compile('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.9@aar') {
         transitive = true;
     }
+    // Foreground Notifications
+    implementation 'com.tapadoo.android:alerter:3.0.2'
 }
 
 apply plugin: 'com.google.gms.google-services'
