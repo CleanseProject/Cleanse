@@ -8,6 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.callbacks.ImageUrlLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.User;
@@ -61,12 +63,8 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
         public void bind(User user) {
             // TODO: Cambiar por la foto de User en Firebase
             lblUsername.setText(user.getName());
-           /* ivUser.setImageURI(new ImageManagerService().userImageDownloadUrl(user.getUserId(), new ImageUrlLoadCallback() {
-                @Override
-                public void onUrlLoaded(String url) {
-                    ivUser.setImageURI(url);
-                }
-            }));*/
+            new ImageManagerService().userImageDownloadUrl(user.getUserId(), url
+                    -> Glide.with(context).load(url).apply(RequestOptions.centerCropTransform().circleCropTransform()).into(ivUser));
         }
     }
 }
