@@ -13,6 +13,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -68,7 +70,20 @@ public class ChatService {
                         chatManagerService.getUserName(
                                 firebaseUser.getUid(),
                                 username -> sendNotificationToUser(user, username + " @" + chat.getChatName(), message));
-                        firebaseDatabase.getReference("userChats").child(user).child(chat.getChatUid()).child("unread").setValue(true);
+                        firebaseDatabase.getReference("userChats").child(user).child(chat.getChatUid()).child("unread").runTransaction(new Transaction.Handler() {
+                            @NonNull
+                            @Override
+                            public Transaction.Result doTransaction(@NonNull MutableData mutableData) {
+                                int unreadNum = mutableData.getValue(Integer.class);
+                                mutableData.setValue(++unreadNum);
+                                return Transaction.success(mutableData);
+                            }
+
+                            @Override
+                            public void onComplete(@Nullable DatabaseError databaseError, boolean b, @Nullable DataSnapshot dataSnapshot) {
+
+                            }
+                        });
                     }
                 }
             }
@@ -109,23 +124,7 @@ public class ChatService {
 
             }
         });
-/*        chatMessages.orderByChild("createdAt").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                ArrayList<Message> messages = new ArrayList<>();
-                for (DataSnapshot messageData : dataSnapshot.getChildren()) {
-                    Message message = messageData.getValue(Message.class);
-                    messages.add(message);
-                }
-                messageLoadCallback.onMessagesLoaded(messages);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });*/
-        firebaseDatabase.getReference("userChats").child(firebaseUser.getUid()).child(chat.getChatUid()).child("unread").setValue(false);
+        firebaseDatabase.getReference("userChats").child(firebaseUser.getUid()).child(chat.getChatUid()).child("unread").setValue(0);
     }
 
     private void sendNotificationToUser(String user, String title, final String message) {
