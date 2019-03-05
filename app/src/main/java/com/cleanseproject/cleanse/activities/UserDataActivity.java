@@ -3,6 +3,8 @@ package com.cleanseproject.cleanse.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -21,6 +23,7 @@ public class UserDataActivity extends AppCompatActivity {
     private Button btnContinue;
     private EditText txtName;
     private EditText txtSurname;
+    private boolean nombre, apellido;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +32,55 @@ public class UserDataActivity extends AppCompatActivity {
         btnContinue = findViewById(R.id.btn_save_user_data);
         txtName = findViewById(R.id.txt_name);
         txtSurname = findViewById(R.id.txt_surname);
+        btnContinue.setEnabled(false);
+        txtName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (txtName.getText().toString().length() > 0) {
+                    nombre = true;
+                } else {
+                    nombre = false;
+                }
+                if (nombre == true && apellido == true) {
+                    btnContinue.setEnabled(true);
+                }
+            }
+        });
+
+        txtSurname.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (txtSurname.getText().toString().length() > 0) {
+                    apellido = true;
+                } else {
+                    apellido = false;
+                }
+                if (nombre == true && apellido == true) {
+                    btnContinue.setEnabled(true);
+                }
+            }
+        });
+
         btnContinue.setOnClickListener(v -> guardarDatos(txtName.getText().toString(), txtSurname.getText().toString()));
         firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
