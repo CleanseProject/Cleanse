@@ -1,32 +1,11 @@
 package com.cleanseproject.cleanse.services;
 
-import android.Manifest;
-import android.app.Activity;
-import android.app.IntentService;
-import android.app.PendingIntent;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
-import android.util.Log;
 
-import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.callbacks.MessageLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.Chat;
-import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.dataClasses.Message;
-import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofenceStatusCodes;
-import com.google.android.gms.location.GeofencingClient;
-import com.google.android.gms.location.GeofencingEvent;
-import com.google.android.gms.location.GeofencingRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -38,9 +17,7 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class ChatService {
