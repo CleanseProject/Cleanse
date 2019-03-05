@@ -21,7 +21,11 @@
             android:layout_marginTop="15dp"
             android:orientation="horizontal">
 
-
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/circulo_discontinuo"
+    android:layout_gravity="center"/>
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/ivAutor"
                 android:layout_width="180dp"
