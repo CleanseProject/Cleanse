@@ -39,4 +39,12 @@
     <string name="whats_cleanse">What\'s Cleanse?</string>
     <string name="knock_knock">Knock Knock</string>
     <string name="how_does_it_work">How does it work?</string>
+    <string name="geofence_not_available">Geofence not available</string>
+    <string name="geofence_too_many_geofences">Too many geofences</string>
+    <string name="geofence_too_many_pending_intents">Too many pending intents</string>
+    <string name="unknown_geofence_error">Unknown geofence error</string>
+    <string name="geofence_transition_entered">Geofence transition entered</string>
+    <string name="geofence_transition_exited">Geofence transition exited</string>
+    <string name="unknown_geofence_transition">Unknown geofence transition</string>
+    <string name="geofence_transition_invalid_type">Geofence transition invalid type</string>
 </resources>
