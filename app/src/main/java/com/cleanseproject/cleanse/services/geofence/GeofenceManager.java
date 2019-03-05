@@ -1,4 +1,5 @@
-package com.cleanseproject.cleanse.services;
+package com.cleanseproject.cleanse.services.geofence;
+
 
 import android.Manifest;
 import android.app.Activity;
@@ -6,7 +7,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
@@ -15,8 +15,6 @@ import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.ArrayList;
 
@@ -40,7 +38,7 @@ public class GeofenceManager {
                     .setCircularRegion(
                             event.getLatitude(),
                             event.getLongitude(),
-                            10000
+                            100000
                     )
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER)
@@ -61,29 +59,43 @@ public class GeofenceManager {
                 .addOnFailureListener((Activity) context, Throwable::printStackTrace);
     }
 
-    public void removeGeofences(){
+    public void removeGeofences() {
         geofencingClient.removeGeofences(getGeofencePendingIntent())
                 .addOnSuccessListener((Activity) context, aVoid -> {
                     // Geofences removed
                     // ...
                 })
-                .addOnFailureListener((Activity)context, e -> {
+                .addOnFailureListener((Activity) context, e -> {
                     // Failed to remove geofences
                     // ...
                 });
     }
 
     private PendingIntent getGeofencePendingIntent() {
-        // Reuse the PendingIntent if we already have it.
-        if (geofencePendingIntent != null) {
+        if (null != geofencePendingIntent) {
+
+            // Return the existing intent
             return geofencePendingIntent;
+
+            // If no PendingIntent exists
+        } else {
+
+            // Create an Intent pointing to the IntentService
+            Intent intent = new Intent(context, GeofenceReceiver.class);
+            //            Intent intent = new Intent(context, ReceiveTransitionsIntentService.class);
+            /*
+             * Return a PendingIntent to start the IntentService.
+             * Always create a PendingIntent sent to Location Services
+             * with FLAG_UPDATE_CURRENT, so that sending the PendingIntent
+             * again updates the original. Otherwise, Location Services
+             * can't match the PendingIntent to requests made with it.
+             */
+            return PendingIntent.getBroadcast(
+                    context,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
         }
-        Intent intent = new Intent(context, GeofenceTransitionsIntentService.class);
-        // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when
-        // calling addGeofences() and removeGeofences().
-        geofencePendingIntent = PendingIntent.getService(context, 0, intent, PendingIntent.
-                FLAG_UPDATE_CURRENT);
-        return geofencePendingIntent;
     }
 
 }
