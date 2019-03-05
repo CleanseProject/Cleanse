@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -52,7 +53,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnGoogle;
     private Button btnPhone;
     private Button btnEmail;
-    private ProgressBar progressBar;
+    private ProgressBar progressBar, progressBarphone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +68,7 @@ public class LoginActivity extends AppCompatActivity {
         btnPhone.setOnClickListener(v -> phoneDialog());
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+        progressBarphone = findViewById(R.id.progressbar_login_phone);
     }
 
     /**
@@ -99,6 +101,8 @@ public class LoginActivity extends AppCompatActivity {
             txtNumeroRegion.setText("");
             btn_Login_phone.setText(getString(R.string.verify));
             btn_Login_phone.setEnabled(true);
+            progressBarphone = findViewById(R.id.progressbar_login_phone);
+            progressBarphone.setVisibility(View.VISIBLE);
         });
     }
 
@@ -123,6 +127,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onVerificationFailed(FirebaseException e) {
                         e.printStackTrace();
                         Toast.makeText(LoginActivity.this, "Verification failed", Toast.LENGTH_SHORT).show();
+
+                        progressBarphone.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
@@ -148,10 +154,12 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("phone", "signInWithCredential:success");
                         iniciarSesion(task.getResult().getUser());
                         btn_Login_phone.setEnabled(false);
+
                     } else {
                         // Sign in failed, display a message and update the UI
                         Log.w("phone", "signInWithCredential:failure", task.getException());
                         btn_Login_phone.setEnabled(true);
+                        progressBarphone.setVisibility(View.INVISIBLE);
                         if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                             // The verification code entered was invalid
                             btn_Login_phone.setEnabled(true);
@@ -222,14 +230,16 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void cambiarActividad(FirebaseUser user) {
+
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+
         if (user.getEmail() != null) {
             intent.putExtra("username", user.getEmail());
         } else if (user.getPhoneNumber() != null) {
             intent.putExtra("username", user.getPhoneNumber());
-        }
+        }finish();
         startActivity(intent);
-        finish();
+
     }
 
     private void errorInicioSesion() {
@@ -256,8 +266,12 @@ public class LoginActivity extends AppCompatActivity {
         txtPassword = findViewById(R.id.txt_pswd);
         lblForgotPassword = findViewById(R.id.lbl_forgot_password);
         progressBarEmail = findViewById(R.id.sign_in_pb);
-        btnLogIn.setOnClickListener(v -> logIn(txtEMail.getText().toString(), txtPassword.getText().toString()));
-        btnSignUp.setOnClickListener(v -> signUp(txtEMail.getText().toString(), txtPassword.getText().toString()));
+        btnLogIn.setOnClickListener(v -> {logIn(txtEMail.getText().toString(), txtPassword.getText().toString());
+            txtPassword.onEditorAction(EditorInfo.IME_ACTION_DONE);
+        });
+        btnSignUp.setOnClickListener(v -> {signUp(txtEMail.getText().toString(), txtPassword.getText().toString());
+            txtPassword.onEditorAction(EditorInfo.IME_ACTION_DONE);
+        });
         lblForgotPassword.setOnClickListener(v -> newAccount());
         txtEMail.addTextChangedListener(new TextWatcher() {
             @Override

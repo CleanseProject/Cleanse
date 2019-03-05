@@ -17,14 +17,13 @@ public class SliderActivity extends AppIntro {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         askForPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 3);
         SliderPage sliderPage = new SliderPage();
         sliderPage.setTitle(getString(R.string.whats_cleanse));
         sliderPage.setImageDrawable(R.drawable.logo_vector);
         sliderPage.setDescription(getString(R.string.slider_descripcion_1));
         sliderPage.setBgColor(ContextCompat.getColor(getApplicationContext(), R.color.colorPrimary));
-        showSkipButton(false);
+        showSkipButton(true);
         addSlide(AppIntroFragment.newInstance(sliderPage));
 
         SliderPage sliderPage1 = new SliderPage();
@@ -40,7 +39,7 @@ public class SliderActivity extends AppIntro {
         sliderPage2.setDescription(getString(R.string.slider_descripcion_2));
         sliderPage2.setBgColor(ContextCompat.getColor(getApplicationContext(), R.color.verdehojainterno));
         addSlide(AppIntroFragment.newInstance(sliderPage2));
-        showSkipButton(false);
+
 
     }
 
