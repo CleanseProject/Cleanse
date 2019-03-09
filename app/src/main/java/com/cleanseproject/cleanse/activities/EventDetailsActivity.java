@@ -4,6 +4,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -140,11 +142,24 @@ public class EventDetailsActivity extends AppCompatActivity {
                                     fab_equis.setAlpha(1.0f);
                                     fab_equis.setEnabled(true);
                                     fab_check.setEnabled(false);
+                                    fab_chat.setEnabled(true);
+                                    int accent = 0xFF81F1B2;
+                                    fab_chat.setBackgroundTintList(ColorStateList.valueOf(accent));
+                                    fab_chat.setColorFilter(0xFFFFFFFF);
+
+
                                 } else {
                                     fab_check.setAlpha(1.0f);
                                     fab_equis.setAlpha(0f);
                                     fab_equis.setEnabled(false);
                                     fab_check.setEnabled(true);
+                                    fab_chat.setEnabled(false);
+                                    int accentdark = 0xFF60BA87;
+                                    fab_chat.setBackgroundTintList(ColorStateList.valueOf(accentdark));
+                                    fab_chat.setColorFilter(0xFFE5E5E5);
+
+
+
                                 }
                             });
                         }
@@ -196,6 +211,10 @@ public class EventDetailsActivity extends AppCompatActivity {
             fab_equis.setEnabled(true);
             fab_check.setEnabled(false);
             eventManagerService.setEventAsFavourite(event.getId());
+            fab_chat.setEnabled(true);
+            int accent = 0xFF81F1B2;
+            fab_chat.setBackgroundTintList(ColorStateList.valueOf(accent));
+            fab_chat.setColorFilter(0xFFFFFFFF);
         });
         fab_equis.setOnClickListener(v -> {
             fab_check.animate().alpha(1.0f);
@@ -203,6 +222,10 @@ public class EventDetailsActivity extends AppCompatActivity {
             fab_equis.setEnabled(false);
             fab_check.setEnabled(true);
             eventManagerService.deleteFavouriteEvent(event.getId());
+            fab_chat.setEnabled(false);
+            int accentdark = 0xFF60BA87;
+            fab_chat.setBackgroundTintList(ColorStateList.valueOf(accentdark));
+            fab_chat.setColorFilter(0xFFE5E5E5);
         });
         users = new ArrayList<>();
         adapter = new UsersInEventAdapter(users);

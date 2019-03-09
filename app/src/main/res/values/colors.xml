@@ -13,4 +13,5 @@
     <color name="ucrop_color_toolbar" tools:override="true">@color/colorPrimary</color>
     <color name="ucrop_color_statusbar" tools:override="true">@color/colorPrimaryTransparent</color>
     <color name="skyblue_slider_color">#11FAFF</color>
+    <color name="grey">#818181</color>
 </resources>

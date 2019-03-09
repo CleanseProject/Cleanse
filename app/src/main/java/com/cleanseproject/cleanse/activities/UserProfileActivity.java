@@ -6,7 +6,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -57,6 +59,14 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
     private String apellido;
 
     @Override
+    public boolean onSupportNavigateUp() {
+        onBackPressed();
+        return true;
+    }
+
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.vista_perfil_usuario);
@@ -70,6 +80,11 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
         btn_savechanges.setEnabled(false);
         cambio_de_imagen = false;
         cambio_de_nombre = false;
+        Toolbar toolbar = findViewById(R.id.profile_toolbar);
+        toolbar.setTitle("Profile");
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
         mAuth = FirebaseAuth.getInstance();
         imageManagerService.userImageDownloadUrl(mAuth.getCurrentUser().getUid(), url
                 -> Glide.with(this).load(url).apply(RequestOptions.circleCropTransform()).into(imagenPerfil));
@@ -108,6 +123,7 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
 
             }
         });
+
 
 
         if (mAuth.getCurrentUser().getPhoneNumber() != null && !mAuth.getCurrentUser().getPhoneNumber().equals("")) {
@@ -167,6 +183,7 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
         finish();
         Intent i = new Intent(this, HomeActivity.class);
         startActivity(i);
+        overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
     private void getDatosUsuario(String userId, UserNameLoadCallback callback) {
