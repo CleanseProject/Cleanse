@@ -11,10 +11,8 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cleanseproject.cleanse.R;
-import com.cleanseproject.cleanse.callbacks.ImageUrlLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.services.ImageManagerService;
-import com.cleanseproject.cleanse.services.UserManagerService;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
@@ -61,10 +59,12 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
         }
 
         public void bind(User user) {
-            // TODO: Cambiar por la foto de User en Firebase
             lblUsername.setText(user.getName());
-            new ImageManagerService().userImageDownloadUrl(user.getUserId(), url
-                    -> Glide.with(context).load(url).apply(RequestOptions.centerCropTransform().circleCropTransform()).into(ivUser));
+            new ImageManagerService().userImageDownloadUrl(user.getUserId(), url ->
+                    Glide.with(context)
+                            .load(url)
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(ivUser));
         }
     }
 }

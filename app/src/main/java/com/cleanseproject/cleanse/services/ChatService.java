@@ -17,7 +17,6 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -128,8 +127,7 @@ public class ChatService {
     }
 
     private void sendNotificationToUser(String user, String title, final String message) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference();
-        final DatabaseReference notifications = ref.child("notificationRequests");
+        final DatabaseReference notifications = firebaseDatabase.getReference().child("notificationRequests");
         Map<String, String> notification = new HashMap<>();
         notification.put("username", user);
         notification.put("title", title);

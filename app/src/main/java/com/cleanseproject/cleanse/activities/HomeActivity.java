@@ -24,11 +24,9 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cleanseproject.cleanse.R;
-import com.cleanseproject.cleanse.callbacks.ImageUrlLoadCallback;
 import com.cleanseproject.cleanse.callbacks.UserNameLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.fragments.ChatListFragment;
@@ -46,7 +44,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -81,7 +78,7 @@ public class HomeActivity extends AppCompatActivity {
         context = this;
         firebaseDatabase = FirebaseDatabase.getInstance();
         imageUserManagerService = new ImageManagerService();
-        notificationManager = new NotificationManager(findViewById(R.id.homeCoordinatorLayout));
+        notificationManager = new NotificationManager(this);
         initializeUI();
     }
 

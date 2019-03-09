@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -42,6 +41,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         Toolbar toolbar = findViewById(R.id.chat_toolbar);
+        //TODO: Set chatname from service
         toolbar.setTitle(getIntent().getStringExtra("chatname"));
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

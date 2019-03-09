@@ -20,6 +20,7 @@ import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.AddEventActivity;
 import com.cleanseproject.cleanse.adapters.EventListAdapter;
 import com.cleanseproject.cleanse.dataClasses.Event;
+import com.cleanseproject.cleanse.services.ChatService;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
 import com.firebase.geofire.GeoLocation;
@@ -39,6 +40,7 @@ public class HomeFragment extends Fragment {
     private ProgressBar progressBar;
     private FloatingActionButton fab;
     private ArrayList<Event> events;
+    private ChatService.GeofenceManager geofenceManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -68,6 +70,7 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
         rvEventos.setLayoutManager(llm);
         eventManagerService = new EventManagerService();
+        geofenceManager = new ChatService.GeofenceManager(getContext());
         locationService = new LocationService(getContext());
         events = new ArrayList<>();
         adaptador = new EventListAdapter(events);
