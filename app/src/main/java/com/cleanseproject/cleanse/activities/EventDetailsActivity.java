@@ -12,14 +12,13 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,8 +38,11 @@ import com.cleanseproject.cleanse.services.NotificationManager;
 import com.cleanseproject.cleanse.services.UserManagerService;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
 public class EventDetailsActivity extends AppCompatActivity {
 
@@ -55,14 +57,13 @@ public class EventDetailsActivity extends AppCompatActivity {
     private ArrayList<User> users;
 
     private ImageView imagenEvento, imageAutor;
-    private TextView txtDescripcion, txtDistancia, txtAutor;
+    private TextView txtDescripcion, txtDistancia, txtAutor, txtFecha;
     private RecyclerView rvUsuarios;
     private UsersInEventAdapter adapter;
     private FloatingActionButton fab_menu;
     private FloatingActionButton fab_chat;
     private FloatingActionButton fab_equis;
     private FloatingActionButton fab_check;
-    private Button btnDelete;
     private boolean fabAbierto;
 
     @Override
@@ -87,13 +88,13 @@ public class EventDetailsActivity extends AppCompatActivity {
         imageAutor = findViewById(R.id.ivAutor);
         txtDescripcion = findViewById(R.id.txtDescripcion);
         txtDistancia = findViewById(R.id.txt_distancia);
+        txtFecha = findViewById(R.id.txt_fecha);
         rvUsuarios = findViewById(R.id.rvUsuarios);
         fab_menu = findViewById(R.id.fabMenu);
         fab_chat = findViewById(R.id.fabchat);
         fab_equis = findViewById(R.id.fabequis);
         fab_check = findViewById(R.id.fabcheck);
         txtAutor = findViewById(R.id.txtAutor);
-        btnDelete = findViewById(R.id.btn_delete);
         eventManagerService = new EventManagerService();
         chatManagerService = new ChatManagerService();
         imageManagerService = new ImageManagerService();
@@ -120,19 +121,19 @@ public class EventDetailsActivity extends AppCompatActivity {
                     userManagerService.getUser(
                             event.getCreatorId(),
                             user -> txtAutor.setText(String.format("%s %s", user.getName(), user.getSurname())));
-                    String distancia;
-                    if (event.getDistance() >= 1000)
-                        distancia = Math.round(event.getDistance() / 1000) + " km";
-                    else
-                        distancia = Math.round(event.getDistance()) + " m";
-                    txtDistancia.setText(distancia);
+                    if (event.getDistance() != -1) {
+                        String distancia;
+                        if (event.getDistance() >= 1000)
+                            distancia = Math.round(event.getDistance() / 1000) + " km";
+                        else
+                            distancia = Math.round(event.getDistance()) + " m";
+                        txtDistancia.setText(distancia);
+                    }
+                    if (event.getEventDate() != 0)
+                        txtFecha.setText(formatDate(event.getEventDate()));
                     eventManagerService.isUserAdmin(event.getId(), isAdmin -> {
                         if (isAdmin) {
-                            btnDelete.setVisibility(View.VISIBLE);
-                            btnDelete.setOnClickListener(v -> {
-                                eventManagerService.deleteEvent(event.getId());
-                                goBack();
-                            });
+                            fab_equis.setOnClickListener(v -> deleteEventDialog());
                         } else {
                             eventManagerService.isEventFavourite(event.getId(), isFavourite -> {
                                 if (isFavourite) {
@@ -144,8 +145,6 @@ public class EventDetailsActivity extends AppCompatActivity {
                                     int accent = 0xFF81F1B2;
                                     fab_chat.setBackgroundTintList(ColorStateList.valueOf(accent));
                                     fab_chat.setColorFilter(0xFFFFFFFF);
-
-
                                 } else {
                                     fab_check.setAlpha(1.0f);
                                     fab_equis.setAlpha(0f);
@@ -155,9 +154,6 @@ public class EventDetailsActivity extends AppCompatActivity {
                                     int accentdark = 0xFF60BA87;
                                     fab_chat.setBackgroundTintList(ColorStateList.valueOf(accentdark));
                                     fab_chat.setColorFilter(0xFFE5E5E5);
-
-
-
                                 }
                             });
                         }
@@ -177,8 +173,6 @@ public class EventDetailsActivity extends AppCompatActivity {
                             }
                     );
                 });
-
-
         imageManagerService.eventImageDownloadUrl(
                 idEvento,
                 imageUrl -> {
@@ -228,6 +222,18 @@ public class EventDetailsActivity extends AppCompatActivity {
         users = new ArrayList<>();
         adapter = new UsersInEventAdapter(users);
         rvUsuarios.setAdapter(adapter);
+    }
+
+    private void deleteEventDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle("Borrar evento")
+                .setMessage("¿Está seguro de que desea borrar el evento?")
+                .setNegativeButton("Cancelar", null)
+                .setPositiveButton("Borrar", (dialog, which) -> {
+                    eventManagerService.deleteEvent(event.getId());
+                    goBack();
+                })
+                .show();
     }
 
     public void addMemberUser(User user) {
@@ -292,6 +298,18 @@ public class EventDetailsActivity extends AppCompatActivity {
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(onEvent);
         super.onPause();
+    }
+
+    private String formatDate(long time) {
+        Date date = new Date(time);
+        Locale locale;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            locale = getResources().getConfiguration().getLocales().get(0);
+        } else {
+            locale = getResources().getConfiguration().locale;
+        }
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
+        return dateFormat.format(date);
     }
 
 }
