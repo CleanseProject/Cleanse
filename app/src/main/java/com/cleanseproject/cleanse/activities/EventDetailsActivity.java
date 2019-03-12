@@ -76,7 +76,7 @@ public class EventDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_details);
-        CollapsingToolbarLayout Coltoolbar = findViewById(R.id.event_details_toolbar);
+        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.event_details_toolbar);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -104,6 +104,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         txtDescripcion.setMovementMethod(new ScrollingMovementMethod());
         Intent intent = getIntent();
         String idEvento = intent.getStringExtra("evento");
+        boolean cargarFoto = intent.getBooleanExtra("cargarFoto", false);
         eventManagerService.getEvent(
                 idEvento,
                 event -> {
@@ -114,7 +115,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                     location.setLatitude(event.getLatitude());
                     location.setLongitude(event.getLongitude());
                     event.setDistance(locationService.distance(location));
-                    Coltoolbar.setTitle(event.getName());
+                    collapsingToolbarLayout.setTitle(event.getName());
                     txtDescripcion.setText(event.getDescription());
                     userManagerService.getUser(
                             event.getCreatorId(),
@@ -169,11 +170,23 @@ public class EventDetailsActivity extends AppCompatActivity {
                             }
                     );
                 });
-        imageManagerService.eventImageDownloadUrl(
-                idEvento,
-                imageUrl -> Glide.with(this)
-                        .load(imageUrl)
-                        .into(imagenEvento));
+        if (cargarFoto) {
+            imageManagerService.eventImageDownloadUrlWait(
+                    idEvento,
+                    imageUrl -> {
+                        Glide.with(this)
+                                .load(imageUrl)
+                                .into(imagenEvento);
+                    });
+        } else {
+            imageManagerService.eventImageDownloadUrl(
+                    idEvento,
+                    imageUrl -> {
+                        Glide.with(this)
+                                .load(imageUrl)
+                                .into(imagenEvento);
+                    });
+        }
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvUsuarios.setLayoutManager(layoutManager);

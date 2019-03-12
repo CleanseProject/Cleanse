@@ -157,6 +157,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
                         event -> {
                             Intent intent = new Intent(AddEventActivity.this, EventDetailsActivity.class);
                             intent.putExtra("evento", event.getId());
+                            intent.putExtra("cargarFoto", true);
                             startActivity(intent);
                         });
             }

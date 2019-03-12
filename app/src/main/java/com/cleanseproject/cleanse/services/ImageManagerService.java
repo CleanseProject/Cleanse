@@ -4,6 +4,9 @@ import android.net.Uri;
 
 import com.cleanseproject.cleanse.callbacks.ImageUrlLoadCallback;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.UploadTask;
+
+import java.util.List;
 
 public class ImageManagerService {
 
@@ -31,6 +34,20 @@ public class ImageManagerService {
                 .addOnFailureListener(e -> {
                     //TODO: Set default image
                 });
+    }
+
+    public void eventImageDownloadUrlWait(String eventId, ImageUrlLoadCallback callback) {
+        List<UploadTask> uploadTasks = firebaseStorage.getReference("images/events/" + eventId).getActiveUploadTasks();
+        if (uploadTasks.size() > 0) {
+            uploadTasks.get(0).addOnCompleteListener(task -> {
+                firebaseStorage.getReference("images/events/" + eventId).getDownloadUrl()
+                        .addOnSuccessListener(uri -> callback.onUrlLoaded(uri.toString()))
+                        .addOnFailureListener(e -> {
+                            //TODO: Set default image
+                        });
+            });
+        }
+
     }
 
     public void userImageDownloadUrl(String userId, ImageUrlLoadCallback callback) {
