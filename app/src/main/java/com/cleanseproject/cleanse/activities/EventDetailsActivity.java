@@ -132,30 +132,28 @@ public class EventDetailsActivity extends AppCompatActivity {
                     if (event.getEventDate() != 0)
                         txtFecha.setText(formatDate(event.getEventDate()));
                     eventManagerService.isUserAdmin(event.getId(), isAdmin -> {
-                        if (isAdmin) {
+                        if (isAdmin)
                             fab_equis.setOnClickListener(v -> deleteEventDialog());
+                    });
+                    eventManagerService.isEventFavourite(event.getId(), isFavourite -> {
+                        if (isFavourite) {
+                            fab_check.setAlpha(0f);
+                            fab_equis.setAlpha(1.0f);
+                            fab_equis.setEnabled(true);
+                            fab_check.setEnabled(false);
+                            fab_chat.setEnabled(true);
+                            int accent = 0xFF81F1B2;
+                            fab_chat.setBackgroundTintList(ColorStateList.valueOf(accent));
+                            fab_chat.setColorFilter(0xFFFFFFFF);
                         } else {
-                            eventManagerService.isEventFavourite(event.getId(), isFavourite -> {
-                                if (isFavourite) {
-                                    fab_check.setAlpha(0f);
-                                    fab_equis.setAlpha(1.0f);
-                                    fab_equis.setEnabled(true);
-                                    fab_check.setEnabled(false);
-                                    fab_chat.setEnabled(true);
-                                    int accent = 0xFF81F1B2;
-                                    fab_chat.setBackgroundTintList(ColorStateList.valueOf(accent));
-                                    fab_chat.setColorFilter(0xFFFFFFFF);
-                                } else {
-                                    fab_check.setAlpha(1.0f);
-                                    fab_equis.setAlpha(0f);
-                                    fab_equis.setEnabled(false);
-                                    fab_check.setEnabled(true);
-                                    fab_chat.setEnabled(false);
-                                    int accentdark = 0xFF60BA87;
-                                    fab_chat.setBackgroundTintList(ColorStateList.valueOf(accentdark));
-                                    fab_chat.setColorFilter(0xFFE5E5E5);
-                                }
-                            });
+                            fab_check.setAlpha(1.0f);
+                            fab_equis.setAlpha(0f);
+                            fab_equis.setEnabled(false);
+                            fab_check.setEnabled(true);
+                            fab_chat.setEnabled(false);
+                            int accentdark = 0xFF60BA87;
+                            fab_chat.setBackgroundTintList(ColorStateList.valueOf(accentdark));
+                            fab_chat.setColorFilter(0xFFE5E5E5);
                         }
                     });
                     eventManagerService.getEventUsers(

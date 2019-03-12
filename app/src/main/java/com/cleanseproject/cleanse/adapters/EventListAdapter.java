@@ -85,10 +85,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
                 distancia = formatDate(event.getEventDate());
             }
             txtDistancia.setText(distancia);
-            if (event.isFavourite())
-                btnLike.setImageResource(R.drawable.corazon_pressed);
-            else
-                btnLike.setImageResource(R.drawable.corazon_transparente);
             imageManagerService.eventImageDownloadUrl(
                     event.getId(),
                     imageUrl -> {
@@ -106,20 +102,29 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
                 intent.putExtra("Evento", event.getId());
                 context.startActivity(intent);
             });
-            btnLike.setOnClickListener(v -> {
-                if (!event.isFavourite()) {
-                    btnLike.setImageResource(R.drawable.corazon_pressed);
-                    eventManagerService.setEventAsFavourite(event.getId());
-                    event.setFavourite(true);
-                } else {
-                    btnLike.setImageResource(R.drawable.corazon_transparente);
-                    eventManagerService.deleteFavouriteEvent(event.getId());
-                    event.setFavourite(false);
-                }
-            });
+            eventManagerService.isUserAdmin(event.getId(),
+                    isAdmin -> {
+                        if (isAdmin) {
+                            btnLike.setImageResource(R.drawable.corazon_pressed);
+                        } else {
+                            if (event.isFavourite())
+                                btnLike.setImageResource(R.drawable.corazon_pressed);
+                            else
+                                btnLike.setImageResource(R.drawable.corazon_transparente);
+                            btnLike.setOnClickListener(v -> {
+                                if (!event.isFavourite()) {
+                                    btnLike.setImageResource(R.drawable.corazon_pressed);
+                                    eventManagerService.setEventAsFavourite(event.getId());
+                                    event.setFavourite(true);
+                                } else {
+                                    btnLike.setImageResource(R.drawable.corazon_transparente);
+                                    eventManagerService.deleteFavouriteEvent(event.getId());
+                                    event.setFavourite(false);
+                                }
+                            });
+                        }
+                    });
         }
-
-
     }
 
     private String formatDate(long time) {
