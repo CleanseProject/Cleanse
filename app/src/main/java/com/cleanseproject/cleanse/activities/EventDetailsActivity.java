@@ -220,10 +220,10 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     private void deleteEventDialog() {
         new AlertDialog.Builder(this)
-                .setTitle("Borrar evento")
-                .setMessage("¿Está seguro de que desea borrar el evento?")
-                .setNegativeButton("Cancelar", null)
-                .setPositiveButton("Borrar", (dialog, which) -> {
+                .setTitle(R.string.delete_event)
+                .setMessage(R.string.confirm_delete_event)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.delete, (dialog, which) -> {
                     eventManagerService.deleteEvent(event.getId());
                     setResult(RESULT_OK);
                     finish();
@@ -233,9 +233,9 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     public void privateChat(User user) {
         new AlertDialog.Builder(this)
-                .setTitle("Private chat")
-                .setMessage("Do you wanna start a private chat?")
-                .setPositiveButton("OK", (dialog, which) -> {
+                .setTitle(R.string.private_chat)
+                .setMessage(R.string.confirm_private_chat)
+                .setPositiveButton(R.string.ok, (dialog, which) -> {
                     ArrayList<String> userIds = new ArrayList<>();
                     userIds.add(firebaseAuth.getCurrentUser().getUid());
                     userIds.add(user.getUserId());
