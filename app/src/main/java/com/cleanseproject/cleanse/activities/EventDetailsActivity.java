@@ -241,7 +241,7 @@ public class EventDetailsActivity extends AppCompatActivity {
                     userIds.add(user.getUserId());
                     chatManagerService.createChat(userIds);
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
