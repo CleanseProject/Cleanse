@@ -25,14 +25,12 @@ import com.cleanseproject.cleanse.activities.AddEventActivity;
 import com.cleanseproject.cleanse.activities.EventDetailsActivity;
 import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.fragments.mapFragment.CleanseMapFragment;
-import com.cleanseproject.cleanse.fragments.mapFragment.MapWrapperLayout;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
 import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -51,6 +49,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private double longitud;
     private Marker selectedMarker;
     private HashMap<Marker, String> markers;
+
+    private Location lastLoaded;
+
+    private final int LOAD_RADIUS = 8527;
 
 
     @Override
@@ -79,11 +81,18 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         CleanseMapFragment mapFragment = (CleanseMapFragment) getChildFragmentManager().findFragmentById(R.id.map);  //use SuppoprtMapFragment for using in fragment instead of activity  MapFragment = activity   SupportMapFragment = fragment
         mapFragment.getMapAsync(this);
         mapFragment.setOnDragListener(motionEvent -> {
+            //mMap.getProjection().getVisibleRegion().latLngBounds.contains()
             LatLng latLng = mMap.getProjection().getVisibleRegion().latLngBounds.getCenter();
-            eventManagerService.getCloseEvents(
-                    new GeoLocation(latLng.latitude, latLng.longitude),
-                    8587,
-                    this::addEventToMap);
+            Location location = new Location("");
+            location.setLatitude(latLng.latitude);
+            location.setLongitude(latLng.longitude);
+            if (lastLoaded == null || (lastLoaded.distanceTo(location) / 1000) > LOAD_RADIUS) {
+                eventManagerService.getCloseEvents(
+                        new GeoLocation(latLng.latitude, latLng.longitude),
+                        LOAD_RADIUS,
+                        this::addEventToMap);
+                lastLoaded = location;
+            }
         });
     }
 
@@ -118,9 +127,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
         Location currentLocation = locationService.getCurrentLocation();
+        lastLoaded = currentLocation;
         eventManagerService.getCloseEvents(
                 new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                8587,
+                LOAD_RADIUS,
                 this::addEventToMap);
         mMap.setOnInfoWindowClickListener(marker -> {
             if (selectedMarker != null) {
