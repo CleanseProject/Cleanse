@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name" translatable="false">Cleanse</string>
     <string name="app_name_lower" translatable="false">CleanSe</string>
     <string name="welcome_button">Comenzar</string>
@@ -17,25 +17,25 @@
     <string name="sign_up">Sign Up</string>
     <string name="enter_message">Insertar mensaje</string>
     <string name="send">ENVIAR</string>
-    <string name="title_activity_maps" translatable="false">Map</string>
+    <string name="title_activity_maps" translatable="false" tools:keep="@string/title_activity_maps">Map</string>
     <string name="incorrect_credentials">Credenciales incorrectas</string>
     <string name="description">Descripción: </string>
     <string name="add">Añadir</string>
     <string name="add_new_event">Añadir nuevo evento</string>
     <string name="select_location">Seleccionar ubicación</string>
-    <string name="close">Cerrar</string>
+    <string name="close" tools:keep="@string/close">Cerrar</string>
     <string name="select_date">Seleccionar fecha</string>
-    <string name="select_photo">Seleccionar foto</string>
+    <string name="select_photo" tools:keep="@string/select_photo">Seleccionar foto</string>
     <string name="verify">Verify</string>
-    <string name="status">Estado</string>
-    <string name="join_chat">Join chat</string>
+    <string name="status" tools:keep="@string/status">Estado</string>
+    <string name="join_chat" tools:keep="@string/join_chat">Join chat</string>
     <string name="add_event">Añadir Evento</string>
     <string name="unknown">Desconocido</string>
     <string name="home">Home</string>
     <string name="favourites">Favoritos</string>
     <string name="places">Lugares</string>
     <string name="chats">Chats</string>
-    <string name="action_settings">Ajustes</string>
+    <string name="action_settings" tools:keep="@string/action_settings">Ajustes</string>
     <string name="slider_descripcion_1">Cleanse se ha creado con la finalidad de conectar a la gente que se ha dado cuenta de que los espacios que nos rodean no siempre se encuentra en las mejores condiciones y están dispuestas a hacer algo para cambiarlo.</string>
     <string name="slider_descripcion_2">Cleanse necesita acceder a tu localización para mostrarte los eventos mas cercanos a ti.</string>
     <string name="slider_descripcion12">En nuestra aplicación podrás unirte a eventos de recogida creados por otros usuarios, así como crearlos tú mismo. Entre todos podemos salvar el planeta, ¡y hacer amigos por el camino!</string>
@@ -51,7 +51,7 @@
     <string name="ok" translatable="false">OK</string>
     <string name="members">Miembros:</string>
     <string name="selected_event_image">Imagen del evento seleccionado</string>
-    <string name="geofence_transition_invalid_type">Geofence transition invalid type</string>
+    <string name="geofence_transition_invalid_type" tools:keep="@string/geofence_transition_invalid_type">Geofence transition invalid type</string>
     <string name="delete_event">Borrar evento</string>
     <string name="confirm_delete_event">¿Está seguro de que desea borrar el evento?</string>
     <string name="cancel">Cancelar</string>
