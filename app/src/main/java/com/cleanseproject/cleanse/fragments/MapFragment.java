@@ -24,6 +24,8 @@ import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.AddEventActivity;
 import com.cleanseproject.cleanse.activities.EventDetailsActivity;
 import com.cleanseproject.cleanse.dataClasses.Event;
+import com.cleanseproject.cleanse.fragments.mapFragment.CleanseMapFragment;
+import com.cleanseproject.cleanse.fragments.mapFragment.MapWrapperLayout;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
 import com.firebase.geofire.GeoLocation;
@@ -74,8 +76,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         markers = new HashMap<>();
         eventManagerService = new EventManagerService();
         locationService = new LocationService(getContext());
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);  //use SuppoprtMapFragment for using in fragment instead of activity  MapFragment = activity   SupportMapFragment = fragment
+        CleanseMapFragment mapFragment = (CleanseMapFragment) getChildFragmentManager().findFragmentById(R.id.map);  //use SuppoprtMapFragment for using in fragment instead of activity  MapFragment = activity   SupportMapFragment = fragment
         mapFragment.getMapAsync(this);
+        mapFragment.setOnDragListener(motionEvent -> {
+            LatLng latLng = mMap.getProjection().getVisibleRegion().latLngBounds.getCenter();
+            eventManagerService.getCloseEvents(
+                    new GeoLocation(latLng.latitude, latLng.longitude),
+                    8587,
+                    this::addEventToMap);
+        });
     }
 
     @Override
