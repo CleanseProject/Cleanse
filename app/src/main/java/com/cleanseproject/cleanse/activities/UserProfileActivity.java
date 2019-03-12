@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -34,17 +35,16 @@ import com.google.firebase.database.ValueEventListener;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 public class UserProfileActivity extends AppCompatActivity implements BSImagePicker.OnSingleImageSelectedListener {
+
     private FirebaseDatabase firebaseDatabase;
     private ImageView imagenPerfil;
-    private TextView txtUsuario;
     private FirebaseAuth mAuth;
-    private Button btn_changepic;
     private Uri imagePath;
     private Button btn_savechanges;
-    private String currentUserID;
 
     private ImageManagerService imageManagerService;
     private UserManagerService userManagerService;
@@ -53,8 +53,6 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
     private boolean cambio_de_nombre;
     private boolean cambio_de_imagen;
     private EditText editTextNombre;
-    private String nombre;
-    private String apellido;
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -66,11 +64,11 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.vista_perfil_usuario);
-        btn_changepic = findViewById(R.id.btn_EditarPerfil);
+        Button btn_changepic = findViewById(R.id.btn_EditarPerfil);
         imagenPerfil = findViewById(R.id.ivAutor);
         btn_savechanges = findViewById(R.id.btnSaveChanges);
         editTextNombre = findViewById(R.id.edittxtNombre);
-        txtUsuario = findViewById(R.id.txtUsuario);
+        TextView txtUsuario = findViewById(R.id.txtUsuario);
         userManagerService = new UserManagerService();
         imageManagerService = new ImageManagerService();
         btn_savechanges.setEnabled(false);
@@ -79,12 +77,13 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
         Toolbar toolbar = findViewById(R.id.profile_toolbar);
         toolbar.setTitle("Profile");
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        ActionBar actionBar= Objects.requireNonNull(getSupportActionBar());
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
         mAuth = FirebaseAuth.getInstance();
         imageManagerService.userImageDownloadUrl(mAuth.getCurrentUser().getUid(), url
                 -> Glide.with(this).load(url).apply(RequestOptions.circleCropTransform()).into(imagenPerfil));
-        currentUserID = mAuth.getCurrentUser().getUid();
+        String currentUserID = mAuth.getCurrentUser().getUid();
         firebaseDatabase = FirebaseDatabase.getInstance();
         getDatosUsuario(currentUserID,
                 username -> editTextNombre.setText(username));
@@ -140,6 +139,8 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
 
     private void guardarCambios() {
         String[] nombreDividido;
+        String apellido;
+        String nombre;
         if (cambio_de_nombre && cambio_de_imagen) {
             imageManagerService.uploadUserImage(mAuth.getCurrentUser().getUid(), imagePath);
             nombreDividido = nombreCompletoNuevo.split(" ", 2);

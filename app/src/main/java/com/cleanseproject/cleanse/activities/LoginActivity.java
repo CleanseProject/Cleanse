@@ -52,9 +52,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private String phoneVerificationId;
 
-    private Button btnGoogle;
-    private Button btnPhone;
-    private Button btnEmail;
     private ProgressBar progressBar, progressBarphone;
     private Context context;
 
@@ -62,9 +59,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        btnGoogle = findViewById(R.id.google_sign_i);
-        btnPhone = findViewById(R.id.btn_phone);
-        btnEmail = findViewById(R.id.btn_email);
+        Button btnGoogle = findViewById(R.id.google_sign_i);
+        Button btnPhone = findViewById(R.id.btn_phone);
+        Button btnEmail = findViewById(R.id.btn_email);
         progressBar = findViewById(R.id.first_sign_in_pb);
         btnEmail.setOnClickListener(v -> initializeEmailUI());
         btnGoogle.setOnClickListener(v -> googleSignIn());
@@ -256,7 +253,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private Button btnLogIn;
     private Button btnSignUp;
-    private TextView lblForgotPassword;
     private EditText txtEMail;
     private EditText txtPassword;
     private ProgressBar progressBarEmail;
@@ -269,7 +265,7 @@ public class LoginActivity extends AppCompatActivity {
         btnSignUp = findViewById(R.id.btn_sign_up);
         txtEMail = findViewById(R.id.txt_email);
         txtPassword = findViewById(R.id.txt_pswd);
-        lblForgotPassword = findViewById(R.id.lbl_forgot_password);
+        TextView lblForgotPassword = findViewById(R.id.lbl_forgot_password);
         progressBarEmail = findViewById(R.id.sign_in_pb);
         btnLogIn.setOnClickListener(v -> {
             logIn(txtEMail.getText().toString(), txtPassword.getText().toString());

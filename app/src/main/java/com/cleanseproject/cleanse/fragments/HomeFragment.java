@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
     private ArrayList<Event> events;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
@@ -94,9 +94,6 @@ public class HomeFragment extends Fragment {
                         new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
                         8587,
                         this::rellenarEventos);
-            else {
-                //TODO: Mostrar petición de localización
-            }
         } else {
             eventManagerService.getUpcomingEvents(this::rellenarEventos);
         }

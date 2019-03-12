@@ -58,9 +58,7 @@ public class EventDetailsActivity extends AppCompatActivity {
 
     private ImageView imagenEvento, imageAutor;
     private TextView txtDescripcion, txtDistancia, txtAutor, txtFecha;
-    private RecyclerView rvUsuarios;
     private UsersInEventAdapter adapter;
-    private FloatingActionButton fab_menu;
     private FloatingActionButton fab_chat;
     private FloatingActionButton fab_equis;
     private FloatingActionButton fab_check;
@@ -89,8 +87,8 @@ public class EventDetailsActivity extends AppCompatActivity {
         txtDescripcion = findViewById(R.id.txtDescripcion);
         txtDistancia = findViewById(R.id.txt_distancia);
         txtFecha = findViewById(R.id.txt_fecha);
-        rvUsuarios = findViewById(R.id.rvUsuarios);
-        fab_menu = findViewById(R.id.fabMenu);
+        RecyclerView rvUsuarios = findViewById(R.id.rvUsuarios);
+        FloatingActionButton fab_menu = findViewById(R.id.fabMenu);
         fab_chat = findViewById(R.id.fabchat);
         fab_equis = findViewById(R.id.fabequis);
         fab_check = findViewById(R.id.fabcheck);

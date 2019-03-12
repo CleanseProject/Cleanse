@@ -43,7 +43,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         if (viewType == VIEW_TYPE_MESSAGE_SENT) {
             view = LayoutInflater.from(parent.getContext())
@@ -130,7 +130,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         void bind(Message message) {
             messageText.setText(message.getMessage());
             timeText.setText(formatDate(message.getCreatedAt()));
-            chatManagerService.getUserName(message.getUser(), username -> nameText.setText(username));
+            chatManagerService.getUserName(message.getUser(), nameText::setText);
             setBubbleColor(itemView, messageText, userColors.get(message.getUser()));
             imageManagerService.userImageDownloadUrl(message.getUser(), url ->
                     Glide.with(itemView)

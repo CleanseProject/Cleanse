@@ -98,18 +98,22 @@ public class ChatManagerService {
                 ArrayList<Chat> chats = new ArrayList<>();
                 for (DataSnapshot objChatId : userChatsData.getChildren()) {
                     String chatId = objChatId.getKey();
-                    Chat chat = dataSnapshot.child("chats").child(chatId).getValue(Chat.class);
-                    if (!chat.getGroupChat()) {
-                        for (String memberKey : chat.getMembers().keySet()) {
-                            String member = chat.getMembers().get(memberKey);
-                            User user = users.child(member).getValue(User.class);
-                            if (!user.getUserId().equals(firebaseUser.getUid())) {
-                                chat.setChatName(user.getName() + " " + user.getSurname());
+                    if (chatId != null) {
+                        Chat chat = dataSnapshot.child("chats").child(chatId).getValue(Chat.class);
+                        if (chat != null) {
+                            if (!chat.getGroupChat()) {
+                                for (String memberKey : chat.getMembers().keySet()) {
+                                    String member = chat.getMembers().get(memberKey);
+                                    User user = users.child(member).getValue(User.class);
+                                    if (!user.getUserId().equals(firebaseUser.getUid())) {
+                                        chat.setChatName(user.getName() + " " + user.getSurname());
+                                    }
+                                }
                             }
+                            chat.setChatUid(chatId);
+                            chats.add(chat);
                         }
                     }
-                    chat.setChatUid(chatId);
-                    chats.add(chat);
                 }
                 Collections.sort(chats);
                 callback.onCallBack(chats);

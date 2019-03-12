@@ -54,7 +54,6 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private FirebaseAuth mAuth;
     private Context context;
-    private Button btnEditarPerfil;
     private ImageManagerService imageUserManagerService;
 
     private final int REQUEST_EVENT_CHANGED = 95;
@@ -141,7 +140,7 @@ public class HomeActivity extends AppCompatActivity {
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerLayout = navigationView.getHeaderView(0);
-        btnEditarPerfil = headerLayout.findViewById(R.id.btn_EditarPerfil);
+        Button btnEditarPerfil = headerLayout.findViewById(R.id.btn_EditarPerfil);
         imagenUsuario = headerLayout.findViewById(R.id.nav_header_imagen);
         imageUserManagerService.userImageDownloadUrl(mAuth.getCurrentUser().getUid(), url
                 -> Glide.with(context).load(url).apply(RequestOptions.circleCropTransform()).into(imagenUsuario));

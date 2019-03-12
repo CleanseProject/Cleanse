@@ -15,12 +15,11 @@ import com.google.firebase.database.ValueEventListener;
 
 public class UserManagerService {
 
-    private final FirebaseAuth firebaseAuth;
     private final FirebaseUser firebaseUser;
     private final FirebaseDatabase firebaseDatabase;
 
     public UserManagerService() {
-        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
     }

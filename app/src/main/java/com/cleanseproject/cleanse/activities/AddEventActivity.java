@@ -35,12 +35,9 @@ import java.util.UUID;
 
 public class AddEventActivity extends AppCompatActivity implements BSImagePicker.OnSingleImageSelectedListener {
 
-    private LocationService locationService;
     private EventManagerService eventManagerService;
     private DatePickerDialog mDateSetListener;
     private Button btnSelectDate;
-    private Button btnSelectLocation;
-    private Button btnAdd;
     private ImageView selectedImage;
     private EditText txtTitle, txtDescription;
     private RadioButton rdbtn_limpio;
@@ -50,7 +47,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     private Uri imagePath;
     private boolean frameAbierto;
     private LatLng eventLatLng;
-    private Toolbar toolbar;
     private FrameLayout addEvent;
     private long timeStamp;
 
@@ -75,18 +71,18 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
-        btnSelectLocation = findViewById(R.id.btn_set_location);
+        Button btnSelectLocation = findViewById(R.id.btn_set_location);
         btnSelectDate = findViewById(R.id.btn_set_date);
-        btnAdd = findViewById(R.id.btn_event_add);
+        Button btnAdd = findViewById(R.id.btn_event_add);
         selectedImage = findViewById(R.id.imagen_evento);
         rdbtn_limpio = findViewById(R.id.radiobtn_limpio);
         rdbtn_sucio = findViewById(R.id.radiobtn_sucio);
         rdbtn_critico = findViewById(R.id.radiobtn_critico);
-        toolbar = findViewById(R.id.toolbar_addevent);
+        Toolbar toolbar = findViewById(R.id.toolbar_addevent);
         toolbar.setTitle(R.string.add_new_event);
         setSupportActionBar(toolbar);
         eventManagerService = new EventManagerService();
-        locationService = new LocationService(this);
+        LocationService locationService = new LocationService(this);
         txtTitle = findViewById(R.id.txt_add_event_title);
         txtDescription = findViewById(R.id.txt_add_description);
         Intent i = getIntent();

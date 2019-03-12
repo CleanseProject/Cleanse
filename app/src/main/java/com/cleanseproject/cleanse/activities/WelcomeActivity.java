@@ -13,8 +13,6 @@ import com.cleanseproject.cleanse.R;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    private final int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 901;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -22,6 +20,7 @@ public class WelcomeActivity extends AppCompatActivity {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
+            int PERMISSION_REQUEST_ACCESS_FINE_LOCATION = 901;
             ActivityCompat.requestPermissions(this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                     PERMISSION_REQUEST_ACCESS_FINE_LOCATION);

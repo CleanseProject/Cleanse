@@ -23,14 +23,13 @@ import java.util.Map;
 public class ChatService {
 
     private Chat chat;
-    private final FirebaseAuth firebaseAuth;
     private final FirebaseUser firebaseUser;
     private final FirebaseDatabase firebaseDatabase;
     private final MessageLoadCallback messageLoadCallback;
     private final ChatManagerService chatManagerService;
 
     public ChatService(MessageLoadCallback messageLoadCallback) {
-        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         chatManagerService = new ChatManagerService();
