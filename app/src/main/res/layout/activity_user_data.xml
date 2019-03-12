@@ -16,14 +16,19 @@
         android:background="@drawable/layoutborder"
         android:gravity="center"
         android:orientation="vertical"
-        android:paddingTop="30dp"
-        >
+        android:paddingTop="30dp">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/iv_user_profile_pic"
             android:layout_width="180dp"
             android:layout_height="180dp"
             app:srcCompat="@drawable/userid" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Añadir imagen"
+            android:textColor="#fff"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -74,7 +79,7 @@
                     android:textColor="@color/quantum_white_text" />
             </android.support.design.widget.TextInputLayout>
 
-         </LinearLayout>
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_save_user_data"
@@ -91,9 +96,9 @@
             android:id="@+id/progressbar_continue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"/>
+            android:layout_marginBottom="5dp"
+            android:visibility="invisible" />
 
 
     </LinearLayout>

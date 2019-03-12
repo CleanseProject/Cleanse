@@ -51,5 +51,6 @@
     <string name="slider_descripcion12">En nuestra aplicación podrás unirte a eventos de recogida creados por otros usuarios, así como crearlos tú mismo. Entre todos podemos salvar el planeta, ¡y hacer amigos por el camino!</string>
     <string name="log_out">Log out</string>
     <string name="map">Map</string>
+    <string name="changes_success">Changes saved successfully!</string>
 
 </resources>
