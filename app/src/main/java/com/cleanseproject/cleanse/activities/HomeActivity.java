@@ -46,8 +46,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
-import java.util.HashMap;
-
 public class HomeActivity extends AppCompatActivity {
 
     private SparseArray<MenuItem> menuItems;
