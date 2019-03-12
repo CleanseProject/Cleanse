@@ -1,5 +1,6 @@
 package com.cleanseproject.cleanse.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -69,7 +70,7 @@ public class HomeFragment extends Fragment {
         eventManagerService = new EventManagerService();
         locationService = new LocationService(getContext());
         events = new ArrayList<>();
-        adaptador = new EventListAdapter(events);
+        adaptador = new EventListAdapter((Context) getActivity(), events);
         rvEventos.setAdapter(adaptador);
         rvEventos.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

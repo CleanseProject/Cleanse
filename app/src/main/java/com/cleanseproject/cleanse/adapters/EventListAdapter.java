@@ -19,13 +19,18 @@ import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.ImageManagerService;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyViewHolder> {
 
+    private Context context;
     private ArrayList<Event> listaEventos;
 
-    public EventListAdapter(ArrayList<Event> listaEventos) {
+    public EventListAdapter(Context context, ArrayList<Event> listaEventos) {
+        this.context = context;
         this.listaEventos = listaEventos;
     }
 
@@ -71,10 +76,14 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
         public void asignarDatos(Event event) {
             txtTitulo.setText(event.getName());
             String distancia;
-            if (event.getDistance() >= 1000)
-                distancia = Math.round(event.getDistance() / 1000) + " km";
-            else
-                distancia = Math.round(event.getDistance()) + " m";
+            if (event.getDistance() != -1) {
+                if (event.getDistance() >= 1000)
+                    distancia = Math.round(event.getDistance() / 1000) + " km";
+                else
+                    distancia = Math.round(event.getDistance()) + " m";
+            } else {
+                distancia = formatDate(event.getEventDate());
+            }
             txtDistancia.setText(distancia);
             if (event.isFavourite())
                 btnLike.setImageResource(R.drawable.corazon_pressed);
@@ -111,6 +120,18 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
         }
 
 
+    }
+
+    private String formatDate(long time) {
+        Date date = new Date(time);
+        Locale locale;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            locale = context.getResources().getConfiguration().getLocales().get(0);
+        } else {
+            locale = context.getResources().getConfiguration().locale;
+        }
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
+        return dateFormat.format(date);
     }
 
 }
