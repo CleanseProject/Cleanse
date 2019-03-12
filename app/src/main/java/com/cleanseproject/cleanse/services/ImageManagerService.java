@@ -29,14 +29,6 @@ public class ImageManagerService {
     }
 
     public void eventImageDownloadUrl(String eventId, ImageUrlLoadCallback callback) {
-        firebaseStorage.getReference("images/events/" + eventId).getDownloadUrl()
-                .addOnSuccessListener(uri -> callback.onUrlLoaded(uri.toString()))
-                .addOnFailureListener(e -> {
-                    //TODO: Set default image
-                });
-    }
-
-    public void eventImageDownloadUrlWait(String eventId, ImageUrlLoadCallback callback) {
         List<UploadTask> uploadTasks = firebaseStorage.getReference("images/events/" + eventId).getActiveUploadTasks();
         if (uploadTasks.size() > 0) {
             uploadTasks.get(0).addOnCompleteListener(task -> {
@@ -46,7 +38,17 @@ public class ImageManagerService {
                             //TODO: Set default image
                         });
             });
+        } else {
+            firebaseStorage.getReference("images/events/" + eventId).getDownloadUrl()
+                    .addOnSuccessListener(uri -> callback.onUrlLoaded(uri.toString()))
+                    .addOnFailureListener(e -> {
+                        //TODO: Set default image
+                    });
         }
+    }
+
+    public void eventImageDownloadUrlWait(String eventId, ImageUrlLoadCallback callback) {
+
 
     }
 

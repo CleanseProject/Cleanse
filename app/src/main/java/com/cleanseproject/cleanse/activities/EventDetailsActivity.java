@@ -104,7 +104,6 @@ public class EventDetailsActivity extends AppCompatActivity {
         txtDescripcion.setMovementMethod(new ScrollingMovementMethod());
         Intent intent = getIntent();
         String idEvento = intent.getStringExtra("evento");
-        boolean cargarFoto = intent.getBooleanExtra("cargarFoto", false);
         eventManagerService.getEvent(
                 idEvento,
                 event -> {
@@ -170,23 +169,14 @@ public class EventDetailsActivity extends AppCompatActivity {
                             }
                     );
                 });
-        if (cargarFoto) {
-            imageManagerService.eventImageDownloadUrlWait(
-                    idEvento,
-                    imageUrl -> {
-                        Glide.with(this)
-                                .load(imageUrl)
-                                .into(imagenEvento);
-                    });
-        } else {
-            imageManagerService.eventImageDownloadUrl(
-                    idEvento,
-                    imageUrl -> {
-                        Glide.with(this)
-                                .load(imageUrl)
-                                .into(imagenEvento);
-                    });
-        }
+        imageManagerService.eventImageDownloadUrl(
+                idEvento,
+                imageUrl -> {
+                    Glide.with(this)
+                            .load(imageUrl)
+                            .into(imagenEvento);
+                });
+
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvUsuarios.setLayoutManager(layoutManager);
