@@ -39,7 +39,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
 
     private LocationService locationService;
     private EventManagerService eventManagerService;
-    private NotificationManager notificationManager;
     private DatePickerDialog mDateSetListener;
     private Button btnSelectDate;
     private Button btnSelectLocation;
@@ -67,7 +66,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.imgExitt:
-                cerrar_ventanas();
+                cerrarVentanas();
                 break;
 
         }
@@ -152,12 +151,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.missing_data)
                         .setMessage(R.string.fill_all_data)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                                dialog.cancel();
-                            }
-                        }).show();
+                        .setPositiveButton(R.string.ok, (dialog, id) -> dialog.cancel()).show();
             } else {
                 String title = txtTitle.getText().toString();
                 String description = txtDescription.getText().toString();
@@ -175,7 +169,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         });
     }
 
-    public void cerrar_ventanas() {
+    private void cerrarVentanas() {
         if (frameAbierto) {
             addEvent.setVisibility(View.GONE);
             frameAbierto = false;
@@ -215,8 +209,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if (resultCode == UCrop.RESULT_ERROR) {
-            UCrop.getError(data).printStackTrace();
         }
     }
 

@@ -15,7 +15,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -93,7 +92,7 @@ public class HomeActivity extends AppCompatActivity {
         transaction.commit();
     }
 
-    private BroadcastReceiver onEvent = new BroadcastReceiver() {
+    private final BroadcastReceiver onEvent = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent i) {
             notificationManager.showNotification(i);
         }
@@ -206,7 +205,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                callback.onUsernameLoaded(user.getName() + " " + user.getSurname());
+                if (user != null)
+                    callback.onUsernameLoaded(user.getName() + " " + user.getSurname());
             }
 
             @Override

@@ -23,11 +23,11 @@ import java.util.Map;
 public class ChatService {
 
     private Chat chat;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;
-    private FirebaseDatabase firebaseDatabase;
-    private MessageLoadCallback messageLoadCallback;
-    private ChatManagerService chatManagerService;
+    private final FirebaseAuth firebaseAuth;
+    private final FirebaseUser firebaseUser;
+    private final FirebaseDatabase firebaseDatabase;
+    private final MessageLoadCallback messageLoadCallback;
+    private final ChatManagerService chatManagerService;
 
     public ChatService(MessageLoadCallback messageLoadCallback) {
         firebaseAuth = FirebaseAuth.getInstance();
@@ -94,7 +94,7 @@ public class ChatService {
         });
     }
 
-    public void getMessages() {
+    private void getMessages() {
         DatabaseReference chatMessages = firebaseDatabase.getReference("chatMessages").child(chat.getChatUid());
         chatMessages.orderByChild("createdAt").addChildEventListener(new ChildEventListener() {
             @Override

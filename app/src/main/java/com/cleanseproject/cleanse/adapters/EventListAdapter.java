@@ -1,8 +1,6 @@
 package com.cleanseproject.cleanse.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.widget.RecyclerView;
@@ -15,10 +13,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.cleanseproject.cleanse.R;
-import com.cleanseproject.cleanse.activities.EventDetailsActivity;
 import com.cleanseproject.cleanse.activities.HomeActivity;
 import com.cleanseproject.cleanse.dataClasses.Event;
-import com.cleanseproject.cleanse.fragments.HomeFragment;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.ImageManagerService;
 
@@ -29,8 +25,8 @@ import java.util.Locale;
 
 public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyViewHolder> {
 
-    private Context context;
-    private ArrayList<Event> listaEventos;
+    private final Context context;
+    private final ArrayList<Event> listaEventos;
 
     public EventListAdapter(Context context, ArrayList<Event> listaEventos) {
         this.context = context;
@@ -57,14 +53,15 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private EventManagerService eventManagerService;
-        private ImageManagerService imageManagerService;
-        private TextView txtTitulo, txtDistancia;
-        private ImageView ivFoto;
-        private ImageButton btnLike;
-        private Context context;
+        private final EventManagerService eventManagerService;
+        private final ImageManagerService imageManagerService;
+        private final TextView txtTitulo;
+        private final TextView txtDistancia;
+        private final ImageView ivFoto;
+        private final ImageButton btnLike;
+        private final Context context;
 
-        public MyViewHolder(View v) {
+        MyViewHolder(View v) {
             super(v);
             txtTitulo = v.findViewById(R.id.tvTitulo);
             txtDistancia = v.findViewById(R.id.txtDistancia);
@@ -75,7 +72,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
             eventManagerService = new EventManagerService();
         }
 
-        public void asignarDatos(Event event) {
+        void asignarDatos(Event event) {
             txtTitulo.setText(event.getName());
             String distancia;
             if (event.getDistance() != -1) {
@@ -99,9 +96,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
                                 .placeholder(progressDrawable)
                                 .into(ivFoto);
                     });
-            ivFoto.setOnClickListener(v -> {
-                ((HomeActivity) context).showEventDetails(event.getId());
-            });
+            ivFoto.setOnClickListener(v -> ((HomeActivity) context).showEventDetails(event.getId()));
             eventManagerService.isUserAdmin(event.getId(),
                     isAdmin -> {
                         if (isAdmin) {

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,6 +22,7 @@ import com.cleanseproject.cleanse.services.ChatService;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Random;
 
 public class ChatActivity extends AppCompatActivity {
@@ -44,8 +46,9 @@ public class ChatActivity extends AppCompatActivity {
         //TODO: Set chatname from service
         toolbar.setTitle(getIntent().getStringExtra("chatname"));
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(true);
         btnSend = findViewById(R.id.button_chatbox_send);
         btnSend.setOnClickListener(v -> sendMessage());
         txtMessage = findViewById(R.id.edittext_chatbox);
@@ -104,7 +107,7 @@ public class ChatActivity extends AppCompatActivity {
         overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
-    private TextWatcher sendTextWatcher = new TextWatcher() {
+    private final TextWatcher sendTextWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -124,7 +127,7 @@ public class ChatActivity extends AppCompatActivity {
         }
     };
 
-    public void updateMessages(Message message) {
+    private void updateMessages(Message message) {
         String user = message.getUser();
         if (!userColors.containsKey(user)) {
             userColors.put(message.getUser(), chatColors[new Random().nextInt(chatColors.length)]);

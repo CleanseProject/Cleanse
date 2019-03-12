@@ -19,8 +19,7 @@ import java.util.ArrayList;
 
 public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapter.Holder> {
 
-    private ArrayList<User> listaUsuarios;
-    private Context context;
+    private final ArrayList<User> listaUsuarios;
 
     public UsersInEventAdapter(ArrayList<User> listaUsuarios) {
         this.listaUsuarios = listaUsuarios;
@@ -46,19 +45,19 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
 
     public static class Holder extends RecyclerView.ViewHolder {
 
-        private CircularImageView ivUser;
-        private TextView lblUsername;
+        private final CircularImageView ivUser;
+        private final TextView lblUsername;
 
-        private Context context;
+        private final Context context;
 
-        public Holder(View view) {
+        Holder(View view) {
             super(view);
             ivUser = view.findViewById(R.id.ivUser);
             lblUsername = view.findViewById(R.id.event_user_name);
             context = view.getContext();
         }
 
-        public void bind(User user) {
+        void bind(User user) {
             lblUsername.setText(user.getName());
             new ImageManagerService().userImageDownloadUrl(user.getUserId(), url ->
                     Glide.with(context)

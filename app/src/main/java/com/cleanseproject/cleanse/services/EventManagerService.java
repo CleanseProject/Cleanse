@@ -28,12 +28,12 @@ import java.util.ArrayList;
 
 public class EventManagerService {
 
-    private ChatManagerService chatManagerService;
-    private ImageManagerService imageManagerService;
-    private UserManagerService userManagerService;
-    private FirebaseUser firebaseUser;
-    private FirebaseDatabase firebaseDatabase;
-    private GeoFire geoFire;
+    private final ChatManagerService chatManagerService;
+    private final ImageManagerService imageManagerService;
+    private final UserManagerService userManagerService;
+    private final FirebaseUser firebaseUser;
+    private final FirebaseDatabase firebaseDatabase;
+    private final GeoFire geoFire;
 
     public EventManagerService() {
         chatManagerService = new ChatManagerService();

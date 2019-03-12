@@ -20,9 +20,9 @@ import java.util.Locale;
 
 public class LocationService {
 
-    private Context context;
+    private final Context context;
     private LocationManager locationManager;
-    private Geocoder geocoder;
+    private final Geocoder geocoder;
 
     public LocationService(Context context) {
         this.context = context;

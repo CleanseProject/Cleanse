@@ -19,10 +19,10 @@ import java.util.ArrayList;
 
 public class ChatListAdapter extends BaseAdapter {
 
-    private Context context;
-    private ArrayList<Chat> chatRows;
-    private ImageManagerService imageManagerService;
-    private ChatManagerService chatManagerService;
+    private final Context context;
+    private final ArrayList<Chat> chatRows;
+    private final ImageManagerService imageManagerService;
+    private final ChatManagerService chatManagerService;
 
     public ChatListAdapter(Context context, ArrayList<Chat> chatRows) {
         this.context = context;
@@ -56,13 +56,11 @@ public class ChatListAdapter extends BaseAdapter {
         TextView txtUnreadNum = view.findViewById(R.id.txt_unread_num);
         if (chat.getGroupChat()) {
             imageManagerService.eventImageDownloadUrl(chat.getChatUid(),
-                    imageUrl -> {
-                        Glide.with(view)
-                                .load(imageUrl)
-                                .placeholder(R.drawable.ic_user)
-                                .apply(RequestOptions.circleCropTransform())
-                                .into(chatImage);
-                    });
+                    imageUrl -> Glide.with(view)
+                            .load(imageUrl)
+                            .placeholder(R.drawable.ic_user)
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(chatImage));
         }
         lblName.setText(chat.getChatName());
         lblLastMessage.setText(chat.getLastMessageSent());
@@ -74,11 +72,4 @@ public class ChatListAdapter extends BaseAdapter {
         return view;
     }
 
-    public Context getContext() {
-        return context;
-    }
-
-    public ArrayList<Chat> getUserRows() {
-        return chatRows;
-    }
 }

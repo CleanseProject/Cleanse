@@ -49,7 +49,7 @@ public class ChatListFragment extends Fragment {
 
 
 
-    public void populateList(ArrayList<Chat> chats) {
+    private void populateList(ArrayList<Chat> chats) {
         chatListAdapter = new ChatListAdapter(getActivity(), chats);
         chatList.setAdapter(chatListAdapter);
     }

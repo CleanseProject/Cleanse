@@ -23,20 +23,20 @@ data class Event(
 ) : Comparable<Event> {
 
     override fun compareTo(other: Event): Int {
-        if (distance != -1f && other.distance != -1f) {
+        return if (distance != -1f && other.distance != -1f) {
             if (distance < other.distance)
-                return -1
+                -1
             else if (distance > other.distance)
-                return 1
+                1
             else
-                return 0
+                0
         } else {
             if (eventDate < other.eventDate)
-                return -1
+                -1
             else if (eventDate > other.eventDate)
-                return 1
+                1
             else
-                return 0
+                0
         }
     }
 }

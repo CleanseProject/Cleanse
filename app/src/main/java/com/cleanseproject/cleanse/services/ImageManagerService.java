@@ -7,7 +7,7 @@ import com.google.firebase.storage.FirebaseStorage;
 
 public class ImageManagerService {
 
-    private FirebaseStorage firebaseStorage;
+    private final FirebaseStorage firebaseStorage;
 
     public ImageManagerService() {
         firebaseStorage = FirebaseStorage.getInstance();

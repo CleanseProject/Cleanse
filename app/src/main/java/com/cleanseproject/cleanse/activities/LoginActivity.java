@@ -89,9 +89,9 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
     }
 
-    Button btn_Login_phone;
-    EditText txt_phonee;
-    TextView txtNumeroRegion;
+    private Button btn_Login_phone;
+    private EditText txt_phonee;
+    private TextView txtNumeroRegion;
 
     private void phoneDialog() {
         setContentView(R.layout.dialog_phone_prompt);
@@ -325,11 +325,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void sendEmail() {
         AlertDialog.Builder alertbuilder = new AlertDialog.Builder(this);
-
-
-        LayoutInflater inflater = this.getLayoutInflater();
-
-
         View alertdialogview = getLayoutInflater().inflate(R.layout.alertdialog, null);
         Button btn_enviar_reset = alertdialogview.findViewById(R.id.btn_enviar_resetpwsd);
         EditText correopararecuperar = alertdialogview.findViewById(R.id.usernamee);
@@ -365,12 +360,7 @@ public class LoginActivity extends AppCompatActivity {
 
         alertbuilder.setView(alertdialogview);
         AlertDialog alerta = alertbuilder.create();
-        btn_cancelar_reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alerta.cancel();
-            }
-        });
+        btn_cancelar_reset.setOnClickListener(v -> alerta.cancel());
         alerta.show();
     }
 

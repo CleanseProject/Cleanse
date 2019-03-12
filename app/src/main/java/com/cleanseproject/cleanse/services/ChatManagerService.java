@@ -21,9 +21,9 @@ import java.util.Collections;
 
 public class ChatManagerService {
 
-    private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;
-    private FirebaseDatabase firebaseDatabase;
+    private final FirebaseAuth firebaseAuth;
+    private final FirebaseUser firebaseUser;
+    private final FirebaseDatabase firebaseDatabase;
 
     public ChatManagerService() {
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -31,6 +31,7 @@ public class ChatManagerService {
         firebaseUser = firebaseAuth.getCurrentUser();
     }
 
+    @SuppressWarnings("unused")
     public void createChat(ArrayList<String> userIds) {
         DatabaseReference chat = firebaseDatabase.getReference("chats").push();
         String chatKey = chat.getKey();

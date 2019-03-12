@@ -173,11 +173,9 @@ public class EventDetailsActivity extends AppCompatActivity {
                 });
         imageManagerService.eventImageDownloadUrl(
                 idEvento,
-                imageUrl -> {
-                    Glide.with(this)
-                            .load(imageUrl)
-                            .into(imagenEvento);
-                });
+                imageUrl -> Glide.with(this)
+                        .load(imageUrl)
+                        .into(imagenEvento));
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvUsuarios.setLayoutManager(layoutManager);
@@ -235,12 +233,12 @@ public class EventDetailsActivity extends AppCompatActivity {
                 .show();
     }
 
-    public void addMemberUser(User user) {
+    private void addMemberUser(User user) {
         users.add(user);
         adapter.notifyDataSetChanged();
     }
 
-    public void removeMemberUser(String userId) {
+    private void removeMemberUser(String userId) {
         Iterator<User> i = users.iterator();
         while (i.hasNext()) {
             User user = i.next();
@@ -250,7 +248,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    private BroadcastReceiver onEvent = new BroadcastReceiver() {
+    private final BroadcastReceiver onEvent = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent i) {
             notificationManager.showNotification(i);
         }
