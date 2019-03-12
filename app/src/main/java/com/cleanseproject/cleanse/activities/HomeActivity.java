@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -57,6 +58,8 @@ public class HomeActivity extends AppCompatActivity {
     private Button btnEditarPerfil;
     private ImageManagerService imageUserManagerService;
 
+    private final int REQUEST_EVENT_CHANGED = 95;
+
     @Override
     public void onStart() {
         super.onStart();
@@ -64,7 +67,6 @@ public class HomeActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(onEvent, f);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,26 +84,13 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        Fragment currentFragment = (Fragment) getSupportFragmentManager()
+        Fragment currentFragment = getSupportFragmentManager()
                 .findFragmentById(R.id.content_frame);
-
-        String actualfragment = currentFragment.toString().replace("{", "@");
-        String[] actual = actualfragment.split("@");
-        actualfragment = actual[0].trim();
-        switch (actualfragment) {
-            case "ChatListFragment":
-
-                transaction.replace(R.id.content_frame, new HomeFragment());
-                break;
-
-            case "MapFragment":
-
-                transaction.replace(R.id.content_frame, new HomeFragment());
-                break;
+        if (!(currentFragment instanceof HomeFragment)) {
+            transaction.replace(R.id.content_frame, new HomeFragment());
         }
         transaction.addToBackStack(null);
         transaction.commit();
-
     }
 
     private BroadcastReceiver onEvent = new BroadcastReceiver() {
@@ -145,14 +134,12 @@ public class HomeActivity extends AppCompatActivity {
 
     private void initializeUI() {
         mAuth = FirebaseAuth.getInstance();
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         drawerLayout = findViewById(R.id.drawer_layout);
-
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerLayout = navigationView.getHeaderView(0);
         btnEditarPerfil = headerLayout.findViewById(R.id.btn_EditarPerfil);
@@ -207,6 +194,12 @@ public class HomeActivity extends AppCompatActivity {
         transaction.commit();
     }
 
+    public void showEventDetails(String key) {
+        Intent intent = new Intent(context, EventDetailsActivity.class);
+        intent.putExtra("evento", key);
+        startActivityForResult(intent, REQUEST_EVENT_CHANGED);
+    }
+
     private void getNombreUsuario(String userId, UserNameLoadCallback callback) {
         DatabaseReference userRef = firebaseDatabase.getReference("users").child(userId);
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -221,6 +214,14 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_EVENT_CHANGED) {
+            Log.d("result", "deleted");
+            recreate();
+        }
     }
 
     @Override

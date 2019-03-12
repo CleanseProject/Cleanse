@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment {
         eventManagerService = new EventManagerService();
         locationService = new LocationService(getContext());
         events = new ArrayList<>();
-        adaptador = new EventListAdapter((Context) getActivity(), events);
+        adaptador = new EventListAdapter(getActivity(), events);
         rvEventos.setAdapter(adaptador);
         rvEventos.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -102,7 +102,6 @@ public class HomeFragment extends Fragment {
             eventManagerService.getUpcomingEvents(this::rellenarEventos);
         }
     }
-
 
     private void updateRecycleView() {
         // TODO: Conexion con Firebase para updatear la lista de eventos

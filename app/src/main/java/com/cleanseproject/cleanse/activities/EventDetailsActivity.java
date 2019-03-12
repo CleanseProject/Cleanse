@@ -105,7 +105,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         fab_chat.setOnClickListener(v -> startChat());
         txtDescripcion.setMovementMethod(new ScrollingMovementMethod());
         Intent intent = getIntent();
-        String idEvento = intent.getStringExtra("Evento");
+        String idEvento = intent.getStringExtra("evento");
         eventManagerService.getEvent(
                 idEvento,
                 event -> {
@@ -229,7 +229,8 @@ public class EventDetailsActivity extends AppCompatActivity {
                 .setNegativeButton("Cancelar", null)
                 .setPositiveButton("Borrar", (dialog, which) -> {
                     eventManagerService.deleteEvent(event.getId());
-                    goBack();
+                    setResult(RESULT_OK);
+                    finish();
                 })
                 .show();
     }

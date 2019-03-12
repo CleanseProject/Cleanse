@@ -151,7 +151,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             } else {
                 Intent intent = new Intent(getContext(), EventDetailsActivity.class);
-                intent.putExtra("Evento", markers.get(marker));
+                intent.putExtra("evento", markers.get(marker));
                 startActivity(intent);
             }
         });

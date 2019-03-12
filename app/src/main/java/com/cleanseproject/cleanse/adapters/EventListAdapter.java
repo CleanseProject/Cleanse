@@ -1,5 +1,6 @@
 package com.cleanseproject.cleanse.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -15,7 +16,9 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.EventDetailsActivity;
+import com.cleanseproject.cleanse.activities.HomeActivity;
 import com.cleanseproject.cleanse.dataClasses.Event;
+import com.cleanseproject.cleanse.fragments.HomeFragment;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.ImageManagerService;
 
@@ -58,7 +61,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
         private ImageManagerService imageManagerService;
         private TextView txtTitulo, txtDistancia;
         private ImageView ivFoto;
-        private ImageButton btnLike, btnShare;
+        private ImageButton btnLike;
         private Context context;
 
         public MyViewHolder(View v) {
@@ -66,7 +69,6 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
             txtTitulo = v.findViewById(R.id.tvTitulo);
             txtDistancia = v.findViewById(R.id.txtDistancia);
             btnLike = v.findViewById(R.id.btnLike);
-            btnShare = v.findViewById(R.id.btnShare);
             ivFoto = v.findViewById(R.id.ivEvento);
             context = v.getContext();
             imageManagerService = new ImageManagerService();
@@ -98,9 +100,7 @@ public class EventListAdapter extends RecyclerView.Adapter<EventListAdapter.MyVi
                                 .into(ivFoto);
                     });
             ivFoto.setOnClickListener(v -> {
-                Intent intent = new Intent(context, EventDetailsActivity.class);
-                intent.putExtra("Evento", event.getId());
-                context.startActivity(intent);
+                ((HomeActivity) context).showEventDetails(event.getId());
             });
             eventManagerService.isUserAdmin(event.getId(),
                     isAdmin -> {
