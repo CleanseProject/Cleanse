@@ -12,6 +12,8 @@ data class Chat(
         @Exclude
         var lastMessageSent: String? = "",
         var groupChat: Boolean? = false,
+        @Exclude
+        var imageId: String? = "",
         var lastMessageTime: Long = 0
 ) : Comparable<Chat> {
     override fun compareTo(other: Chat): Int {

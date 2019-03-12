@@ -1,7 +1,9 @@
 package com.cleanseproject.cleanse.services;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
+import com.bumptech.glide.signature.ObjectKey;
 import com.cleanseproject.cleanse.callbacks.ChatListLoadCallback;
 import com.cleanseproject.cleanse.callbacks.ChatRemovedCallback;
 import com.cleanseproject.cleanse.callbacks.UnreadMessagesCallback;
@@ -31,17 +33,13 @@ public class ChatManagerService {
         firebaseUser = firebaseAuth.getCurrentUser();
     }
 
-    @SuppressWarnings("unused")
     public void createChat(ArrayList<String> userIds) {
         DatabaseReference chat = firebaseDatabase.getReference("chats").push();
         String chatKey = chat.getKey();
-        chat.setValue(new Chat(chatKey, "", null, "", false, System.currentTimeMillis()));
+        chat.setValue(new Chat(chatKey, "", null, "", false, "", System.currentTimeMillis()));
         for (String userId : userIds) {
-            chat.child("members").push().setValue(userId);
-        }
-        DatabaseReference userChats = firebaseDatabase.getReference("userChats");
-        for (String userId : userIds) {
-            userChats.child(userId).push().setValue(chatKey);
+            Log.d("joined", userId);
+            joinChat(userId, chatKey);
         }
     }
 
@@ -52,7 +50,7 @@ public class ChatManagerService {
 
     public void createGroupChat(String eventId, String name) {
         DatabaseReference chat = firebaseDatabase.getReference("chats").child(eventId);
-        chat.setValue(new Chat(eventId, name, null, "", true, System.currentTimeMillis()));
+        chat.setValue(new Chat(eventId, name, null, "", true, "", System.currentTimeMillis()));
     }
 
     public void removeChat(String chatId, ChatRemovedCallback callback) {
@@ -107,8 +105,11 @@ public class ChatManagerService {
                                     User user = users.child(member).getValue(User.class);
                                     if (!user.getUserId().equals(firebaseUser.getUid())) {
                                         chat.setChatName(user.getName() + " " + user.getSurname());
+                                        chat.setImageId(user.getUserId());
                                     }
                                 }
+                            } else {
+                                chat.setImageId(chatId);
                             }
                             chat.setChatUid(chatId);
                             chats.add(chat);
@@ -147,7 +148,13 @@ public class ChatManagerService {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        callback.loadUnreadMessages(dataSnapshot.getValue(Integer.class));
+                        Object unreadObj = dataSnapshot.getValue();
+                        if (unreadObj != null)
+                            try {
+                                callback.loadUnreadMessages((int) unreadObj);
+                            } catch (ClassCastException e) {
+                                callback.loadUnreadMessages(((Long) unreadObj).intValue());
+                            }
                     }
 
                     @Override

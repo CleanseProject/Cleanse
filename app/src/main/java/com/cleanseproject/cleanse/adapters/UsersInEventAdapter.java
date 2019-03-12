@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cleanseproject.cleanse.R;
+import com.cleanseproject.cleanse.activities.EventDetailsActivity;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.services.ImageManagerService;
 import com.mikhaellopez.circularimageview.CircularImageView;
@@ -21,7 +22,7 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
 
     private final ArrayList<User> listaUsuarios;
 
-    public UsersInEventAdapter(ArrayList<User> listaUsuarios) {
+    public UsersInEventAdapter(Context context, ArrayList<User> listaUsuarios) {
         this.listaUsuarios = listaUsuarios;
     }
 
@@ -59,6 +60,9 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
 
         void bind(User user) {
             lblUsername.setText(user.getName());
+            ivUser.setOnClickListener(v -> {
+                ((EventDetailsActivity) context).privateChat(user);
+            });
             new ImageManagerService().userImageDownloadUrl(user.getUserId(), url ->
                     Glide.with(context)
                             .load(url)

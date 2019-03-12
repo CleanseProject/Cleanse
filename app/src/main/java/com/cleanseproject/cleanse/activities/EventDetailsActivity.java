@@ -214,7 +214,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             fab_chat.setColorFilter(0xFFE5E5E5);
         });
         users = new ArrayList<>();
-        adapter = new UsersInEventAdapter(users);
+        adapter = new UsersInEventAdapter(this, users);
         rvUsuarios.setAdapter(adapter);
     }
 
@@ -228,6 +228,20 @@ public class EventDetailsActivity extends AppCompatActivity {
                     setResult(RESULT_OK);
                     finish();
                 })
+                .show();
+    }
+
+    public void privateChat(User user) {
+        new AlertDialog.Builder(this)
+                .setTitle("Private chat")
+                .setMessage("Do you wanna start a private chat?")
+                .setPositiveButton("OK", (dialog, which) -> {
+                    ArrayList<String> userIds = new ArrayList<>();
+                    userIds.add(firebaseAuth.getCurrentUser().getUid());
+                    userIds.add(user.getUserId());
+                    chatManagerService.createChat(userIds);
+                })
+                .setNegativeButton("Cancel", null)
                 .show();
     }
 
