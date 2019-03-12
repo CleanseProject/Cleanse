@@ -64,7 +64,6 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
     }
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,16 +123,15 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
         });
 
 
-
         if (mAuth.getCurrentUser().getPhoneNumber() != null && !mAuth.getCurrentUser().getPhoneNumber().equals("")) {
             txtUsuario.setText(mAuth.getCurrentUser().getPhoneNumber());
-            Log.v("Cambio","Movil" + "'"+mAuth.getCurrentUser().getPhoneNumber()+"'" );
+            Log.v("Cambio", "Movil" + "'" + mAuth.getCurrentUser().getPhoneNumber() + "'");
         } else if (mAuth.getCurrentUser().getEmail() != null) {
             txtUsuario.setText(mAuth.getCurrentUser().getEmail());
-            Log.v("Cambio","Correo");
+            Log.v("Cambio", "Correo");
         } else {
             txtUsuario.setText("error");
-            Log.v("Cambio","error");
+            Log.v("Cambio", "error");
         }
 
 
@@ -147,7 +145,6 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
             guardarCambios();
 
         });
-
 
 
     }

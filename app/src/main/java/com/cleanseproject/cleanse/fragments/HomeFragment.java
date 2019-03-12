@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
     private ProgressBar progressBar;
     private FloatingActionButton fab;
     private ArrayList<Event> events;
-    private ChatService.GeofenceManager geofenceManager;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment {
         LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
         rvEventos.setLayoutManager(llm);
         eventManagerService = new EventManagerService();
-        geofenceManager = new ChatService.GeofenceManager(getContext());
+
         locationService = new LocationService(getContext());
         events = new ArrayList<>();
         adaptador = new EventListAdapter(events);
