@@ -44,11 +44,8 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     private DatePickerDialog mDateSetListener;
     private Button btnSelectDate;
     private Button btnSelectLocation;
-    private Button btnSelectPic;
     private Button btnAdd;
-    private ImageView imgExit, selectedImage;
-    private Spinner spn_estado;
-    private ImageView imgEstado;
+    private ImageView selectedImage;
     private EditText txtTitle, txtDescription;
     private RadioButton rdbtn_limpio;
     private RadioButton rdbtn_sucio;

@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.view.GravityCompat;
@@ -14,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -66,6 +68,7 @@ public class HomeActivity extends AppCompatActivity {
                 .registerReceiver(onEvent, f);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +84,26 @@ public class HomeActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment currentFragment = (Fragment) getSupportFragmentManager()
+                .findFragmentById(R.id.content_frame);
+
+        String actualfragment = currentFragment.toString().replace("{", "@");
+        String[] actual = actualfragment.split("@");
+        actualfragment = actual[0].trim();
+        switch (actualfragment) {
+            case "ChatListFragment":
+
+                transaction.replace(R.id.content_frame, new HomeFragment());
+                break;
+
+            case "MapFragment":
+
+                transaction.replace(R.id.content_frame, new HomeFragment());
+                break;
+        }
+        transaction.addToBackStack(null);
+        transaction.commit();
 
     }
 
@@ -164,6 +187,7 @@ public class HomeActivity extends AppCompatActivity {
                     break;
                 case R.id.nav_chats:
                     transaction.replace(R.id.content_frame, new ChatListFragment());
+
                     break;
                 case R.id.nav_map:
                     transaction.replace(R.id.content_frame, new MapFragment());

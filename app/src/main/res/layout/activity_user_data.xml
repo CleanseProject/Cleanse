@@ -11,28 +11,35 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/layoutborder"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="30dp"
+        >
 
         <ImageView
             android:id="@+id/imageView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-           android:paddingBottom="15dp"
-            app:srcCompat="@drawable/id_card" />
+            android:layout_width="180dp"
+            android:layout_height="180dp"
+            app:srcCompat="@drawable/userid" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp"
-            android:background="@drawable/login_shape"
+
             android:orientation="vertical"
             android:padding="10dp">
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColorHint="@color/quantum_grey300">
 
                 <EditText
                     android:id="@+id/txt_name"
@@ -43,39 +50,50 @@
                     android:ems="10"
                     android:fontFamily="@font/montserrat"
                     android:hint="Name"
-                    android:inputType="textEmailAddress" />
+                    android:inputType="textPersonName"
+                    android:textColor="@color/quantum_white_text" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColorHint="@color/quantum_grey300">
 
                 <EditText
                     android:id="@+id/txt_surname"
                     style="@style/CleanseEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="surname"
+                    android:autofillHints="name"
                     android:ems="10"
                     android:fontFamily="@font/montserrat"
-                    android:hint="Surname" />
+                    android:hint="Surname"
+                    android:inputType="textPersonName"
+                    android:textColor="@color/quantum_white_text" />
             </android.support.design.widget.TextInputLayout>
 
-
-        </LinearLayout>
+         </LinearLayout>
 
         <Button
             android:id="@+id/btn_save_user_data"
             style="@style/ButtonSinImagen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
-            android:text="Continue"
-            android:layout_marginLeft="25dp"
-            android:layout_marginRight="25dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             android:background="@drawable/boton"
-            android:textColor="#ffffff"
-            />
+            android:text="Continue"
+            android:textColor="#ffffff" />
+
+        <ProgressBar
+            android:id="@+id/progressbar_continue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"/>
 
 
     </LinearLayout>

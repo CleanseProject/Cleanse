@@ -1,14 +1,20 @@
 package com.cleanseproject.cleanse.activities;
 
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -22,6 +28,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthCredential;
@@ -52,7 +59,8 @@ public class LoginActivity extends AppCompatActivity {
     private Button btnGoogle;
     private Button btnPhone;
     private Button btnEmail;
-    private ProgressBar progressBar;
+    private ProgressBar progressBar, progressBarphone;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +75,8 @@ public class LoginActivity extends AppCompatActivity {
         btnPhone.setOnClickListener(v -> phoneDialog());
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
+        context = this;
+        progressBarphone = findViewById(R.id.progressbar_login_phone);
     }
 
     /**
@@ -99,6 +109,8 @@ public class LoginActivity extends AppCompatActivity {
             txtNumeroRegion.setText("");
             btn_Login_phone.setText(getString(R.string.verify));
             btn_Login_phone.setEnabled(true);
+            progressBarphone = findViewById(R.id.progressbar_login_phone);
+            progressBarphone.setVisibility(View.VISIBLE);
         });
     }
 
@@ -123,6 +135,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onVerificationFailed(FirebaseException e) {
                         e.printStackTrace();
                         Toast.makeText(LoginActivity.this, "Verification failed", Toast.LENGTH_SHORT).show();
+
+                        progressBarphone.setVisibility(View.INVISIBLE);
                     }
 
                     @Override
@@ -148,10 +162,12 @@ public class LoginActivity extends AppCompatActivity {
                         Log.d("phone", "signInWithCredential:success");
                         iniciarSesion(task.getResult().getUser());
                         btn_Login_phone.setEnabled(false);
+
                     } else {
                         // Sign in failed, display a message and update the UI
                         Log.w("phone", "signInWithCredential:failure", task.getException());
                         btn_Login_phone.setEnabled(true);
+                        progressBarphone.setVisibility(View.INVISIBLE);
                         if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                             // The verification code entered was invalid
                             btn_Login_phone.setEnabled(true);
@@ -222,14 +238,17 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void cambiarActividad(FirebaseUser user) {
+
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+
         if (user.getEmail() != null) {
             intent.putExtra("username", user.getEmail());
         } else if (user.getPhoneNumber() != null) {
             intent.putExtra("username", user.getPhoneNumber());
         }
-        startActivity(intent);
         finish();
+        startActivity(intent);
+
     }
 
     private void errorInicioSesion() {
@@ -256,9 +275,15 @@ public class LoginActivity extends AppCompatActivity {
         txtPassword = findViewById(R.id.txt_pswd);
         lblForgotPassword = findViewById(R.id.lbl_forgot_password);
         progressBarEmail = findViewById(R.id.sign_in_pb);
-        btnLogIn.setOnClickListener(v -> logIn(txtEMail.getText().toString(), txtPassword.getText().toString()));
-        btnSignUp.setOnClickListener(v -> signUp(txtEMail.getText().toString(), txtPassword.getText().toString()));
-        lblForgotPassword.setOnClickListener(v -> newAccount());
+        btnLogIn.setOnClickListener(v -> {
+            logIn(txtEMail.getText().toString(), txtPassword.getText().toString());
+            txtPassword.onEditorAction(EditorInfo.IME_ACTION_DONE);
+        });
+        btnSignUp.setOnClickListener(v -> {
+            signUp(txtEMail.getText().toString(), txtPassword.getText().toString());
+            txtPassword.onEditorAction(EditorInfo.IME_ACTION_DONE);
+        });
+        lblForgotPassword.setOnClickListener(v -> sendEmail());
         txtEMail.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -301,14 +326,62 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+    private void sendEmail() {
+        AlertDialog.Builder alertbuilder = new AlertDialog.Builder(this);
+
+
+        LayoutInflater inflater = this.getLayoutInflater();
+
+
+        View alertdialogview = getLayoutInflater().inflate(R.layout.alertdialog, null);
+        Button btn_enviar_reset = alertdialogview.findViewById(R.id.btn_enviar_resetpwsd);
+        EditText correopararecuperar = alertdialogview.findViewById(R.id.usernamee);
+        correopararecuperar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String campodetexto = correopararecuperar.getText().toString().trim();
+                btn_enviar_reset.setEnabled(!campodetexto.isEmpty());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+        btn_enviar_reset.setOnClickListener(v -> firebaseAuth.sendPasswordResetEmail(correopararecuperar.getText().toString())
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+
+                        Toast.makeText(context, "Email sent.", Toast.LENGTH_LONG).show();
+                        correopararecuperar.setText("");
+                    } else {
+                        Toast.makeText(context, "Error, try again.", Toast.LENGTH_LONG).show();
+                        correopararecuperar.setText("");
+                    }
+                }));
+        Button btn_cancelar_reset = alertdialogview.findViewById(R.id.btn_cancelar_resetpwsd);
+
+        alertbuilder.setView(alertdialogview);
+        AlertDialog alerta = alertbuilder.create();
+        btn_cancelar_reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alerta.cancel();
+            }
+        });
+        alerta.show();
+    }
+
     private void actualizarBoton() {
         btnLogIn.setEnabled(emailCorrecto && pswdCorrecta);
         btnSignUp.setEnabled(emailCorrecto && pswdCorrecta);
     }
 
-    private void newAccount() {
-
-    }
 
     private void logIn(String email, String password) {
         btnLogIn.setEnabled(false);

@@ -29,6 +29,8 @@ public class ChatListFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_chat_list, container, false);
     }
 
+
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);

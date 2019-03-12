@@ -20,6 +20,7 @@
         <item name="android:textColor">#000</item>
     </style>
 
+
     <style name="boton" parent="Base.Widget.AppCompat.Button">
         <item name="android:background">@drawable/boton_default_gris</item>
         <item name="android:textAllCaps">false</item>
@@ -37,7 +38,7 @@
     </style>
 
     <style name="ButtonSinImagen" parent="Base.Widget.AppCompat.Button">
-        <item name="android:background">@drawable/button_con_imagen</item>
+        <item name="android:background">@drawable/button_sin_imagen</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:fontFamily">@font/montserrat</item>
         <item name="android:textColor">#000</item>
