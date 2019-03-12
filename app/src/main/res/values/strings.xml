@@ -58,4 +58,6 @@
     <string name="delete">Borrar</string>
     <string name="private_chat">Chat privado</string>
     <string name="confirm_private_chat">¿Quiere comenzar un chat privado?</string>
+    <string name="log_out">Log out</string>
+    <string name="map">Map</string>
 </resources>

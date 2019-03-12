@@ -123,6 +123,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return distance / 1000;
     }
 
+    public void changeMapType() {
+        if (mMap != null) {
+            if (mMap.getMapType() == GoogleMap.MAP_TYPE_NORMAL) {
+                mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+            } else if (mMap.getMapType() == GoogleMap.MAP_TYPE_HYBRID) {
+                mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+            }
+        }
+    }
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;

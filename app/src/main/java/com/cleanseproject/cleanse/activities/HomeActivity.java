@@ -15,6 +15,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.SparseArray;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,15 +46,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import java.util.HashMap;
+
 public class HomeActivity extends AppCompatActivity {
 
+    private SparseArray<MenuItem> menuItems;
     private NotificationManager notificationManager;
     private DrawerLayout drawerLayout;
     private CircularImageView imagenUsuario;
     private TextView nombreUsuario;
     private FirebaseDatabase firebaseDatabase;
     private FirebaseAuth mAuth;
-    private Context context;
     private ImageManagerService imageUserManagerService;
 
     private final int REQUEST_EVENT_CHANGED = 95;
@@ -72,7 +75,7 @@ public class HomeActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setProgressBarIndeterminateVisibility(true);
         setContentView(R.layout.activity_home);
-        context = this;
+        menuItems = new SparseArray<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
         imageUserManagerService = new ImageManagerService();
         notificationManager = new NotificationManager(this);
@@ -84,9 +87,8 @@ public class HomeActivity extends AppCompatActivity {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         Fragment currentFragment = getSupportFragmentManager()
                 .findFragmentById(R.id.content_frame);
-        if (!(currentFragment instanceof HomeFragment)) {
+        if (!(currentFragment instanceof HomeFragment))
             transaction.replace(R.id.content_frame, new HomeFragment(), "homeFragment");
-        }
         transaction.addToBackStack(null);
         transaction.commit();
     }
@@ -102,9 +104,10 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.user_menu, menu);
+        menuItems.put(R.id.menu_map, menu.findItem(R.id.menu_map));
+        menuItems.get(R.id.menu_map).setVisible(false);
         return true;
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -114,6 +117,11 @@ public class HomeActivity extends AppCompatActivity {
                 return true;
             case R.id.user_menu:
                 logOut();
+                return true;
+            case R.id.menu_map:
+                MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag("mapFragment");
+                if (mapFragment != null)
+                    mapFragment.changeMapType();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -143,10 +151,10 @@ public class HomeActivity extends AppCompatActivity {
         Button btnEditarPerfil = headerLayout.findViewById(R.id.btn_EditarPerfil);
         imagenUsuario = headerLayout.findViewById(R.id.nav_header_imagen);
         imageUserManagerService.userImageDownloadUrl(mAuth.getCurrentUser().getUid(), url
-                -> Glide.with(context).load(url).apply(RequestOptions.circleCropTransform()).into(imagenUsuario));
+                -> Glide.with(HomeActivity.this).load(url).apply(RequestOptions.circleCropTransform()).into(imagenUsuario));
         nombreUsuario = headerLayout.findViewById(R.id.nav_header_usuario);
         btnEditarPerfil.setOnClickListener(v -> {
-            Intent intent = new Intent(context, UserProfileActivity.class);
+            Intent intent = new Intent(HomeActivity.this, UserProfileActivity.class);
             intent.putExtra("userId", mAuth.getCurrentUser().getUid());
             startActivity(intent);
         });
@@ -158,9 +166,11 @@ public class HomeActivity extends AppCompatActivity {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:
+                    menuItems.get(R.id.menu_map).setVisible(false);
                     transaction.replace(R.id.content_frame, new HomeFragment(), "homeFragment");
                     break;
                 case R.id.nav_favourites:
+                    menuItems.get(R.id.menu_map).setVisible(false);
                     Bundle bundle = new Bundle();
                     HomeFragment homeFragment = new HomeFragment();
                     bundle.putString("filter", "favourites");
@@ -168,11 +178,12 @@ public class HomeActivity extends AppCompatActivity {
                     transaction.replace(R.id.content_frame, homeFragment, "homeFragment");
                     break;
                 case R.id.nav_chats:
+                    menuItems.get(R.id.menu_map).setVisible(false);
                     transaction.replace(R.id.content_frame, new ChatListFragment());
-
                     break;
                 case R.id.nav_map:
-                    transaction.replace(R.id.content_frame, new MapFragment());
+                    menuItems.get(R.id.menu_map).setVisible(true);
+                    transaction.replace(R.id.content_frame, new MapFragment(), "mapFragment");
             }
             transaction.addToBackStack(null);
             transaction.commit();
@@ -193,7 +204,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void showEventDetails(String key) {
-        Intent intent = new Intent(context, EventDetailsActivity.class);
+        Intent intent = new Intent(HomeActivity.this, EventDetailsActivity.class);
         intent.putExtra("evento", key);
         startActivityForResult(intent, REQUEST_EVENT_CHANGED);
     }
