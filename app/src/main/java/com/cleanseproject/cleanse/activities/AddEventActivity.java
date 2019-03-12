@@ -1,7 +1,6 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -26,7 +25,6 @@ import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.fragments.MapFragment;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
-import com.cleanseproject.cleanse.services.NotificationManager;
 import com.google.android.gms.maps.model.LatLng;
 import com.yalantis.ucrop.UCrop;
 

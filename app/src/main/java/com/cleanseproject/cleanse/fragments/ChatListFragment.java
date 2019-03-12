@@ -15,6 +15,7 @@ import com.cleanseproject.cleanse.dataClasses.Chat;
 import com.cleanseproject.cleanse.services.ChatManagerService;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ChatListFragment extends Fragment {
 
@@ -30,11 +31,10 @@ public class ChatListFragment extends Fragment {
     }
 
 
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        View view = getView();
+        View view = Objects.requireNonNull(getView());
         chatList = view.findViewById(R.id.chat_list);
         chatList.setOnItemClickListener((parent, v, position, id) -> {
             Chat chat = chatListAdapter.getItem(position);
@@ -46,7 +46,6 @@ public class ChatListFragment extends Fragment {
         chatManagerService = new ChatManagerService();
         chatManagerService.getUserChats(this::populateList);
     }
-
 
 
     private void populateList(ArrayList<Chat> chats) {

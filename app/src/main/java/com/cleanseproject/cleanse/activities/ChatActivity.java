@@ -59,7 +59,7 @@ public class ChatActivity extends AppCompatActivity {
             if (bottom < oldBottom) {
                 messageRecycler.postDelayed(
                         () -> messageRecycler.scrollToPosition(
-                                messageRecycler.getAdapter().getItemCount() - 1), 100);
+                                messageListAdapter.getItemCount() - 1), 100);
             }
         });
         messageRecycler.setLayoutManager(new GridLayoutManager(this, 1));
@@ -69,9 +69,10 @@ public class ChatActivity extends AppCompatActivity {
         messageRecycler.setAdapter(messageListAdapter);
         chatService = new ChatService(this::updateMessages);
         String chatId = getIntent().getStringExtra("chatuid");
-        if (chatId == null) {
-            Bundle b = getIntent().getExtras();// add these lines of code to get data from notification
-            chatId = b.getString("chatuid");
+        Bundle bundle = getIntent().getExtras();
+        if (chatId == null && bundle != null) {
+            //Get data from notification
+            chatId = bundle.getString("chatuid");
         }
         chatColors = getResources().getIntArray(R.array.chat_color_array);
         chatService.inicializar(chatId);
@@ -95,16 +96,18 @@ public class ChatActivity extends AppCompatActivity {
 
     private void navigateUp() {
         Intent intent = NavUtils.getParentActivityIntent(this);
-        intent.putExtra("fragment", "chats");
-        // Check if Activity has been opened from notification
-        if (NavUtils.shouldUpRecreateTask(this, intent) || isTaskRoot()) {
-            TaskStackBuilder.create(this)
-                    .addNextIntentWithParentStack(intent)
-                    .startActivities();
-        } else {
-            NavUtils.navigateUpTo(this, intent);
+        if (intent != null) {
+            intent.putExtra("fragment", "chats");
+            // Check if Activity has been opened from notification
+            if (NavUtils.shouldUpRecreateTask(this, intent) || isTaskRoot()) {
+                TaskStackBuilder.create(this)
+                        .addNextIntentWithParentStack(intent)
+                        .startActivities();
+            } else {
+                NavUtils.navigateUpTo(this, intent);
+            }
+            overridePendingTransition(R.anim.enter, R.anim.exit);
         }
-        overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
     private final TextWatcher sendTextWatcher = new TextWatcher() {
@@ -134,12 +137,12 @@ public class ChatActivity extends AppCompatActivity {
         }
         messages.add(message);
         messageListAdapter.notifyDataSetChanged();
-        messageRecycler.scrollToPosition(messageRecycler.getAdapter().getItemCount() - 1);
+        messageRecycler.scrollToPosition(messageListAdapter.getItemCount() - 1);
     }
 
     private void sendMessage() {
         chatService.sendMessage(txtMessage.getText().toString().trim());
-        messageRecycler.scrollToPosition(messageRecycler.getAdapter().getItemCount() - 1);
+        messageRecycler.scrollToPosition(messageListAdapter.getItemCount() - 1);
         txtMessage.setText("");
         btnSend.setEnabled(false);
     }

@@ -62,10 +62,12 @@ public class ChatManagerService {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child("members").hasChildren()) {
                     for (DataSnapshot userSnapshot : dataSnapshot.child("members").getChildren()) {
-                        firebaseDatabase.getReference("userChats")
-                                .child(userSnapshot.getValue().toString())
-                                .child(chatId)
-                                .removeValue();
+                        Object member = userSnapshot.getValue();
+                        if (member != null)
+                            firebaseDatabase.getReference("userChats")
+                                    .child(member.toString())
+                                    .child(chatId)
+                                    .removeValue();
                     }
                 }
                 firebaseDatabase.getReference("chatMessages")
@@ -90,6 +92,7 @@ public class ChatManagerService {
         userChats.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                assert firebaseUser != null;
                 DataSnapshot userChatsData = dataSnapshot.child("userChats").child(firebaseUser.getUid());
                 DataSnapshot users = dataSnapshot.child("users");
                 ArrayList<Chat> chats = new ArrayList<>();
