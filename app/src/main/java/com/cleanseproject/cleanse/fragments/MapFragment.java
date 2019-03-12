@@ -112,7 +112,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             locationService.setLocationListener(location -> {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 if (followUser)
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11.0f));
             });
         }
         mMap.setOnMapClickListener(latLng -> {
