@@ -1,9 +1,7 @@
 package com.cleanseproject.cleanse.services;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.bumptech.glide.signature.ObjectKey;
 import com.cleanseproject.cleanse.callbacks.ChatListLoadCallback;
 import com.cleanseproject.cleanse.callbacks.ChatRemovedCallback;
 import com.cleanseproject.cleanse.callbacks.UnreadMessagesCallback;
@@ -38,7 +36,6 @@ public class ChatManagerService {
         String chatKey = chat.getKey();
         chat.setValue(new Chat(chatKey, "", null, "", false, "", System.currentTimeMillis()));
         for (String userId : userIds) {
-            Log.d("joined", userId);
             joinChat(userId, chatKey);
         }
     }

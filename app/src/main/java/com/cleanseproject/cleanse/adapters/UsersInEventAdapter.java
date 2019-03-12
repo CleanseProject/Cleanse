@@ -15,7 +15,6 @@ import com.cleanseproject.cleanse.activities.EventDetailsActivity;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.services.ImageManagerService;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
