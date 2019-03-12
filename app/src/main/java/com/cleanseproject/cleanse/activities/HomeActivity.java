@@ -58,7 +58,6 @@ public class HomeActivity extends AppCompatActivity {
     private Context context;
     private Button btnEditarPerfil;
     private ImageManagerService imageUserManagerService;
-    private StorageReference storageReference;
 
     @Override
     public void onStart() {

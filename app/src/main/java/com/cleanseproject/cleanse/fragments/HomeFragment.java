@@ -40,7 +40,6 @@ public class HomeFragment extends Fragment {
     private ProgressBar progressBar;
     private FloatingActionButton fab;
     private ArrayList<Event> events;
-    private ChatService.GeofenceManager geofenceManager;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,14 +62,12 @@ public class HomeFragment extends Fragment {
             updateRecycleView();
         });
         cargarDatos();
-
     }
 
     private void cargarDatos() {
         LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
         rvEventos.setLayoutManager(llm);
         eventManagerService = new EventManagerService();
-        geofenceManager = new ChatService.GeofenceManager(getContext());
         locationService = new LocationService(getContext());
         events = new ArrayList<>();
         adaptador = new EventListAdapter(events);
@@ -92,7 +89,7 @@ public class HomeFragment extends Fragment {
             if (filter != null && filter.equals("favourites")) {
                 eventManagerService.getFavouriteEvents(this::rellenarEventos);
             }
-        } else {
+        } else if (currentLocation != null) {
             if (locationService.checkPermission())
                 eventManagerService.getCloseEvents(
                         new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
@@ -101,6 +98,8 @@ public class HomeFragment extends Fragment {
             else {
                 //TODO: Mostrar petición de localización
             }
+        } else {
+            eventManagerService.getUpcomingEvents(this::rellenarEventos);
         }
     }
 
