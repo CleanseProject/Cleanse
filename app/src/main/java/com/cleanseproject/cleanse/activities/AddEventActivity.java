@@ -19,7 +19,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 
 import com.asksira.bsimagepicker.BSImagePicker;
 import com.cleanseproject.cleanse.R;

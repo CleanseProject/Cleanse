@@ -20,7 +20,6 @@ import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.AddEventActivity;
 import com.cleanseproject.cleanse.adapters.EventListAdapter;
 import com.cleanseproject.cleanse.dataClasses.Event;
-import com.cleanseproject.cleanse.services.ChatService;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
 import com.firebase.geofire.GeoLocation;
