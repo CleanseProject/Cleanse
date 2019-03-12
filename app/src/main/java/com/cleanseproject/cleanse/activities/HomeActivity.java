@@ -228,8 +228,11 @@ public class HomeActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_EVENT_CHANGED) {
             HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("homeFragment");
-            if (homeFragment != null)
-                homeFragment.cargarDatos();
+            if (homeFragment != null) {
+                String eventId = data.getStringExtra("deletedEvent");
+                if (eventId != null)
+                    homeFragment.deleteEvent(eventId);
+            }
         }
     }
 

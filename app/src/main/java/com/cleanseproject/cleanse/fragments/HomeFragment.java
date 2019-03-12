@@ -28,13 +28,14 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 public class HomeFragment extends Fragment {
 
     private EventManagerService eventManagerService;
     private LocationService locationService;
     private SwipeRefreshLayout swipeRefresh;
-    private EventListAdapter adaptador;
+    private EventListAdapter eventListAdapter;
     private RecyclerView rvEventos;
     private ProgressBar progressBar;
     private FloatingActionButton fab;
@@ -63,14 +64,14 @@ public class HomeFragment extends Fragment {
         cargarDatos();
     }
 
-    public void cargarDatos() {
+    private void cargarDatos() {
         LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
         rvEventos.setLayoutManager(llm);
         eventManagerService = new EventManagerService();
         locationService = new LocationService(getContext());
         events = new ArrayList<>();
-        adaptador = new EventListAdapter(getActivity(), events);
-        rvEventos.setAdapter(adaptador);
+        eventListAdapter = new EventListAdapter(getActivity(), events);
+        rvEventos.setAdapter(eventListAdapter);
         rvEventos.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -99,6 +100,17 @@ public class HomeFragment extends Fragment {
         }
     }
 
+    public void deleteEvent(String eventId) {
+        Iterator<Event> iterator = events.iterator();
+        while (iterator.hasNext()) {
+            Event event = iterator.next();
+            if (event.getId() != null)
+                if (event.getId().equals(eventId))
+                    iterator.remove();
+        }
+        eventListAdapter.notifyDataSetChanged();
+    }
+
     private void updateRecycleView() {
         // TODO: Conexion con Firebase para updatear la lista de eventos
         cargarDatos();
@@ -113,7 +125,7 @@ public class HomeFragment extends Fragment {
         event.setFavourite(false);
         events.add(event);
         Collections.sort(events);
-        adaptador.notifyDataSetChanged();
+        eventListAdapter.notifyDataSetChanged();
         if (progressBar.getVisibility() == View.VISIBLE)
             progressBar.setVisibility(View.GONE);
         eventManagerService.getFavouriteKeys(this::setFavourites);
@@ -128,7 +140,7 @@ public class HomeFragment extends Fragment {
                 }
             }
         }
-        adaptador.notifyDataSetChanged();
+        eventListAdapter.notifyDataSetChanged();
     }
 
 }

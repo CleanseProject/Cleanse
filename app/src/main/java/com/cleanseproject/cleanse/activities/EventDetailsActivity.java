@@ -228,7 +228,9 @@ public class EventDetailsActivity extends AppCompatActivity {
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.delete, (dialog, which) -> {
                     eventManagerService.deleteEvent(event.getId());
-                    setResult(RESULT_OK);
+                    Intent intent = new Intent();
+                    intent.putExtra("deletedEvent", event.getId());
+                    setResult(RESULT_OK, intent);
                     finish();
                 })
                 .show();
