@@ -2,6 +2,7 @@ package com.cleanseproject.cleanse.services;
 
 import android.support.annotation.NonNull;
 
+import com.cleanseproject.cleanse.callbacks.ChatCreatedCallback;
 import com.cleanseproject.cleanse.callbacks.ChatListLoadCallback;
 import com.cleanseproject.cleanse.callbacks.ChatRemovedCallback;
 import com.cleanseproject.cleanse.callbacks.UnreadMessagesCallback;
@@ -31,13 +32,48 @@ public class ChatManagerService {
         firebaseUser = firebaseAuth.getCurrentUser();
     }
 
-    public void createChat(ArrayList<String> userIds) {
+    public void createChat(ArrayList<String> userIds, ChatCreatedCallback callback) {
         DatabaseReference chat = firebaseDatabase.getReference("chats").push();
         String chatKey = chat.getKey();
         chat.setValue(new Chat(chatKey, "", null, "", false, "", System.currentTimeMillis()));
         for (String userId : userIds) {
             joinChat(userId, chatKey);
         }
+        callback.onChatCreated(chatKey);
+    }
+
+    public void startPrivateChat(ArrayList<String> userIds, ChatCreatedCallback callback) {
+        String firstUser = userIds.get(0);
+        String secondUser = userIds.get(1);
+        firebaseDatabase.getReference("chats")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() != null) {
+                            boolean exists = false;
+                            for (DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
+                                ArrayList<String> memberIds = new ArrayList<>();
+                                Chat chat = chatSnapshot.getValue(Chat.class);
+                                if (!chat.getGroupChat()) {
+                                    for (DataSnapshot memberSnapshot : chatSnapshot.child("members").getChildren()) {
+                                        memberIds.add(memberSnapshot.getValue(String.class));
+                                    }
+                                    if (memberIds.contains(firstUser) && memberIds.contains(secondUser)) {
+                                        exists = true;
+                                        callback.onChatCreated(chatSnapshot.getKey());
+                                    }
+                                }
+                            }
+                            if (!exists)
+                                createChat(userIds, callback);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     public void joinChat(String userId, String chatId) {

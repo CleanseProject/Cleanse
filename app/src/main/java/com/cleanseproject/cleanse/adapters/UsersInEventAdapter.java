@@ -62,7 +62,7 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
         void bind(User user) {
             lblUsername.setText(user.getName());
             if (!user.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
-                ivUser.setOnClickListener(v -> ((EventDetailsActivity) context).privateChat(user));
+                ivUser.setOnClickListener(v -> ((EventDetailsActivity) context).privateChatDialog(user));
             new ImageManagerService().userImageDownloadUrl(user.getUserId(), url ->
                     Glide.with(context)
                             .load(url)

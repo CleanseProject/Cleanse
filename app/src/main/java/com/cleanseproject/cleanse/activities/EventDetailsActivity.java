@@ -18,6 +18,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -231,18 +232,26 @@ public class EventDetailsActivity extends AppCompatActivity {
                 .show();
     }
 
-    public void privateChat(User user) {
+    public void privateChatDialog(User user) {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.private_chat)
                 .setMessage(R.string.confirm_private_chat)
-                .setPositiveButton(R.string.ok, (dialog, which) -> {
-                    ArrayList<String> userIds = new ArrayList<>();
-                    userIds.add(firebaseAuth.getCurrentUser().getUid());
-                    userIds.add(user.getUserId());
-                    chatManagerService.createChat(userIds);
-                })
+                .setPositiveButton(R.string.ok, (dialog, which) -> startPrivateChat(user))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
+    }
+
+    private void startPrivateChat(User user) {
+        ArrayList<String> userIds = new ArrayList<>();
+        userIds.add(firebaseAuth.getCurrentUser().getUid());
+        userIds.add(user.getUserId());
+        chatManagerService.startPrivateChat(userIds, chatId -> {
+            Log.d("chatid", chatId);
+        });
+/*        Intent intent = new Intent(EventDetailsActivity.this, ChatActivity.class);
+        intent.putExtra("chatuid", event.getId());
+        intent.putExtra("chatname", event.getName());
+        startActivity(intent);*/
     }
 
     private void addMemberUser(User user) {
