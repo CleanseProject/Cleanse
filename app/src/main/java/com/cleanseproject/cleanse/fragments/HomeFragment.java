@@ -1,6 +1,5 @@
 package com.cleanseproject.cleanse.fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
@@ -64,7 +63,7 @@ public class HomeFragment extends Fragment {
         cargarDatos();
     }
 
-    private void cargarDatos() {
+    public void cargarDatos() {
         LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
         rvEventos.setLayoutManager(llm);
         eventManagerService = new EventManagerService();

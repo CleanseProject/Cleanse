@@ -87,7 +87,7 @@ public class HomeActivity extends AppCompatActivity {
         Fragment currentFragment = getSupportFragmentManager()
                 .findFragmentById(R.id.content_frame);
         if (!(currentFragment instanceof HomeFragment)) {
-            transaction.replace(R.id.content_frame, new HomeFragment());
+            transaction.replace(R.id.content_frame, new HomeFragment(), "homeFragment");
         }
         transaction.addToBackStack(null);
         transaction.commit();
@@ -160,14 +160,14 @@ public class HomeActivity extends AppCompatActivity {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:
-                    transaction.replace(R.id.content_frame, new HomeFragment());
+                    transaction.replace(R.id.content_frame, new HomeFragment(), "homeFragment");
                     break;
                 case R.id.nav_favourites:
                     Bundle bundle = new Bundle();
                     HomeFragment homeFragment = new HomeFragment();
                     bundle.putString("filter", "favourites");
                     homeFragment.setArguments(bundle);
-                    transaction.replace(R.id.content_frame, homeFragment);
+                    transaction.replace(R.id.content_frame, homeFragment, "homeFragment");
                     break;
                 case R.id.nav_chats:
                     transaction.replace(R.id.content_frame, new ChatListFragment());
@@ -187,7 +187,7 @@ public class HomeActivity extends AppCompatActivity {
             transaction.replace(R.id.content_frame, new ChatListFragment());
             navigationView.getMenu().getItem(3).setChecked(true);
         } else {
-            transaction.replace(R.id.content_frame, new HomeFragment());
+            transaction.replace(R.id.content_frame, new HomeFragment(), "homeFragment");
             navigationView.getMenu().getItem(0).setChecked(true);
         }
         transaction.addToBackStack(null);
@@ -219,8 +219,9 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && requestCode == REQUEST_EVENT_CHANGED) {
-            Log.d("result", "deleted");
-            recreate();
+            HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("homeFragment");
+            if (homeFragment != null)
+                homeFragment.cargarDatos();
         }
     }
 
