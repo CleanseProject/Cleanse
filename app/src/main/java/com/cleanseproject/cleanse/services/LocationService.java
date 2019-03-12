@@ -8,7 +8,9 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 
 import com.cleanseproject.cleanse.R;
@@ -31,7 +33,21 @@ public class LocationService {
     }
 
     public boolean checkPermission() {
+        if (!isLocationEnabled(context))
+            return false;
         return ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static boolean isLocationEnabled(Context context) {
+        int locationMode = 0;
+        try {
+            locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return locationMode != Settings.Secure.LOCATION_MODE_OFF;
     }
 
     public Location getCurrentLocation() {
@@ -80,7 +96,8 @@ public class LocationService {
     public float distance(Location eventLocation) {
         if (checkPermission()) {
             Location currentLocation = getCurrentLocation();
-            return currentLocation.distanceTo(eventLocation);
+            if (currentLocation != null)
+                return currentLocation.distanceTo(eventLocation);
         }
         return -1;
     }
