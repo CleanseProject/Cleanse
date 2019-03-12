@@ -79,7 +79,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         CleanseMapFragment mapFragment = (CleanseMapFragment) getChildFragmentManager().findFragmentById(R.id.map);  //use SuppoprtMapFragment for using in fragment instead of activity  MapFragment = activity   SupportMapFragment = fragment
         mapFragment.getMapAsync(this);
         mapFragment.setOnDragListener(motionEvent -> {
-            //mMap.getProjection().getVisibleRegion().latLngBounds.contains()
             LatLng latLng = mMap.getProjection().getVisibleRegion().latLngBounds.getCenter();
             Location location = new Location("");
             location.setLatitude(latLng.latitude);
@@ -97,18 +96,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (checkPermission())
+        if (checkPermission()) {
             mMap.setMyLocationEnabled(true);
-        mMap.setOnMyLocationButtonClickListener(() -> {
-            followUser = true;
-            return false;
-        });
-        locationService.setLocationListener(location -> {
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            if (followUser)
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
-        });
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            mMap.setOnMyLocationButtonClickListener(() -> {
+                followUser = true;
+                return false;
+            });
+            Location currentLocation = locationService.getCurrentLocation();
+            lastLoaded = currentLocation;
+            eventManagerService.getCloseEvents(
+                    new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                    LOAD_RADIUS,
+                    this::addEventToMap);
+            locationService.setLocationListener(location -> {
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                if (followUser)
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
+            });
+        }
         mMap.setOnMapClickListener(latLng -> {
             if (selectedMarker != null) {
                 selectedMarker.remove();
@@ -122,12 +128,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 selectedMarker.showInfoWindow();
             }
         });
-        Location currentLocation = locationService.getCurrentLocation();
-        lastLoaded = currentLocation;
-        eventManagerService.getCloseEvents(
-                new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                LOAD_RADIUS,
-                this::addEventToMap);
         mMap.setOnInfoWindowClickListener(marker -> {
             if (selectedMarker != null) {
                 LatLng latLng = marker.getPosition();
@@ -156,7 +156,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
     }
-
 
     private boolean checkPermission() {
         return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
