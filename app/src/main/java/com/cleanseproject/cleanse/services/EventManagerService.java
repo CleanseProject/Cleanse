@@ -160,6 +160,30 @@ public class EventManagerService {
         });
     }
 
+
+    public void getUpcomingEvents(EventLoadCallback callback) {
+        firebaseDatabase.getReference("events").orderByChild("createdAt")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot eventSnapchot : dataSnapshot.getChildren()) {
+                            Event event = eventSnapchot.getValue(Event.class);
+                            if (event != null && event.getEventDate() > System.currentTimeMillis()) {
+                                event.setId(eventSnapchot.getKey());
+                                callback.onEventLoaded(event);
+                            } else {
+                                Log.d("Firebase", "Null Event returned");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+    }
+
     public void getFavouriteEvents(EventLoadCallback callback) {
         DatabaseReference userEventsRef = firebaseDatabase.getReference("userEvents").child(firebaseUser.getUid());
         userEventsRef.keepSynced(true);
