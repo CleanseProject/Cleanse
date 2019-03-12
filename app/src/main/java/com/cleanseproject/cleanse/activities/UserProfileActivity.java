@@ -64,7 +64,7 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.vista_perfil_usuario);
+        setContentView(R.layout.activity_user_profile);
         Button btn_changepic = findViewById(R.id.btn_EditarPerfil);
         imagenPerfil = findViewById(R.id.ivAutor);
         btn_savechanges = findViewById(R.id.btnSaveChanges);
@@ -78,7 +78,7 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
         Toolbar toolbar = findViewById(R.id.profile_toolbar);
         toolbar.setTitle("Profile");
         setSupportActionBar(toolbar);
-        ActionBar actionBar= Objects.requireNonNull(getSupportActionBar());
+        ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setDisplayShowHomeEnabled(true);
         mAuth = FirebaseAuth.getInstance();
@@ -126,11 +126,9 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
             txtUsuario.setText(mAuth.getCurrentUser().getEmail());
             Log.v("Cambio", "Correo");
         } else {
-            txtUsuario.setText("error");
+            txtUsuario.setText("Error");
             Log.v("Cambio", "error");
         }
-
-
         btn_changepic.setOnClickListener(v -> {
             BSImagePicker singleSelectionPicker = new BSImagePicker.Builder("com.cleanseproject.fileprovider")
                     .build();
@@ -150,17 +148,17 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
             apellido = nombreDividido[1];
             userManagerService.updateUserData(nombre, apellido);
             nombreCompletoAnterior = nombre + " " + apellido;
-            Toast.makeText(this, "Changes saved successfully!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.changes_success), Toast.LENGTH_LONG).show();
         } else if (cambio_de_nombre) {
             nombreDividido = nombreCompletoNuevo.split(" ", 2);
             nombre = nombreDividido[0];
             apellido = nombreDividido[1];
             userManagerService.updateUserData(nombre, apellido);
             nombreCompletoAnterior = nombre + " " + apellido;
-            Toast.makeText(this, "Changes saved successfully!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.changes_success), Toast.LENGTH_LONG).show();
         } else if (cambio_de_imagen) {
             imageManagerService.uploadUserImage(mAuth.getCurrentUser().getUid(), imagePath);
-            Toast.makeText(this, "Changes saved successfully!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.changes_success), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -209,7 +207,6 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && requestCode == UCrop.REQUEST_CROP) {
             imagePath = UCrop.getOutput(data);
-            Log.v("Cambio", imagePath + " ");
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
                 imagenPerfil.setImageBitmap(bitmap);
