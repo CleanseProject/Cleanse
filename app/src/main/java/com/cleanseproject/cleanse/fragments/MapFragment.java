@@ -37,6 +37,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.VisibleRegion;
 
 import java.util.HashMap;
 
@@ -50,9 +51,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private HashMap<Marker, String> markers;
 
     private Location lastLoaded;
-
-    private final int LOAD_RADIUS = 8527;
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -84,14 +82,45 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             Location location = new Location("");
             location.setLatitude(latLng.latitude);
             location.setLongitude(latLng.longitude);
-            if (lastLoaded == null || (lastLoaded.distanceTo(location) / 1000) > LOAD_RADIUS) {
+            if (lastLoaded == null || (lastLoaded.distanceTo(location) / 1000) > getMapVisibleRadiusKm()) {
                 eventManagerService.getCloseEvents(
                         new GeoLocation(latLng.latitude, latLng.longitude),
-                        LOAD_RADIUS,
+                        getMapVisibleRadiusKm(),
                         this::addEventToMap);
                 lastLoaded = location;
             }
         });
+    }
+
+    private double getMapVisibleRadiusKm() {
+        VisibleRegion visibleRegion = mMap.getProjection().getVisibleRegion();
+        LatLng farRight = visibleRegion.farRight;
+        LatLng farLeft = visibleRegion.farLeft;
+        LatLng nearRight = visibleRegion.nearRight;
+        LatLng nearLeft = visibleRegion.nearLeft;
+        float[] distanceWidth = new float[2];
+        Location.distanceBetween(
+                (farRight.latitude + nearRight.latitude) / 2,
+                (farRight.longitude + nearRight.longitude) / 2,
+                (farLeft.latitude + nearLeft.latitude) / 2,
+                (farLeft.longitude + nearLeft.longitude) / 2,
+                distanceWidth
+        );
+        float[] distanceHeight = new float[2];
+        Location.distanceBetween(
+                (farRight.latitude + nearRight.latitude) / 2,
+                (farRight.longitude + nearRight.longitude) / 2,
+                (farLeft.latitude + nearLeft.latitude) / 2,
+                (farLeft.longitude + nearLeft.longitude) / 2,
+                distanceHeight
+        );
+        float distance;
+        if (distanceWidth[0] > distanceHeight[0]) {
+            distance = distanceWidth[0];
+        } else {
+            distance = distanceHeight[0];
+        }
+        return distance / 1000;
     }
 
     @Override
@@ -106,16 +135,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             });
             Location currentLocation = locationService.getCurrentLocation();
             lastLoaded = currentLocation;
-            eventManagerService.getCloseEvents(
-                    new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                    LOAD_RADIUS,
-                    this::addEventToMap);
             locationService.setLocationListener(location -> {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
                 if (followUser)
                     mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11.0f));
             });
         }
+        eventManagerService.getCloseEvents(
+                new GeoLocation(0, 0),
+                getMapVisibleRadiusKm(),
+                this::addEventToMap);
         mMap.setOnMapClickListener(latLng -> {
             if (selectedMarker != null) {
                 selectedMarker.remove();
