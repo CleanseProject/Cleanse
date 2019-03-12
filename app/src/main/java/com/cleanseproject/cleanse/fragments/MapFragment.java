@@ -207,11 +207,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 markerType = R.drawable.marcadorlimpio_vector;
         }
         LatLng latLng = new LatLng(event.getLatitude(), event.getLongitude());
-        Marker marker = mMap.addMarker(new MarkerOptions()
-                .position(latLng)
-                .title(event.getName())
-                .icon(bitmapDescriptorFromVector(getContext(), markerType)));
-        markers.put(marker, event.getId());
+        Context context = getContext();
+        if (context != null) {
+            Marker marker = mMap.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(event.getName())
+                    .icon(bitmapDescriptorFromVector(getContext(), markerType)));
+            markers.put(marker, event.getId());
+        }
     }
 
     private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
