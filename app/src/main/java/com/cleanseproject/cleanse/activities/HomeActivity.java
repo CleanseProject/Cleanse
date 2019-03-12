@@ -102,8 +102,11 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.user_menu, menu);
-        menuItems.put(R.id.menu_map, menu.findItem(R.id.menu_map));
-        menuItems.get(R.id.menu_map).setVisible(false);
+        MenuItem mapType = menu.findItem(R.id.menu_map);
+        menuItems.put(R.id.menu_map, mapType);
+        mapType.setVisible(false);
+        MenuItem filter = menu.findItem(R.id.menu_filter);
+        menuItems.put(R.id.menu_filter, filter);
         return true;
     }
 
@@ -121,6 +124,11 @@ public class HomeActivity extends AppCompatActivity {
                 if (mapFragment != null)
                     mapFragment.changeMapType();
                 return true;
+            case R.id.menu_filter:
+                HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("homeFragment");
+                if (homeFragment != null)
+                    homeFragment.changeFilter();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -164,10 +172,12 @@ public class HomeActivity extends AppCompatActivity {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:
+                    menuItems.get(R.id.menu_filter).setVisible(true);
                     menuItems.get(R.id.menu_map).setVisible(false);
                     transaction.replace(R.id.content_frame, new HomeFragment(), "homeFragment");
                     break;
                 case R.id.nav_favourites:
+                    menuItems.get(R.id.menu_filter).setVisible(false);
                     menuItems.get(R.id.menu_map).setVisible(false);
                     Bundle bundle = new Bundle();
                     HomeFragment homeFragment = new HomeFragment();
@@ -176,10 +186,12 @@ public class HomeActivity extends AppCompatActivity {
                     transaction.replace(R.id.content_frame, homeFragment, "homeFragment");
                     break;
                 case R.id.nav_chats:
+                    menuItems.get(R.id.menu_filter).setVisible(false);
                     menuItems.get(R.id.menu_map).setVisible(false);
                     transaction.replace(R.id.content_frame, new ChatListFragment());
                     break;
                 case R.id.nav_map:
+                    menuItems.get(R.id.menu_filter).setVisible(false);
                     menuItems.get(R.id.menu_map).setVisible(true);
                     transaction.replace(R.id.content_frame, new MapFragment(), "mapFragment");
             }
