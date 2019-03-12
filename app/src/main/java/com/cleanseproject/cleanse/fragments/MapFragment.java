@@ -45,8 +45,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private EventManagerService eventManagerService;
     private LocationService locationService;
     private boolean followUser;
-    private double latitud;
-    private double longitud;
     private Marker selectedMarker;
     private HashMap<Marker, String> markers;
 
@@ -122,8 +120,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         .title(getString(R.string.add_event))
                         .snippet("Haz click para agregar este punto"));
                 selectedMarker.showInfoWindow();
-                latitud = latLng.latitude;
-                longitud = latLng.longitude;
             }
         });
         Location currentLocation = locationService.getCurrentLocation();
