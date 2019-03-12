@@ -67,7 +67,10 @@ public class ChatService {
                     if (!user.equals(firebaseUser.getUid())) {
                         chatManagerService.getUserName(
                                 firebaseUser.getUid(),
-                                username -> sendNotificationToUser(user, username + " @" + chat.getChatName(), message));
+                                username -> sendNotificationToUser(user,
+                                        username +
+                                                (chat.getChatName().equals("") ? "" : "@" + chat.getChatName())
+                                        , message));
                         firebaseDatabase.getReference("userChats").child(user).child(chat.getChatUid()).child("unread").runTransaction(new Transaction.Handler() {
                             @NonNull
                             @Override

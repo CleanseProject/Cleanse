@@ -214,7 +214,7 @@ public class EventDetailsActivity extends AppCompatActivity {
             fab_chat.setColorFilter(0xFFE5E5E5);
         });
         users = new ArrayList<>();
-        adapter = new UsersInEventAdapter(this, users);
+        adapter = new UsersInEventAdapter(users);
         rvUsuarios.setAdapter(adapter);
     }
 
