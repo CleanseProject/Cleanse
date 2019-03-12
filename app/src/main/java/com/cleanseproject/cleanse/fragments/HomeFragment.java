@@ -20,7 +20,6 @@ import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.AddEventActivity;
 import com.cleanseproject.cleanse.adapters.EventListAdapter;
 import com.cleanseproject.cleanse.dataClasses.Event;
-import com.cleanseproject.cleanse.services.ChatService;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
 import com.firebase.geofire.GeoLocation;
@@ -43,7 +42,7 @@ public class HomeFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_home, container, false);
     }
@@ -66,14 +65,14 @@ public class HomeFragment extends Fragment {
 
     }
 
-    private void cargarDatos() {
+    public void cargarDatos() {
         LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
         rvEventos.setLayoutManager(llm);
         eventManagerService = new EventManagerService();
 
         locationService = new LocationService(getContext());
         events = new ArrayList<>();
-        adaptador = new EventListAdapter(events);
+        adaptador = new EventListAdapter(getActivity(), events);
         rvEventos.setAdapter(adaptador);
         rvEventos.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -92,18 +91,16 @@ public class HomeFragment extends Fragment {
             if (filter != null && filter.equals("favourites")) {
                 eventManagerService.getFavouriteEvents(this::rellenarEventos);
             }
-        } else {
+        } else if (currentLocation != null) {
             if (locationService.checkPermission())
                 eventManagerService.getCloseEvents(
                         new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
                         8587,
                         this::rellenarEventos);
-            else {
-                //TODO: Mostrar petición de localización
-            }
+        } else {
+            eventManagerService.getUpcomingEvents(this::rellenarEventos);
         }
     }
-
 
     private void updateRecycleView() {
         // TODO: Conexion con Firebase para updatear la lista de eventos

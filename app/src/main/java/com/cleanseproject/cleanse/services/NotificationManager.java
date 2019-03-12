@@ -12,8 +12,8 @@ import java.util.HashSet;
 
 public class NotificationManager {
 
-    private Context context;
-    private HashSet<String> shownNotifications;
+    private final Context context;
+    private final HashSet<String> shownNotifications;
 
     public NotificationManager(Context context) {
         this.context = context;
@@ -25,14 +25,6 @@ public class NotificationManager {
         String body = intent.getStringExtra("body");
         String chatId = intent.getStringExtra("chatuid");
         String notificationid = intent.getStringExtra("notificationid");
-        String mensaje = "";
-        if (body != null && title != null) {
-            mensaje = title + ": " + body;
-        } else if (body != null) {
-            mensaje = body;
-        } else if (title != null) {
-            mensaje = title;
-        }
         if (!shownNotifications.contains(notificationid)) {
             Alerter.create((Activity) context)
                     .setTitle(title)

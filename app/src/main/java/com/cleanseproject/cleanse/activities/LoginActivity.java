@@ -1,18 +1,15 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.Layout;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
@@ -28,7 +25,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthCredential;
@@ -56,9 +52,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private String phoneVerificationId;
 
-    private Button btnGoogle;
-    private Button btnPhone;
-    private Button btnEmail;
     private ProgressBar progressBar, progressBarphone;
     private Context context;
 
@@ -66,9 +59,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        btnGoogle = findViewById(R.id.google_sign_i);
-        btnPhone = findViewById(R.id.btn_phone);
-        btnEmail = findViewById(R.id.btn_email);
+        Button btnGoogle = findViewById(R.id.google_sign_i);
+        Button btnPhone = findViewById(R.id.btn_phone);
+        Button btnEmail = findViewById(R.id.btn_email);
         progressBar = findViewById(R.id.first_sign_in_pb);
         btnEmail.setOnClickListener(v -> initializeEmailUI());
         btnGoogle.setOnClickListener(v -> googleSignIn());
@@ -92,9 +85,9 @@ public class LoginActivity extends AppCompatActivity {
         startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
     }
 
-    Button btn_Login_phone;
-    EditText txt_phonee;
-    TextView txtNumeroRegion;
+    private Button btn_Login_phone;
+    private EditText txt_phonee;
+    private TextView txtNumeroRegion;
 
     private void phoneDialog() {
         setContentView(R.layout.dialog_phone_prompt);
@@ -260,7 +253,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private Button btnLogIn;
     private Button btnSignUp;
-    private TextView lblForgotPassword;
     private EditText txtEMail;
     private EditText txtPassword;
     private ProgressBar progressBarEmail;
@@ -273,7 +265,7 @@ public class LoginActivity extends AppCompatActivity {
         btnSignUp = findViewById(R.id.btn_sign_up);
         txtEMail = findViewById(R.id.txt_email);
         txtPassword = findViewById(R.id.txt_pswd);
-        lblForgotPassword = findViewById(R.id.lbl_forgot_password);
+        TextView lblForgotPassword = findViewById(R.id.lbl_forgot_password);
         progressBarEmail = findViewById(R.id.sign_in_pb);
         btnLogIn.setOnClickListener(v -> {
             logIn(txtEMail.getText().toString(), txtPassword.getText().toString());
@@ -328,11 +320,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void sendEmail() {
         AlertDialog.Builder alertbuilder = new AlertDialog.Builder(this);
-
-
-        LayoutInflater inflater = this.getLayoutInflater();
-
-
         View alertdialogview = getLayoutInflater().inflate(R.layout.alertdialog, null);
         Button btn_enviar_reset = alertdialogview.findViewById(R.id.btn_enviar_resetpwsd);
         EditText correopararecuperar = alertdialogview.findViewById(R.id.usernamee);
@@ -368,12 +355,7 @@ public class LoginActivity extends AppCompatActivity {
 
         alertbuilder.setView(alertdialogview);
         AlertDialog alerta = alertbuilder.create();
-        btn_cancelar_reset.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alerta.cancel();
-            }
-        });
+        btn_cancelar_reset.setOnClickListener(v -> alerta.cancel());
         alerta.show();
     }
 

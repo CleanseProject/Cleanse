@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -24,13 +25,13 @@ import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.AddEventActivity;
 import com.cleanseproject.cleanse.activities.EventDetailsActivity;
 import com.cleanseproject.cleanse.dataClasses.Event;
+import com.cleanseproject.cleanse.fragments.mapFragment.CleanseMapFragment;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
 import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
@@ -45,14 +46,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private EventManagerService eventManagerService;
     private LocationService locationService;
     private boolean followUser;
-    private double latitud;
-    private double longitud;
     private Marker selectedMarker;
     private HashMap<Marker, String> markers;
 
+    private Location lastLoaded;
+
+    private final int LOAD_RADIUS = 8527;
+
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_map, container, false);
 
@@ -74,25 +77,45 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         markers = new HashMap<>();
         eventManagerService = new EventManagerService();
         locationService = new LocationService(getContext());
-        SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);  //use SuppoprtMapFragment for using in fragment instead of activity  MapFragment = activity   SupportMapFragment = fragment
+        CleanseMapFragment mapFragment = (CleanseMapFragment) getChildFragmentManager().findFragmentById(R.id.map);  //use SuppoprtMapFragment for using in fragment instead of activity  MapFragment = activity   SupportMapFragment = fragment
         mapFragment.getMapAsync(this);
+        mapFragment.setOnDragListener(motionEvent -> {
+            LatLng latLng = mMap.getProjection().getVisibleRegion().latLngBounds.getCenter();
+            Location location = new Location("");
+            location.setLatitude(latLng.latitude);
+            location.setLongitude(latLng.longitude);
+            if (lastLoaded == null || (lastLoaded.distanceTo(location) / 1000) > LOAD_RADIUS) {
+                eventManagerService.getCloseEvents(
+                        new GeoLocation(latLng.latitude, latLng.longitude),
+                        LOAD_RADIUS,
+                        this::addEventToMap);
+                lastLoaded = location;
+            }
+        });
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        if (checkPermission())
+        if (checkPermission()) {
             mMap.setMyLocationEnabled(true);
-        mMap.setOnMyLocationButtonClickListener(() -> {
-            followUser = true;
-            return false;
-        });
-        locationService.setLocationListener(location -> {
-            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-            if (followUser)
-                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 12.0f));
-        });
-        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            mMap.getUiSettings().setMyLocationButtonEnabled(true);
+            mMap.setOnMyLocationButtonClickListener(() -> {
+                followUser = true;
+                return false;
+            });
+            Location currentLocation = locationService.getCurrentLocation();
+            lastLoaded = currentLocation;
+            eventManagerService.getCloseEvents(
+                    new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
+                    LOAD_RADIUS,
+                    this::addEventToMap);
+            locationService.setLocationListener(location -> {
+                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                if (followUser)
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, 11.0f));
+            });
+        }
         mMap.setOnMapClickListener(latLng -> {
             if (selectedMarker != null) {
                 selectedMarker.remove();
@@ -104,15 +127,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                         .title(getString(R.string.add_event))
                         .snippet("Haz click para agregar este punto"));
                 selectedMarker.showInfoWindow();
-                latitud = latLng.latitude;
-                longitud = latLng.longitude;
             }
         });
-        Location currentLocation = locationService.getCurrentLocation();
-        eventManagerService.getCloseEvents(
-                new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
-                8587,
-                this::addEventToMap);
         mMap.setOnInfoWindowClickListener(marker -> {
             if (selectedMarker != null) {
                 LatLng latLng = marker.getPosition();
@@ -136,12 +152,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 }
             } else {
                 Intent intent = new Intent(getContext(), EventDetailsActivity.class);
-                intent.putExtra("Evento", markers.get(marker));
+                intent.putExtra("evento", markers.get(marker));
                 startActivity(intent);
             }
         });
     }
-
 
     private boolean checkPermission() {
         return ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;

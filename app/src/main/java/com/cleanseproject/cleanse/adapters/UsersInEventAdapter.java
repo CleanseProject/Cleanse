@@ -11,16 +11,17 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cleanseproject.cleanse.R;
+import com.cleanseproject.cleanse.activities.EventDetailsActivity;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.services.ImageManagerService;
+import com.google.firebase.auth.FirebaseAuth;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.util.ArrayList;
 
 public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapter.Holder> {
 
-    private ArrayList<User> listaUsuarios;
-    private Context context;
+    private final ArrayList<User> listaUsuarios;
 
     public UsersInEventAdapter(ArrayList<User> listaUsuarios) {
         this.listaUsuarios = listaUsuarios;
@@ -46,20 +47,22 @@ public class UsersInEventAdapter extends RecyclerView.Adapter<UsersInEventAdapte
 
     public static class Holder extends RecyclerView.ViewHolder {
 
-        private CircularImageView ivUser;
-        private TextView lblUsername;
+        private final CircularImageView ivUser;
+        private final TextView lblUsername;
 
-        private Context context;
+        private final Context context;
 
-        public Holder(View view) {
+        Holder(View view) {
             super(view);
             ivUser = view.findViewById(R.id.ivUser);
             lblUsername = view.findViewById(R.id.event_user_name);
             context = view.getContext();
         }
 
-        public void bind(User user) {
+        void bind(User user) {
             lblUsername.setText(user.getName());
+            if (!user.getUserId().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
+                ivUser.setOnClickListener(v -> ((EventDetailsActivity) context).privateChatDialog(user));
             new ImageManagerService().userImageDownloadUrl(user.getUserId(), url ->
                     Glide.with(context)
                             .load(url)

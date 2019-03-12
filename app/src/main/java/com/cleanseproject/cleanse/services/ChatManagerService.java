@@ -2,6 +2,7 @@ package com.cleanseproject.cleanse.services;
 
 import android.support.annotation.NonNull;
 
+import com.cleanseproject.cleanse.callbacks.ChatCreatedCallback;
 import com.cleanseproject.cleanse.callbacks.ChatListLoadCallback;
 import com.cleanseproject.cleanse.callbacks.ChatRemovedCallback;
 import com.cleanseproject.cleanse.callbacks.UnreadMessagesCallback;
@@ -21,9 +22,9 @@ import java.util.Collections;
 
 public class ChatManagerService {
 
-    private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;
-    private FirebaseDatabase firebaseDatabase;
+    private final FirebaseAuth firebaseAuth;
+    private final FirebaseUser firebaseUser;
+    private final FirebaseDatabase firebaseDatabase;
 
     public ChatManagerService() {
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -31,17 +32,48 @@ public class ChatManagerService {
         firebaseUser = firebaseAuth.getCurrentUser();
     }
 
-    public void createChat(ArrayList<String> userIds) {
+    public void createChat(ArrayList<String> userIds, ChatCreatedCallback callback) {
         DatabaseReference chat = firebaseDatabase.getReference("chats").push();
         String chatKey = chat.getKey();
-        chat.setValue(new Chat(chatKey, "", null, "", false, System.currentTimeMillis()));
+        chat.setValue(new Chat(chatKey, "", null, "", false, "", System.currentTimeMillis()));
         for (String userId : userIds) {
-            chat.child("members").push().setValue(userId);
+            joinChat(userId, chatKey);
         }
-        DatabaseReference userChats = firebaseDatabase.getReference("userChats");
-        for (String userId : userIds) {
-            userChats.child(userId).push().setValue(chatKey);
-        }
+        callback.onChatCreated(chatKey);
+    }
+
+    public void startPrivateChat(ArrayList<String> userIds, ChatCreatedCallback callback) {
+        String firstUser = userIds.get(0);
+        String secondUser = userIds.get(1);
+        firebaseDatabase.getReference("chats")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.getValue() != null) {
+                            boolean exists = false;
+                            for (DataSnapshot chatSnapshot : dataSnapshot.getChildren()) {
+                                ArrayList<String> memberIds = new ArrayList<>();
+                                Chat chat = chatSnapshot.getValue(Chat.class);
+                                if (!chat.getGroupChat()) {
+                                    for (DataSnapshot memberSnapshot : chatSnapshot.child("members").getChildren()) {
+                                        memberIds.add(memberSnapshot.getValue(String.class));
+                                    }
+                                    if (memberIds.contains(firstUser) && memberIds.contains(secondUser)) {
+                                        exists = true;
+                                        callback.onChatCreated(chatSnapshot.getKey());
+                                    }
+                                }
+                            }
+                            if (!exists)
+                                createChat(userIds, callback);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     public void joinChat(String userId, String chatId) {
@@ -51,7 +83,7 @@ public class ChatManagerService {
 
     public void createGroupChat(String eventId, String name) {
         DatabaseReference chat = firebaseDatabase.getReference("chats").child(eventId);
-        chat.setValue(new Chat(eventId, name, null, "", true, System.currentTimeMillis()));
+        chat.setValue(new Chat(eventId, name, null, "", true, "", System.currentTimeMillis()));
     }
 
     public void removeChat(String chatId, ChatRemovedCallback callback) {
@@ -61,10 +93,12 @@ public class ChatManagerService {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.child("members").hasChildren()) {
                     for (DataSnapshot userSnapshot : dataSnapshot.child("members").getChildren()) {
-                        firebaseDatabase.getReference("userChats")
-                                .child(userSnapshot.getValue().toString())
-                                .child(chatId)
-                                .removeValue();
+                        Object member = userSnapshot.getValue();
+                        if (member != null)
+                            firebaseDatabase.getReference("userChats")
+                                    .child(member.toString())
+                                    .child(chatId)
+                                    .removeValue();
                     }
                 }
                 firebaseDatabase.getReference("chatMessages")
@@ -89,23 +123,31 @@ public class ChatManagerService {
         userChats.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                assert firebaseUser != null;
                 DataSnapshot userChatsData = dataSnapshot.child("userChats").child(firebaseUser.getUid());
                 DataSnapshot users = dataSnapshot.child("users");
                 ArrayList<Chat> chats = new ArrayList<>();
                 for (DataSnapshot objChatId : userChatsData.getChildren()) {
                     String chatId = objChatId.getKey();
-                    Chat chat = dataSnapshot.child("chats").child(chatId).getValue(Chat.class);
-                    if (!chat.getGroupChat()) {
-                        for (String memberKey : chat.getMembers().keySet()) {
-                            String member = chat.getMembers().get(memberKey);
-                            User user = users.child(member).getValue(User.class);
-                            if (!user.getUserId().equals(firebaseUser.getUid())) {
-                                chat.setChatName(user.getName() + " " + user.getSurname());
+                    if (chatId != null) {
+                        Chat chat = dataSnapshot.child("chats").child(chatId).getValue(Chat.class);
+                        if (chat != null) {
+                            if (!chat.getGroupChat()) {
+                                for (String memberKey : chat.getMembers().keySet()) {
+                                    String member = chat.getMembers().get(memberKey);
+                                    User user = users.child(member).getValue(User.class);
+                                    if (!user.getUserId().equals(firebaseUser.getUid())) {
+                                        chat.setChatName(user.getName() + " " + user.getSurname());
+                                        chat.setImageId(user.getUserId());
+                                    }
+                                }
+                            } else {
+                                chat.setImageId(chatId);
                             }
+                            chat.setChatUid(chatId);
+                            chats.add(chat);
                         }
                     }
-                    chat.setChatUid(chatId);
-                    chats.add(chat);
                 }
                 Collections.sort(chats);
                 callback.onCallBack(chats);
@@ -139,7 +181,13 @@ public class ChatManagerService {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        callback.loadUnreadMessages(dataSnapshot.getValue(Integer.class));
+                        Object unreadObj = dataSnapshot.getValue();
+                        if (unreadObj != null)
+                            try {
+                                callback.loadUnreadMessages((int) unreadObj);
+                            } catch (ClassCastException e) {
+                                callback.loadUnreadMessages(((Long) unreadObj).intValue());
+                            }
                     }
 
                     @Override

@@ -15,7 +15,6 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,7 +43,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.StorageReference;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 public class HomeActivity extends AppCompatActivity {
@@ -56,9 +54,9 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseDatabase firebaseDatabase;
     private FirebaseAuth mAuth;
     private Context context;
-    private Button btnEditarPerfil;
     private ImageManagerService imageUserManagerService;
-    private StorageReference storageReference;
+
+    private final int REQUEST_EVENT_CHANGED = 95;
 
     @Override
     public void onStart() {
@@ -67,7 +65,6 @@ public class HomeActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this)
                 .registerReceiver(onEvent, f);
     }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,29 +82,16 @@ public class HomeActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        Fragment currentFragment = (Fragment) getSupportFragmentManager()
+        Fragment currentFragment = getSupportFragmentManager()
                 .findFragmentById(R.id.content_frame);
-
-        String actualfragment = currentFragment.toString().replace("{", "@");
-        String[] actual = actualfragment.split("@");
-        actualfragment = actual[0].trim();
-        switch (actualfragment) {
-            case "ChatListFragment":
-
-                transaction.replace(R.id.content_frame, new HomeFragment());
-                break;
-
-            case "MapFragment":
-
-                transaction.replace(R.id.content_frame, new HomeFragment());
-                break;
+        if (!(currentFragment instanceof HomeFragment)) {
+            transaction.replace(R.id.content_frame, new HomeFragment(), "homeFragment");
         }
         transaction.addToBackStack(null);
         transaction.commit();
-
     }
 
-    private BroadcastReceiver onEvent = new BroadcastReceiver() {
+    private final BroadcastReceiver onEvent = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent i) {
             notificationManager.showNotification(i);
         }
@@ -148,17 +132,15 @@ public class HomeActivity extends AppCompatActivity {
 
     private void initializeUI() {
         mAuth = FirebaseAuth.getInstance();
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_menu);
         drawerLayout = findViewById(R.id.drawer_layout);
-
         NavigationView navigationView = findViewById(R.id.nav_view);
         View headerLayout = navigationView.getHeaderView(0);
-        btnEditarPerfil = headerLayout.findViewById(R.id.btn_EditarPerfil);
+        Button btnEditarPerfil = headerLayout.findViewById(R.id.btn_EditarPerfil);
         imagenUsuario = headerLayout.findViewById(R.id.nav_header_imagen);
         imageUserManagerService.userImageDownloadUrl(mAuth.getCurrentUser().getUid(), url
                 -> Glide.with(context).load(url).apply(RequestOptions.circleCropTransform()).into(imagenUsuario));
@@ -176,14 +158,14 @@ public class HomeActivity extends AppCompatActivity {
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             switch (menuItem.getItemId()) {
                 case R.id.nav_home:
-                    transaction.replace(R.id.content_frame, new HomeFragment());
+                    transaction.replace(R.id.content_frame, new HomeFragment(), "homeFragment");
                     break;
                 case R.id.nav_favourites:
                     Bundle bundle = new Bundle();
                     HomeFragment homeFragment = new HomeFragment();
                     bundle.putString("filter", "favourites");
                     homeFragment.setArguments(bundle);
-                    transaction.replace(R.id.content_frame, homeFragment);
+                    transaction.replace(R.id.content_frame, homeFragment, "homeFragment");
                     break;
                 case R.id.nav_chats:
                     transaction.replace(R.id.content_frame, new ChatListFragment());
@@ -203,11 +185,17 @@ public class HomeActivity extends AppCompatActivity {
             transaction.replace(R.id.content_frame, new ChatListFragment());
             navigationView.getMenu().getItem(3).setChecked(true);
         } else {
-            transaction.replace(R.id.content_frame, new HomeFragment());
+            transaction.replace(R.id.content_frame, new HomeFragment(), "homeFragment");
             navigationView.getMenu().getItem(0).setChecked(true);
         }
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    public void showEventDetails(String key) {
+        Intent intent = new Intent(context, EventDetailsActivity.class);
+        intent.putExtra("evento", key);
+        startActivityForResult(intent, REQUEST_EVENT_CHANGED);
     }
 
     private void getNombreUsuario(String userId, UserNameLoadCallback callback) {
@@ -216,7 +204,8 @@ public class HomeActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                callback.onUsernameLoaded(user.getName() + " " + user.getSurname());
+                if (user != null)
+                    callback.onUsernameLoaded(user.getName() + " " + user.getSurname());
             }
 
             @Override
@@ -224,6 +213,15 @@ public class HomeActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_EVENT_CHANGED) {
+            HomeFragment homeFragment = (HomeFragment) getSupportFragmentManager().findFragmentByTag("homeFragment");
+            if (homeFragment != null)
+                homeFragment.cargarDatos();
+        }
     }
 
     @Override

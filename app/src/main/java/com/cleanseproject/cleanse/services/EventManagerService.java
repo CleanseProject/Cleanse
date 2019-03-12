@@ -28,12 +28,12 @@ import java.util.ArrayList;
 
 public class EventManagerService {
 
-    private ChatManagerService chatManagerService;
-    private ImageManagerService imageManagerService;
-    private UserManagerService userManagerService;
-    private FirebaseUser firebaseUser;
-    private FirebaseDatabase firebaseDatabase;
-    private GeoFire geoFire;
+    private final ChatManagerService chatManagerService;
+    private final ImageManagerService imageManagerService;
+    private final UserManagerService userManagerService;
+    private final FirebaseUser firebaseUser;
+    private final FirebaseDatabase firebaseDatabase;
+    private final GeoFire geoFire;
 
     public EventManagerService() {
         chatManagerService = new ChatManagerService();
@@ -60,6 +60,7 @@ public class EventManagerService {
         if (image != null) {
             imageManagerService.uploadEventImage(eventKey, image);
         }
+        setEventAsFavourite(eventKey);
         callback.onEventLoaded(event);
     }
 
@@ -80,7 +81,9 @@ public class EventManagerService {
                     firebaseDatabase.getReference("events")
                             .child(key)
                             .removeValue();
-                    geoFire.removeLocation(key);
+                    geoFire.removeLocation(key, (key1, error) -> {
+
+                    });
                     imageManagerService.removeEventImage(key);
                 }
 
@@ -97,8 +100,10 @@ public class EventManagerService {
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        callback.onLoad(dataSnapshot.getValue().toString()
-                                .equals(firebaseUser.getUid()));
+                        Object objCreatorId = dataSnapshot.getValue();
+                        if (objCreatorId != null)
+                            callback.onLoad(objCreatorId.toString()
+                                    .equals(firebaseUser.getUid()));
                     }
 
                     @Override
@@ -158,6 +163,32 @@ public class EventManagerService {
 
             }
         });
+    }
+
+
+    public void getUpcomingEvents(EventLoadCallback callback) {
+        firebaseDatabase.getReference("events").orderByChild("createdAt")
+                .addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        for (DataSnapshot eventSnapchot : dataSnapshot.getChildren()) {
+                            Event event = eventSnapchot.getValue(Event.class);
+                            // Checks whether event is null or after yesterday
+                            if (event != null && event.getEventDate() > (System.currentTimeMillis() - 86400000L)) {
+                                Log.d("time", "" + System.currentTimeMillis());
+                                event.setId(eventSnapchot.getKey());
+                                callback.onEventLoaded(event);
+                            } else {
+                                Log.d("Firebase", "Null Event returned");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
     }
 
     public void getFavouriteEvents(EventLoadCallback callback) {

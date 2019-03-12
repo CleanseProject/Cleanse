@@ -1,7 +1,6 @@
 package com.cleanseproject.cleanse.activities;
 
 import android.app.DatePickerDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -19,7 +18,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RadioButton;
-import android.widget.Spinner;
 
 import com.asksira.bsimagepicker.BSImagePicker;
 import com.cleanseproject.cleanse.R;
@@ -27,7 +25,6 @@ import com.cleanseproject.cleanse.dataClasses.Event;
 import com.cleanseproject.cleanse.fragments.MapFragment;
 import com.cleanseproject.cleanse.services.EventManagerService;
 import com.cleanseproject.cleanse.services.LocationService;
-import com.cleanseproject.cleanse.services.NotificationManager;
 import com.google.android.gms.maps.model.LatLng;
 import com.yalantis.ucrop.UCrop;
 
@@ -38,13 +35,9 @@ import java.util.UUID;
 
 public class AddEventActivity extends AppCompatActivity implements BSImagePicker.OnSingleImageSelectedListener {
 
-    private LocationService locationService;
     private EventManagerService eventManagerService;
-    private NotificationManager notificationManager;
     private DatePickerDialog mDateSetListener;
     private Button btnSelectDate;
-    private Button btnSelectLocation;
-    private Button btnAdd;
     private ImageView selectedImage;
     private EditText txtTitle, txtDescription;
     private RadioButton rdbtn_limpio;
@@ -54,7 +47,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     private Uri imagePath;
     private boolean frameAbierto;
     private LatLng eventLatLng;
-    private Toolbar toolbar;
     private FrameLayout addEvent;
     private long timeStamp;
 
@@ -68,7 +60,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.imgExitt:
-                cerrar_ventanas();
+                cerrarVentanas();
                 break;
 
         }
@@ -79,18 +71,18 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
-        btnSelectLocation = findViewById(R.id.btn_set_location);
+        Button btnSelectLocation = findViewById(R.id.btn_set_location);
         btnSelectDate = findViewById(R.id.btn_set_date);
-        btnAdd = findViewById(R.id.btn_event_add);
+        Button btnAdd = findViewById(R.id.btn_event_add);
         selectedImage = findViewById(R.id.imagen_evento);
         rdbtn_limpio = findViewById(R.id.radiobtn_limpio);
         rdbtn_sucio = findViewById(R.id.radiobtn_sucio);
         rdbtn_critico = findViewById(R.id.radiobtn_critico);
-        toolbar = findViewById(R.id.toolbar_addevent);
+        Toolbar toolbar = findViewById(R.id.toolbar_addevent);
         toolbar.setTitle(R.string.add_new_event);
         setSupportActionBar(toolbar);
         eventManagerService = new EventManagerService();
-        locationService = new LocationService(this);
+        LocationService locationService = new LocationService(this);
         txtTitle = findViewById(R.id.txt_add_event_title);
         txtDescription = findViewById(R.id.txt_add_description);
         Intent i = getIntent();
@@ -153,12 +145,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
                 new AlertDialog.Builder(this)
                         .setTitle(R.string.missing_data)
                         .setMessage(R.string.fill_all_data)
-                        .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                                dialog.cancel();
-                            }
-                        }).show();
+                        .setPositiveButton(R.string.ok, (dialog, id) -> dialog.cancel()).show();
             } else {
                 String title = txtTitle.getText().toString();
                 String description = txtDescription.getText().toString();
@@ -169,14 +156,14 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
                         imagePath,
                         event -> {
                             Intent intent = new Intent(AddEventActivity.this, EventDetailsActivity.class);
-                            intent.putExtra("Evento", event.getId());
+                            intent.putExtra("evento", event.getId());
                             startActivity(intent);
                         });
             }
         });
     }
 
-    public void cerrar_ventanas() {
+    private void cerrarVentanas() {
         if (frameAbierto) {
             addEvent.setVisibility(View.GONE);
             frameAbierto = false;
@@ -216,8 +203,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        } else if (resultCode == UCrop.RESULT_ERROR) {
-            UCrop.getError(data).printStackTrace();
         }
     }
 

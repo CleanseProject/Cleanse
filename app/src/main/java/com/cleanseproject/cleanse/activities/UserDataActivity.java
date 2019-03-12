@@ -55,12 +55,8 @@ public class UserDataActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (txtName.getText().toString().length() > 0) {
-                    nombre = true;
-                } else {
-                    nombre = false;
-                }
-                if (nombre == true && apellido == true) {
+                nombre = txtName.getText().toString().length() > 0;
+                if (nombre && apellido) {
                     btnContinue.setEnabled(true);
                 }
             }
@@ -79,12 +75,8 @@ public class UserDataActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (txtSurname.getText().toString().length() > 0) {
-                    apellido = true;
-                } else {
-                    apellido = false;
-                }
-                if (nombre == true && apellido == true) {
+                apellido = txtSurname.getText().toString().length() > 0;
+                if (nombre && apellido) {
                     btnContinue.setEnabled(true);
                 }
             }

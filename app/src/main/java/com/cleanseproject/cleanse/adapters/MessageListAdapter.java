@@ -29,10 +29,10 @@ public class MessageListAdapter extends RecyclerView.Adapter {
     private static final int VIEW_TYPE_MESSAGE_RECEIVED = 2;
     private static final int VIEW_TYPE_MESSAGE_RECEIVED_NO_USER = 3;
 
-    private List<Message> messages;
-    private ChatManagerService chatManagerService;
-    private HashMap<String, Integer> userColors;
-    private ImageManagerService imageManagerService;
+    private final List<Message> messages;
+    private final ChatManagerService chatManagerService;
+    private final HashMap<String, Integer> userColors;
+    private final ImageManagerService imageManagerService;
 
     public MessageListAdapter(List<Message> messages, HashMap<String, Integer> userColors) {
         this.userColors = userColors;
@@ -43,7 +43,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view;
         if (viewType == VIEW_TYPE_MESSAGE_SENT) {
             view = LayoutInflater.from(parent.getContext())
@@ -96,7 +96,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     private class SentMessageHolder extends RecyclerView.ViewHolder {
 
-        TextView messageText, timeText;
+        final TextView messageText;
+        final TextView timeText;
 
         SentMessageHolder(View itemView) {
             super(itemView);
@@ -113,8 +114,10 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     private class ReceivedMessageHolder extends RecyclerView.ViewHolder {
 
-        TextView messageText, timeText, nameText;
-        ImageView profileImage;
+        final TextView messageText;
+        final TextView timeText;
+        final TextView nameText;
+        final ImageView profileImage;
 
         ReceivedMessageHolder(View itemView) {
             super(itemView);
@@ -127,7 +130,7 @@ public class MessageListAdapter extends RecyclerView.Adapter {
         void bind(Message message) {
             messageText.setText(message.getMessage());
             timeText.setText(formatDate(message.getCreatedAt()));
-            chatManagerService.getUserName(message.getUser(), username -> nameText.setText(username));
+            chatManagerService.getUserName(message.getUser(), nameText::setText);
             setBubbleColor(itemView, messageText, userColors.get(message.getUser()));
             imageManagerService.userImageDownloadUrl(message.getUser(), url ->
                     Glide.with(itemView)
@@ -142,7 +145,8 @@ public class MessageListAdapter extends RecyclerView.Adapter {
 
     private class ReceivedNoUserMessageHolder extends RecyclerView.ViewHolder {
 
-        TextView messageText, timeText;
+        final TextView messageText;
+        final TextView timeText;
 
         ReceivedNoUserMessageHolder(View itemView) {
             super(itemView);

@@ -23,14 +23,13 @@ import java.util.Map;
 public class ChatService {
 
     private Chat chat;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;
-    private FirebaseDatabase firebaseDatabase;
-    private MessageLoadCallback messageLoadCallback;
-    private ChatManagerService chatManagerService;
+    private final FirebaseUser firebaseUser;
+    private final FirebaseDatabase firebaseDatabase;
+    private final MessageLoadCallback messageLoadCallback;
+    private final ChatManagerService chatManagerService;
 
     public ChatService(MessageLoadCallback messageLoadCallback) {
-        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
         firebaseDatabase = FirebaseDatabase.getInstance();
         chatManagerService = new ChatManagerService();
@@ -68,7 +67,10 @@ public class ChatService {
                     if (!user.equals(firebaseUser.getUid())) {
                         chatManagerService.getUserName(
                                 firebaseUser.getUid(),
-                                username -> sendNotificationToUser(user, username + " @" + chat.getChatName(), message));
+                                username -> sendNotificationToUser(user,
+                                        username +
+                                                (chat.getGroupChat() ? "@" + chat.getChatName() : "")
+                                        , message));
                         firebaseDatabase.getReference("userChats").child(user).child(chat.getChatUid()).child("unread").runTransaction(new Transaction.Handler() {
                             @NonNull
                             @Override
@@ -94,7 +96,7 @@ public class ChatService {
         });
     }
 
-    public void getMessages() {
+    private void getMessages() {
         DatabaseReference chatMessages = firebaseDatabase.getReference("chatMessages").child(chat.getChatUid());
         chatMessages.orderByChild("createdAt").addChildEventListener(new ChildEventListener() {
             @Override

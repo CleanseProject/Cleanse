@@ -1,6 +1,5 @@
 package com.cleanseproject.cleanse.services;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -13,19 +12,15 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
 
 public class UserManagerService {
 
-    private FirebaseAuth firebaseAuth;
-    private FirebaseUser firebaseUser;
-    private FirebaseStorage firebaseStorage;
-    private FirebaseDatabase firebaseDatabase;
+    private final FirebaseUser firebaseUser;
+    private final FirebaseDatabase firebaseDatabase;
 
     public UserManagerService() {
-        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         firebaseUser = firebaseAuth.getCurrentUser();
-        firebaseStorage = FirebaseStorage.getInstance();
         firebaseDatabase = FirebaseDatabase.getInstance();
     }
 
@@ -61,15 +56,6 @@ public class UserManagerService {
         });
 
          Log.v("USUARIOID", firebaseUser.getUid()+"");
-    }
-
-    public void setProfilePhoto(Uri imagePath) {
-        firebaseStorage.getReference("users").child(firebaseUser.getUid())
-                .child("profilePhoto").putFile(imagePath);
-    }
-
-    public void getProfilePhotoDownloadUrl(String userId) {
-
     }
 
 }

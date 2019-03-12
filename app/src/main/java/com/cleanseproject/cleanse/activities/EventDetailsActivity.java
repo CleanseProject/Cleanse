@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -13,14 +12,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,8 +39,11 @@ import com.cleanseproject.cleanse.services.NotificationManager;
 import com.cleanseproject.cleanse.services.UserManagerService;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.Locale;
 
 public class EventDetailsActivity extends AppCompatActivity {
 
@@ -56,14 +58,11 @@ public class EventDetailsActivity extends AppCompatActivity {
     private ArrayList<User> users;
 
     private ImageView imagenEvento, imageAutor;
-    private TextView txtDescripcion, txtDistancia, txtAutor;
-    private RecyclerView rvUsuarios;
+    private TextView txtDescripcion, txtDistancia, txtAutor, txtFecha;
     private UsersInEventAdapter adapter;
-    private FloatingActionButton fab_menu;
     private FloatingActionButton fab_chat;
     private FloatingActionButton fab_equis;
     private FloatingActionButton fab_check;
-    private Button btnDelete;
     private boolean fabAbierto;
 
     @Override
@@ -88,13 +87,13 @@ public class EventDetailsActivity extends AppCompatActivity {
         imageAutor = findViewById(R.id.ivAutor);
         txtDescripcion = findViewById(R.id.txtDescripcion);
         txtDistancia = findViewById(R.id.txt_distancia);
-        rvUsuarios = findViewById(R.id.rvUsuarios);
-        fab_menu = findViewById(R.id.fabMenu);
+        txtFecha = findViewById(R.id.txt_fecha);
+        RecyclerView rvUsuarios = findViewById(R.id.rvUsuarios);
+        FloatingActionButton fab_menu = findViewById(R.id.fabMenu);
         fab_chat = findViewById(R.id.fabchat);
         fab_equis = findViewById(R.id.fabequis);
         fab_check = findViewById(R.id.fabcheck);
         txtAutor = findViewById(R.id.txtAutor);
-        btnDelete = findViewById(R.id.btn_delete);
         eventManagerService = new EventManagerService();
         chatManagerService = new ChatManagerService();
         imageManagerService = new ImageManagerService();
@@ -105,7 +104,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         fab_chat.setOnClickListener(v -> startChat());
         txtDescripcion.setMovementMethod(new ScrollingMovementMethod());
         Intent intent = getIntent();
-        String idEvento = intent.getStringExtra("Evento");
+        String idEvento = intent.getStringExtra("evento");
         eventManagerService.getEvent(
                 idEvento,
                 event -> {
@@ -121,46 +120,39 @@ public class EventDetailsActivity extends AppCompatActivity {
                     userManagerService.getUser(
                             event.getCreatorId(),
                             user -> txtAutor.setText(String.format("%s %s", user.getName(), user.getSurname())));
-                    String distancia;
-                    if (event.getDistance() >= 1000)
-                        distancia = Math.round(event.getDistance() / 1000) + " km";
-                    else
-                        distancia = Math.round(event.getDistance()) + " m";
-                    txtDistancia.setText(distancia);
+                    if (event.getDistance() != -1) {
+                        String distancia;
+                        if (event.getDistance() >= 1000)
+                            distancia = Math.round(event.getDistance() / 1000) + " km";
+                        else
+                            distancia = Math.round(event.getDistance()) + " m";
+                        txtDistancia.setText(distancia);
+                    }
+                    if (event.getEventDate() != 0)
+                        txtFecha.setText(formatDate(event.getEventDate()));
                     eventManagerService.isUserAdmin(event.getId(), isAdmin -> {
-                        if (isAdmin) {
-                            btnDelete.setVisibility(View.VISIBLE);
-                            btnDelete.setOnClickListener(v -> {
-                                eventManagerService.deleteEvent(event.getId());
-                                goBack();
-                            });
+                        if (isAdmin)
+                            fab_equis.setOnClickListener(v -> deleteEventDialog());
+                    });
+                    eventManagerService.isEventFavourite(event.getId(), isFavourite -> {
+                        if (isFavourite) {
+                            fab_check.setAlpha(0f);
+                            fab_equis.setAlpha(1.0f);
+                            fab_equis.setEnabled(true);
+                            fab_check.setEnabled(false);
+                            fab_chat.setEnabled(true);
+                            int accent = 0xFF81F1B2;
+                            fab_chat.setBackgroundTintList(ColorStateList.valueOf(accent));
+                            fab_chat.setColorFilter(0xFFFFFFFF);
                         } else {
-                            eventManagerService.isEventFavourite(event.getId(), isFavourite -> {
-                                if (isFavourite) {
-                                    fab_check.setAlpha(0f);
-                                    fab_equis.setAlpha(1.0f);
-                                    fab_equis.setEnabled(true);
-                                    fab_check.setEnabled(false);
-                                    fab_chat.setEnabled(true);
-                                    int accent = 0xFF81F1B2;
-                                    fab_chat.setBackgroundTintList(ColorStateList.valueOf(accent));
-                                    fab_chat.setColorFilter(0xFFFFFFFF);
-
-
-                                } else {
-                                    fab_check.setAlpha(1.0f);
-                                    fab_equis.setAlpha(0f);
-                                    fab_equis.setEnabled(false);
-                                    fab_check.setEnabled(true);
-                                    fab_chat.setEnabled(false);
-                                    int accentdark = 0xFF60BA87;
-                                    fab_chat.setBackgroundTintList(ColorStateList.valueOf(accentdark));
-                                    fab_chat.setColorFilter(0xFFE5E5E5);
-
-
-
-                                }
-                            });
+                            fab_check.setAlpha(1.0f);
+                            fab_equis.setAlpha(0f);
+                            fab_equis.setEnabled(false);
+                            fab_check.setEnabled(true);
+                            fab_chat.setEnabled(false);
+                            int accentdark = 0xFF60BA87;
+                            fab_chat.setBackgroundTintList(ColorStateList.valueOf(accentdark));
+                            fab_chat.setColorFilter(0xFFE5E5E5);
                         }
                     });
                     eventManagerService.getEventUsers(
@@ -178,15 +170,11 @@ public class EventDetailsActivity extends AppCompatActivity {
                             }
                     );
                 });
-
-
         imageManagerService.eventImageDownloadUrl(
                 idEvento,
-                imageUrl -> {
-                    Glide.with(this)
-                            .load(imageUrl)
-                            .into(imagenEvento);
-                });
+                imageUrl -> Glide.with(this)
+                        .load(imageUrl)
+                        .into(imagenEvento));
         LinearLayoutManager layoutManager
                 = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         rvUsuarios.setLayoutManager(layoutManager);
@@ -231,12 +219,46 @@ public class EventDetailsActivity extends AppCompatActivity {
         rvUsuarios.setAdapter(adapter);
     }
 
-    public void addMemberUser(User user) {
+    private void deleteEventDialog() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.delete_event)
+                .setMessage(R.string.confirm_delete_event)
+                .setNegativeButton(R.string.cancel, null)
+                .setPositiveButton(R.string.delete, (dialog, which) -> {
+                    eventManagerService.deleteEvent(event.getId());
+                    setResult(RESULT_OK);
+                    finish();
+                })
+                .show();
+    }
+
+    public void privateChatDialog(User user) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.private_chat)
+                .setMessage(R.string.confirm_private_chat)
+                .setPositiveButton(R.string.ok, (dialog, which) -> startPrivateChat(user))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    private void startPrivateChat(User user) {
+        ArrayList<String> userIds = new ArrayList<>();
+        userIds.add(firebaseAuth.getCurrentUser().getUid());
+        userIds.add(user.getUserId());
+        chatManagerService.startPrivateChat(userIds, chatId -> {
+            Intent intent = new Intent(EventDetailsActivity.this, ChatActivity.class);
+            intent.putExtra("chatuid", chatId);
+            intent.putExtra("chatname", R.string.private_chat);
+            startActivity(intent);
+        });
+    }
+
+    private void addMemberUser(User user) {
         users.add(user);
         adapter.notifyDataSetChanged();
     }
 
-    public void removeMemberUser(String userId) {
+    private void removeMemberUser(String userId) {
         Iterator<User> i = users.iterator();
         while (i.hasNext()) {
             User user = i.next();
@@ -246,7 +268,7 @@ public class EventDetailsActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
-    private BroadcastReceiver onEvent = new BroadcastReceiver() {
+    private final BroadcastReceiver onEvent = new BroadcastReceiver() {
         public void onReceive(Context ctxt, Intent i) {
             notificationManager.showNotification(i);
         }
@@ -293,6 +315,18 @@ public class EventDetailsActivity extends AppCompatActivity {
     protected void onPause() {
         LocalBroadcastManager.getInstance(this).unregisterReceiver(onEvent);
         super.onPause();
+    }
+
+    private String formatDate(long time) {
+        Date date = new Date(time);
+        Locale locale;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            locale = getResources().getConfiguration().getLocales().get(0);
+        } else {
+            locale = getResources().getConfiguration().locale;
+        }
+        DateFormat dateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM, locale);
+        return dateFormat.format(date);
     }
 
 }

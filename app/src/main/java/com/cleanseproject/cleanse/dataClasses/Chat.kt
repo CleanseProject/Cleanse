@@ -12,14 +12,15 @@ data class Chat(
         @Exclude
         var lastMessageSent: String? = "",
         var groupChat: Boolean? = false,
+        @Exclude
+        var imageId: String? = "",
         var lastMessageTime: Long = 0
 ) : Comparable<Chat> {
     override fun compareTo(other: Chat): Int {
-        if (lastMessageTime > other.lastMessageTime)
-            return -1
-        else if (lastMessageTime < other.lastMessageTime)
-            return 1
-        else
-            return 0
+        return when {
+            lastMessageTime > other.lastMessageTime -> -1
+            lastMessageTime < other.lastMessageTime -> 1
+            else -> 0
+        }
     }
 }
