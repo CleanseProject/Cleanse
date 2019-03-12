@@ -246,12 +246,11 @@ public class EventDetailsActivity extends AppCompatActivity {
         userIds.add(firebaseAuth.getCurrentUser().getUid());
         userIds.add(user.getUserId());
         chatManagerService.startPrivateChat(userIds, chatId -> {
-            Log.d("chatid", chatId);
+            Intent intent = new Intent(EventDetailsActivity.this, ChatActivity.class);
+            intent.putExtra("chatuid", chatId);
+            intent.putExtra("chatname", R.string.private_chat);
+            startActivity(intent);
         });
-/*        Intent intent = new Intent(EventDetailsActivity.this, ChatActivity.class);
-        intent.putExtra("chatuid", event.getId());
-        intent.putExtra("chatname", event.getName());
-        startActivity(intent);*/
     }
 
     private void addMemberUser(User user) {

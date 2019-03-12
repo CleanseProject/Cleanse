@@ -52,5 +52,5 @@
     <string name="cancel">Cancelar</string>
     <string name="delete">Borrar</string>
     <string name="private_chat">Private chat</string>
-    <string name="confirm_private_chat">Do you wanna start a private chat?</string>
+    <string name="confirm_private_chat">Do you want to start a private chat?</string>
 </resources>

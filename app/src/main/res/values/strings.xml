@@ -63,6 +63,6 @@
     <string name="confirm_delete_event">¿Está seguro de que desea borrar el evento?</string>
     <string name="cancel">Cancelar</string>
     <string name="delete">Borrar</string>
-    <string name="private_chat">Private chat</string>
+    <string name="private_chat">Chat privado</string>
     <string name="confirm_private_chat">Do you wanna start a private chat?</string>
 </resources>
