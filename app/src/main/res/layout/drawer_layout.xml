@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    tools:context=".activities.HomeActivity">
+    tools:context=".activities.HomeActivity"
+    tools:keep="@layout/drawer_layout">
 
     <FrameLayout
         android:id="@+id/content_frame"
