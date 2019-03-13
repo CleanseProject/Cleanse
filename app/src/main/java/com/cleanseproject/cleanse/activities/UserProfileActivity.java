@@ -47,7 +47,7 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
     private ImageManagerService imageManagerService;
     private UserManagerService userManagerService;
     private String nombre;
-    private String nombreCompletoNuevo;
+    private String apellido;
     private boolean cambio_de_nombre;
     private boolean cambio_de_imagen;
     private EditText editTextNombre, txtSurname;
@@ -94,11 +94,37 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                nombreCompletoNuevo = s.toString();
-                if ((nombre != null && !nombreCompletoNuevo.equals(nombre))) {
+                if ((nombre != null && !s.equals(nombre))) {
                     cambio_de_nombre = true;
                     btnSaveChanges.setEnabled(true);
-                } else if (nombreCompletoNuevo.equals(nombre)) {
+                } else if (s.equals(nombre)) {
+                    cambio_de_nombre = false;
+                    btnSaveChanges.setEnabled(false);
+                }
+                if (cambio_de_imagen) {
+                    btnSaveChanges.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+        });
+        editTextNombre.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if ((apellido != null && !s.equals(apellido))) {
+                    cambio_de_nombre = true;
+                    btnSaveChanges.setEnabled(true);
+                } else if (s.equals(nombre)) {
                     cambio_de_nombre = false;
                     btnSaveChanges.setEnabled(false);
                 }
@@ -161,6 +187,8 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
                 if (user != null) {
+                    nombre = user.getName();
+                    apellido = user.getSurname();
                     editTextNombre.setText(user.getName());
                     txtSurname.setText(user.getSurname());
                 }
