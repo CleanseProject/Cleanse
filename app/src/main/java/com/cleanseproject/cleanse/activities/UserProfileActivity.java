@@ -89,7 +89,7 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                btnSaveChanges.setEnabled(false);
+
             }
 
             @Override
@@ -116,7 +116,6 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
