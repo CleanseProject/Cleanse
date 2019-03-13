@@ -76,15 +76,5 @@
             android:tint="@color/colorBlanco"
             />
 
-        <ImageButton
-            android:id="@+id/btnShare"
-            android:layout_width="54dp"
-            android:layout_height="49dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_weight="1"
-            android:background="@null"
-            android:tint="@color/colorBlanco"
-            app:srcCompat="@drawable/icono_share_boton" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
