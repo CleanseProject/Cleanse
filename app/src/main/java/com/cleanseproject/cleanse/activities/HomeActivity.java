@@ -46,6 +46,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import java.util.List;
+
 public class HomeActivity extends AppCompatActivity {
 
     private SparseArray<MenuItem> menuItems;
@@ -107,6 +109,7 @@ public class HomeActivity extends AppCompatActivity {
         mapType.setVisible(false);
         MenuItem filter = menu.findItem(R.id.menu_filter);
         menuItems.put(R.id.menu_filter, filter);
+        filter.setVisible(checkHomeFragment());
         return true;
     }
 
@@ -211,6 +214,15 @@ public class HomeActivity extends AppCompatActivity {
         }
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    private boolean checkHomeFragment() {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        boolean isHome = false;
+        for (Fragment fragment : fragments) {
+            isHome = fragment instanceof HomeFragment;
+        }
+        return isHome;
     }
 
     public void showEventDetails(String key) {
