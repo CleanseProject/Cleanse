@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".activities.UserProfileActivity">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/profile_toolbar"
         android:layout_width="match_parent"
@@ -27,15 +28,16 @@
 
             android:orientation="horizontal">
 
-<ImageView
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:src="@drawable/circulo_discontinuo"
-    android:layout_gravity="center"/>
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/circulo_discontinuo" />
+
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/ivAutor"
-                android:layout_width="180dp"
-                android:layout_height="180dp"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="25dp"
                 android:layout_marginBottom="25dp"
@@ -49,7 +51,6 @@
                 tools:layout_conversion_absoluteWidth="60dp"
                 tools:layout_editor_absoluteX="351dp"
                 tools:layout_editor_absoluteY="227dp" />
-
 
         </FrameLayout>
 
@@ -72,28 +73,50 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:fontFamily="@font/comfortaa"
-            android:text="Nombre:" />
-
-        <EditText
-            android:id="@+id/edittxtNombre"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:fontFamily="@font/comfortaa"
-            android:gravity="center_vertical"
-            android:text="TextView"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:textColorHint="@color/quantum_grey300">
 
-            android:textColor="@android:color/black"
-            android:textSize="16sp" />
+            <EditText
+                android:id="@+id/txt_edit_name"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:fontFamily="@font/comfortaa"
+                android:gravity="center_vertical"
+                android:hint="@string/name"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColorHint="@color/quantum_grey300">
+
+            <EditText
+                android:id="@+id/txt_edit_surname"
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:fontFamily="@font/comfortaa"
+                android:gravity="center_vertical"
+                android:hint="@string/surname"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+        </android.support.design.widget.TextInputLayout>
+
+
     </LinearLayout>
 
     <LinearLayout
@@ -102,27 +125,23 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView5"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
-            android:layout_marginBottom="15dp"
+            android:layout_marginBottom="5dp"
             android:fontFamily="@font/comfortaa"
-            android:text="Usuario:"
-            />
+            android:text="@string/user_explain" />
 
         <TextView
             android:id="@+id/txtUsuario"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:fontFamily="@font/comfortaa"
             android:gravity="center_vertical"
-            android:text="TextView"
             android:textColor="@android:color/black"
-            android:textSize="16sp"
-            />
+            android:textSize="16sp" />
 
 
     </LinearLayout>
@@ -140,9 +159,9 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_gravity="center"
+            android:enabled="false"
             android:gravity="center"
             android:text="@string/save_changes"
-            android:enabled="false"
             android:textColor="@color/quantum_black_100" />
     </RelativeLayout>
 

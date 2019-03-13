@@ -62,4 +62,9 @@
     <string name="map">Map</string>
     <string name="changes_success">Changes saved successfully!</string>
     <string name="filter">Filter</string>
+    <string name="my_profile">My Profile</string>
+    <string name="error">Error</string>
+    <string name="name">Nombre</string>
+    <string name="surname">Apellido</string>
+    <string name="user_explain">Usuario:</string>
 </resources>

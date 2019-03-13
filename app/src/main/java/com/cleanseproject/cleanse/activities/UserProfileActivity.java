@@ -11,7 +11,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,7 +21,6 @@ import com.asksira.bsimagepicker.BSImagePicker;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.cleanseproject.cleanse.R;
-import com.cleanseproject.cleanse.callbacks.UserNameLoadCallback;
 import com.cleanseproject.cleanse.dataClasses.User;
 import com.cleanseproject.cleanse.services.ImageManagerService;
 import com.cleanseproject.cleanse.services.UserManagerService;
@@ -44,15 +42,15 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
     private ImageView imagenPerfil;
     private FirebaseAuth mAuth;
     private Uri imagePath;
-    private Button btn_savechanges;
+    private Button btnSaveChanges;
 
     private ImageManagerService imageManagerService;
     private UserManagerService userManagerService;
-    private String nombreCompletoAnterior;
+    private String nombre;
     private String nombreCompletoNuevo;
     private boolean cambio_de_nombre;
     private boolean cambio_de_imagen;
-    private EditText editTextNombre;
+    private EditText editTextNombre, txtSurname;
 
     @Override
     public boolean onSupportNavigateUp() {
@@ -66,16 +64,17 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
         setContentView(R.layout.activity_user_profile);
         Button btn_changepic = findViewById(R.id.btn_EditarPerfil);
         imagenPerfil = findViewById(R.id.ivAutor);
-        btn_savechanges = findViewById(R.id.btnSaveChanges);
-        editTextNombre = findViewById(R.id.edittxtNombre);
+        btnSaveChanges = findViewById(R.id.btnSaveChanges);
+        editTextNombre = findViewById(R.id.txt_edit_name);
+        txtSurname = findViewById(R.id.txt_edit_surname);
         TextView txtUsuario = findViewById(R.id.txtUsuario);
         userManagerService = new UserManagerService();
         imageManagerService = new ImageManagerService();
-        btn_savechanges.setEnabled(false);
+        btnSaveChanges.setEnabled(false);
         cambio_de_imagen = false;
         cambio_de_nombre = false;
         Toolbar toolbar = findViewById(R.id.profile_toolbar);
-        toolbar.setTitle("Profile");
+        toolbar.setTitle(R.string.my_profile);
         setSupportActionBar(toolbar);
         ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -85,28 +84,26 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
                 -> Glide.with(this).load(url).apply(RequestOptions.circleCropTransform()).into(imagenPerfil));
         String currentUserID = mAuth.getCurrentUser().getUid();
         firebaseDatabase = FirebaseDatabase.getInstance();
-        getDatosUsuario(currentUserID,
-                username -> editTextNombre.setText(username));
+        getDatosUsuario(currentUserID);
         editTextNombre.addTextChangedListener(new TextWatcher() {
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                btn_savechanges.setEnabled(false);
+                btnSaveChanges.setEnabled(false);
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 nombreCompletoNuevo = s.toString();
-                if ((!nombreCompletoNuevo.equals(nombreCompletoAnterior) && nombreCompletoAnterior != null)) {
+                if ((nombre != null && !nombreCompletoNuevo.equals(nombre))) {
                     cambio_de_nombre = true;
-                    btn_savechanges.setEnabled(true);
-                } else if (nombreCompletoNuevo.equals(nombreCompletoAnterior)) {
+                    btnSaveChanges.setEnabled(true);
+                } else if (nombreCompletoNuevo.equals(nombre)) {
                     cambio_de_nombre = false;
-                    btn_savechanges.setEnabled(false);
+                    btnSaveChanges.setEnabled(false);
                 }
-
                 if (cambio_de_imagen) {
-                    btn_savechanges.setEnabled(true);
+                    btnSaveChanges.setEnabled(true);
                 }
             }
 
@@ -118,40 +115,30 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
         });
         if (mAuth.getCurrentUser().getPhoneNumber() != null && !mAuth.getCurrentUser().getPhoneNumber().equals("")) {
             txtUsuario.setText(mAuth.getCurrentUser().getPhoneNumber());
-            Log.v("Cambio", "Movil" + "'" + mAuth.getCurrentUser().getPhoneNumber() + "'");
         } else if (mAuth.getCurrentUser().getEmail() != null) {
             txtUsuario.setText(mAuth.getCurrentUser().getEmail());
-            Log.v("Cambio", "Correo");
         } else {
-            txtUsuario.setText("Error");
-            Log.v("Cambio", "error");
+            txtUsuario.setText(getString(R.string.error));
         }
         btn_changepic.setOnClickListener(v -> {
             BSImagePicker singleSelectionPicker = new BSImagePicker.Builder("com.cleanseproject.fileprovider")
                     .build();
             singleSelectionPicker.show(getSupportFragmentManager(), "picker");
         });
-        btn_savechanges.setOnClickListener(v -> guardarCambios());
+        btnSaveChanges.setOnClickListener(v -> guardarCambios());
     }
 
     private void guardarCambios() {
-        String[] nombreDividido;
-        String apellido;
-        String nombre;
+        String nombre = editTextNombre.getText().toString();
+        String apellido = txtSurname.getText().toString();
         if (cambio_de_nombre && cambio_de_imagen) {
             imageManagerService.uploadUserImage(mAuth.getCurrentUser().getUid(), imagePath);
-            nombreDividido = nombreCompletoNuevo.split(" ", 2);
-            nombre = nombreDividido[0];
-            apellido = nombreDividido[1];
             userManagerService.updateUserData(nombre, apellido);
-            nombreCompletoAnterior = nombre + " " + apellido;
+            this.nombre = nombre;
             Toast.makeText(this, getString(R.string.changes_success), Toast.LENGTH_LONG).show();
         } else if (cambio_de_nombre) {
-            nombreDividido = nombreCompletoNuevo.split(" ", 2);
-            nombre = nombreDividido[0];
-            apellido = nombreDividido[1];
             userManagerService.updateUserData(nombre, apellido);
-            nombreCompletoAnterior = nombre + " " + apellido;
+            this.nombre = nombre;
             Toast.makeText(this, getString(R.string.changes_success), Toast.LENGTH_LONG).show();
         } else if (cambio_de_imagen) {
             imageManagerService.uploadUserImage(mAuth.getCurrentUser().getUid(), imagePath);
@@ -167,16 +154,16 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
         overridePendingTransition(R.anim.enter, R.anim.exit);
     }
 
-    private void getDatosUsuario(String userId, UserNameLoadCallback callback) {
-
+    private void getDatosUsuario(String userId) {
         DatabaseReference userRef = firebaseDatabase.getReference("users").child(userId);
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 User user = dataSnapshot.getValue(User.class);
-                nombreCompletoAnterior = user.getName() + " " + user.getSurname();
-                callback.onUsernameLoaded(user.getName() + " " + user.getSurname());
-
+                if (user != null) {
+                    editTextNombre.setText(user.getName());
+                    txtSurname.setText(user.getSurname());
+                }
             }
 
             @Override
@@ -207,7 +194,7 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
             try {
                 Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imagePath);
                 imagenPerfil.setImageBitmap(bitmap);
-                btn_savechanges.setEnabled(true);
+                btnSaveChanges.setEnabled(true);
                 cambio_de_imagen = true;
             } catch (IOException e) {
                 e.printStackTrace();
