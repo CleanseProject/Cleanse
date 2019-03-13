@@ -89,12 +89,6 @@ public class HomeFragment extends Fragment {
         cargarDatos();
     }
 
-    public void cargarDatos() {
-        LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
-        rvEventos.setLayoutManager(llm);
-        eventManagerService = new EventManagerService();
-
-        locationService = new LocationService(getContext());
     private void cargarDatos() {
         Log.d("filterType", currentFilter + "");
         events = new ArrayList<>();
