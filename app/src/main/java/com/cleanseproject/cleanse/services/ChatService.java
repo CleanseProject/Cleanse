@@ -69,7 +69,7 @@ public class ChatService {
                                 firebaseUser.getUid(),
                                 username -> sendNotificationToUser(user,
                                         username +
-                                                (chat.getGroupChat() ? "@" + chat.getChatName() : "")
+                                                (chat.getGroupChat() ? " @" + chat.getChatName() : "")
                                         , message));
                         firebaseDatabase.getReference("userChats").child(user).child(chat.getChatUid()).child("unread").runTransaction(new Transaction.Handler() {
                             @NonNull
