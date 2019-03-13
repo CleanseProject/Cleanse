@@ -33,7 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            app:srcCompat="@drawable/imagen" />
+            app:srcCompat="@drawable/ic_flat_landscape" />
 
         <View
             android:layout_width="match_parent"
