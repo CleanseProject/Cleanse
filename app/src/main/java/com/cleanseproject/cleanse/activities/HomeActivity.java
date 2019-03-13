@@ -91,6 +91,8 @@ public class HomeActivity extends AppCompatActivity {
             transaction.replace(R.id.content_frame, new HomeFragment(), "homeFragment");
         transaction.addToBackStack(null);
         transaction.commit();
+        menuItems.get(R.id.menu_filter).setVisible(true);
+        menuItems.get(R.id.menu_map).setVisible(false);
     }
 
     private final BroadcastReceiver onEvent = new BroadcastReceiver() {
