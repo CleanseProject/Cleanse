@@ -8,7 +8,7 @@ Cleanse is a Firebase-based crowdsourcing app that allows you to connect to loca
 Easily create new location-based events, and view them ordered by distance or date
 
 ### Chats
-Create ont-to-one or group ral-time chats with push notifications
+Create one-to-one or group real-time chats with push notifications
 
 ### Places
 Integrated map with the locations of every event  
