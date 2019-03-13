@@ -24,19 +24,17 @@ data class Event(
 
     override fun compareTo(other: Event): Int {
         return if (distance != -1f && other.distance != -1f) {
-            if (distance < other.distance)
-                -1
-            else if (distance > other.distance)
-                1
-            else
-                0
+            when {
+                distance < other.distance -> -1
+                distance > other.distance -> 1
+                else -> 0
+            }
         } else {
-            if (eventDate < other.eventDate)
-                -1
-            else if (eventDate > other.eventDate)
-                1
-            else
-                0
+            when {
+                eventDate < other.eventDate -> -1
+                eventDate > other.eventDate -> 1
+                else -> 0
+            }
         }
     }
 }
