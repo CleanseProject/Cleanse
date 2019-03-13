@@ -58,7 +58,7 @@ public class ChatManagerService {
                                     for (DataSnapshot memberSnapshot : chatSnapshot.child("members").getChildren()) {
                                         memberIds.add(memberSnapshot.getValue(String.class));
                                     }
-                                    if (memberIds.contains(firstUser) && memberIds.contains(secondUser)) {
+                                    if (memberIds.size() == 2 && memberIds.contains(firstUser) && memberIds.contains(secondUser)) {
                                         exists = true;
                                         callback.onChatCreated(chatSnapshot.getKey());
                                     }
