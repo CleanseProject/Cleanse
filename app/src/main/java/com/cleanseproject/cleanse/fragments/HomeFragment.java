@@ -87,7 +87,6 @@ public class HomeFragment extends Fragment {
             currentFilter = FILTER_DATE;
         }
         cargarDatos();
-
     }
 
     public void cargarDatos() {
