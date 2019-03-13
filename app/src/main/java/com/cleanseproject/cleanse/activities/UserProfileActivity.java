@@ -139,8 +139,6 @@ public class UserProfileActivity extends AppCompatActivity implements BSImagePic
             }
 
         });
-
-
         if (mAuth.getCurrentUser().getPhoneNumber() != null && !mAuth.getCurrentUser().getPhoneNumber().equals("")) {
             txtUsuario.setText(mAuth.getCurrentUser().getPhoneNumber());
         } else if (mAuth.getCurrentUser().getEmail() != null) {
