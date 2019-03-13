@@ -52,5 +52,6 @@
     <string name="log_out">Log out</string>
     <string name="map">Map</string>
     <string name="changes_success">Changes saved successfully!</string>
+    <string name="filter">Filter</string>
 
 </resources>

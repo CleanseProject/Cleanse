@@ -28,18 +28,26 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 public class HomeFragment extends Fragment {
+
+    private final int FILTER_CLOSE = 0;
+    private final int FILTER_DATE = 1;
+    private final int FILTER_FAVOURITE = 2;
 
     private EventManagerService eventManagerService;
     private LocationService locationService;
     private SwipeRefreshLayout swipeRefresh;
-    private EventListAdapter adaptador;
+    private EventListAdapter eventListAdapter;
     private RecyclerView rvEventos;
     private ProgressBar progressBar;
     private FloatingActionButton fab;
     private ArrayList<Event> events;
 
+    private boolean locationEnabled;
+    private Location currentLocation;
+    private int currentFilter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -51,9 +59,13 @@ public class HomeFragment extends Fragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         View view = getView();
+        eventManagerService = new EventManagerService();
+        locationService = new LocationService(getContext());
         rvEventos = view.findViewById(R.id.rv_Eventos);
         progressBar = view.findViewById(R.id.home_fragment_pb);
         swipeRefresh = view.findViewById(R.id.swiperefresh);
+        LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
+        rvEventos.setLayoutManager(llm);
         fab = view.findViewById(R.id.fab_btn);
         fab.setOnClickListener(v -> v.getContext().startActivity(
                 new Intent(v.getContext(), AddEventActivity.class)));
@@ -61,6 +73,19 @@ public class HomeFragment extends Fragment {
             swipeRefresh.setRefreshing(true);
             updateRecycleView();
         });
+        locationEnabled = locationService.checkPermission() && locationService.getCurrentLocation() != null;
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            String filter = bundle.getString("filter");
+            if (filter != null && filter.equals("favourites")) {
+                currentFilter = FILTER_FAVOURITE;
+            }
+        } else if (locationEnabled) {
+            currentLocation = locationService.getCurrentLocation();
+            currentFilter = FILTER_CLOSE;
+        } else {
+            currentFilter = FILTER_DATE;
+        }
         cargarDatos();
 
     }
@@ -71,9 +96,11 @@ public class HomeFragment extends Fragment {
         eventManagerService = new EventManagerService();
 
         locationService = new LocationService(getContext());
+    private void cargarDatos() {
+        Log.d("filterType", currentFilter + "");
         events = new ArrayList<>();
-        adaptador = new EventListAdapter(getActivity(), events);
-        rvEventos.setAdapter(adaptador);
+        eventListAdapter = new EventListAdapter(getActivity(), events);
+        rvEventos.setAdapter(eventListAdapter);
         rvEventos.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -82,24 +109,44 @@ public class HomeFragment extends Fragment {
                 super.onScrolled(recyclerView, dx, dy);
             }
         });
-        Location currentLocation = locationService.getCurrentLocation();
-        Bundle bundle = getArguments();
         DatabaseReference eventsRef = FirebaseDatabase.getInstance().getReference("events");
         eventsRef.keepSynced(true);
-        if (bundle != null) {
-            String filter = bundle.getString("filter");
-            if (filter != null && filter.equals("favourites")) {
+        switch (currentFilter) {
+            case FILTER_FAVOURITE:
                 eventManagerService.getFavouriteEvents(this::rellenarEventos);
-            }
-        } else if (currentLocation != null) {
-            if (locationService.checkPermission())
+                break;
+            case FILTER_CLOSE:
                 eventManagerService.getCloseEvents(
                         new GeoLocation(currentLocation.getLatitude(), currentLocation.getLongitude()),
                         8587,
                         this::rellenarEventos);
-        } else {
-            eventManagerService.getUpcomingEvents(this::rellenarEventos);
+                break;
+            case FILTER_DATE:
+                eventManagerService.getUpcomingEvents(this::rellenarEventos);
+                break;
         }
+    }
+
+    public void changeFilter() {
+        if (locationEnabled) {
+            if (currentFilter == FILTER_CLOSE) {
+                currentFilter = FILTER_DATE;
+            } else if (currentFilter == FILTER_DATE) {
+                currentFilter = FILTER_CLOSE;
+            }
+            cargarDatos();
+        }
+    }
+
+    public void deleteEvent(String eventId) {
+        Iterator<Event> iterator = events.iterator();
+        while (iterator.hasNext()) {
+            Event event = iterator.next();
+            if (event.getId() != null)
+                if (event.getId().equals(eventId))
+                    iterator.remove();
+        }
+        eventListAdapter.notifyDataSetChanged();
     }
 
     private void updateRecycleView() {
@@ -112,11 +159,14 @@ public class HomeFragment extends Fragment {
         Location location = new Location("");
         location.setLatitude(event.getLatitude());
         location.setLongitude(event.getLongitude());
-        event.setDistance(locationService.distance(location));
+        if (currentFilter != FILTER_DATE)
+            event.setDistance(locationService.distance(location));
+        else
+            event.setDistance(-1);
         event.setFavourite(false);
         events.add(event);
         Collections.sort(events);
-        adaptador.notifyDataSetChanged();
+        eventListAdapter.notifyDataSetChanged();
         if (progressBar.getVisibility() == View.VISIBLE)
             progressBar.setVisibility(View.GONE);
         eventManagerService.getFavouriteKeys(this::setFavourites);
@@ -131,7 +181,7 @@ public class HomeFragment extends Fragment {
                 }
             }
         }
-        adaptador.notifyDataSetChanged();
+        eventListAdapter.notifyDataSetChanged();
     }
 
 }

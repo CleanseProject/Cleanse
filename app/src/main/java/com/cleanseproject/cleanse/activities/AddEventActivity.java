@@ -1,5 +1,6 @@
 package com.cleanseproject.cleanse.activities;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -111,6 +113,7 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         });
         addEvent = findViewById(R.id.FrameLayout_add_event);
         btnSelectDate.setOnClickListener(v -> {
+            hideKeyboard();
             Calendar cal = Calendar.getInstance();
             int year = cal.get(Calendar.YEAR);
             int month = cal.get(Calendar.MONTH);
@@ -124,9 +127,8 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             mDateSetListener.show();
 
         });
-
-
         btnSelectLocation.setOnClickListener(v -> {
+            hideKeyboard();
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
             transaction.replace(R.id.FrameLayout_add_event, new MapFragment());
             addEvent.setVisibility(View.VISIBLE);
@@ -134,7 +136,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
             transaction.commit();
             frameAbierto = true;
         });
-
         selectedImage.setOnClickListener(v -> {
             BSImagePicker singleSelectionPicker = new BSImagePicker.Builder("com.cleanseproject.fileprovider")
                     .build();
@@ -163,6 +164,15 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         });
     }
 
+    public void hideKeyboard() {
+        InputMethodManager imm = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = getCurrentFocus();
+        if (view == null) {
+            view = new View(this);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
     private void cerrarVentanas() {
         if (frameAbierto) {
             addEvent.setVisibility(View.GONE);
@@ -170,7 +180,6 @@ public class AddEventActivity extends AppCompatActivity implements BSImagePicker
         } else {
             finish();
         }
-
     }
 
     public void setFrameAbierto(boolean frameAbierto) {
