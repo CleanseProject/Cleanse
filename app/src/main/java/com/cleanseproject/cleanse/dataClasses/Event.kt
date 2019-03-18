@@ -28,6 +28,9 @@ data class Event(
         var state: Int? = 0
 ) : Comparable<Event> {
 
+    /**
+     * Compares event by distance
+     */
     override fun compareTo(other: Event): Int {
         return if (distance != -1f && other.distance != -1f) {
             when {
@@ -44,11 +47,15 @@ data class Event(
         }
     }
 
+    /**
+     * Returns true if event is equal to the other
+     */
     override fun equals(other: Any?) = (other is Event)
             && id.equals(other.id)
 
-    override fun hashCode(): Int {
-        return id.hashCode()
-    }
+    /**
+     * Returns event hashcode based on id
+     */
+    override fun hashCode(): Int = id.hashCode()
 
 }
