@@ -37,4 +37,12 @@ data class Event(
             }
         }
     }
+
+    override fun equals(other: Any?) = (other is Event)
+            && id.equals(other.id)
+
+    override fun hashCode(): Int {
+        return id.hashCode()
+    }
+
 }

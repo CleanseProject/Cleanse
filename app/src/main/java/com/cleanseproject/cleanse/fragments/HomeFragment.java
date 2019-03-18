@@ -149,20 +149,22 @@ public class HomeFragment extends Fragment {
     }
 
     private void rellenarEventos(Event event) {
-        Location location = new Location("");
-        location.setLatitude(event.getLatitude());
-        location.setLongitude(event.getLongitude());
-        if (currentFilter != FILTER_DATE)
-            event.setDistance(locationService.distance(location));
-        else
-            event.setDistance(-1);
-        event.setFavourite(false);
-        events.add(event);
-        Collections.sort(events);
-        eventListAdapter.notifyDataSetChanged();
-        if (progressBar.getVisibility() == View.VISIBLE)
-            progressBar.setVisibility(View.GONE);
-        eventManagerService.getFavouriteKeys(this::setFavourites);
+        if (!events.contains(event)) {
+            Location location = new Location("");
+            location.setLatitude(event.getLatitude());
+            location.setLongitude(event.getLongitude());
+            if (currentFilter != FILTER_DATE)
+                event.setDistance(locationService.distance(location));
+            else
+                event.setDistance(-1);
+            event.setFavourite(false);
+            events.add(event);
+            Collections.sort(events);
+            eventListAdapter.notifyDataSetChanged();
+            if (progressBar.getVisibility() == View.VISIBLE)
+                progressBar.setVisibility(View.GONE);
+            eventManagerService.getFavouriteKeys(this::setFavourites);
+        }
     }
 
     private void setFavourites(ArrayList<String> keys) {
