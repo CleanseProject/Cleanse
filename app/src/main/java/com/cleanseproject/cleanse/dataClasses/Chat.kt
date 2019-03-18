@@ -3,6 +3,11 @@ package com.cleanseproject.cleanse.dataClasses
 import com.google.firebase.database.Exclude
 import com.google.firebase.database.IgnoreExtraProperties
 
+/**
+ * Chat data class for chat objects on Firebase
+ * Implements comparable to sort chats by the last message sent or creation time
+ * @author Cleanse Project
+ */
 @IgnoreExtraProperties
 data class Chat(
         @Exclude

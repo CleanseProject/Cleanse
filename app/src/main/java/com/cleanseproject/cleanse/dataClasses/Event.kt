@@ -3,6 +3,12 @@ package com.cleanseproject.cleanse.dataClasses
 import com.google.firebase.database.Exclude
 import com.google.firebase.database.IgnoreExtraProperties
 
+/**
+ * Data class for Events objects on Firebase
+ * Implements Comparable class in order to sort by distance
+ * Overrides equals and hashCode to check if events exist on array
+ * @author Cleanse Project
+ */
 @IgnoreExtraProperties
 data class Event(
         var id: String? = "",
