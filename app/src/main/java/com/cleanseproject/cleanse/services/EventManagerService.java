@@ -26,6 +26,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+/**
+ * Manages events from Firebase
+ * @author Cleanse Project
+ */
 public class EventManagerService {
 
     private final ChatManagerService chatManagerService;
@@ -35,6 +39,10 @@ public class EventManagerService {
     private final FirebaseDatabase firebaseDatabase;
     private final GeoFire geoFire;
 
+    /**
+     * Constructor for the class
+     * Gets Firebase and Geofire instances
+     */
     public EventManagerService() {
         chatManagerService = new ChatManagerService();
         imageManagerService = new ImageManagerService();
@@ -45,6 +53,12 @@ public class EventManagerService {
         geoFire = new GeoFire(geoFireRef);
     }
 
+    /**
+     * Creates new event on Firebase database
+     * @param event Event to be created
+     * @param image Event image uri
+     * @param callback Executed when event is created, returns created event
+     */
     public void createEvent(Event event, Uri image, EventLoadCallback callback) {
         DatabaseReference events = firebaseDatabase.getReference("events");
         String eventKey = events.push().getKey();
@@ -64,6 +78,10 @@ public class EventManagerService {
         callback.onEventLoaded(event);
     }
 
+    /**
+     * Deletes event
+     * @param key Key of the event to be deleted
+     */
     public void deleteEvent(String key) {
         chatManagerService.removeChat(key, () -> {
             DatabaseReference eventRef = firebaseDatabase.getReference("events").child(key);
@@ -95,6 +113,11 @@ public class EventManagerService {
         });
     }
 
+    /**
+     * Checks if logged Firebase user is admin of the event
+     * @param key Event key
+     * @param callback Returns true if the user is admin
+     */
     public void isUserAdmin(String key, IsAdminCallback callback) {
         firebaseDatabase.getReference("events").child(key).child("creatorId")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -113,6 +136,11 @@ public class EventManagerService {
                 });
     }
 
+    /**
+     * Gets an event
+     * @param key Event to be loaded
+     * @param callback Returns the selected event
+     */
     public void getEvent(String key, EventLoadCallback callback) {
         DatabaseReference eventsRef = firebaseDatabase.getReference("events").child(key);
         eventsRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -134,6 +162,12 @@ public class EventManagerService {
         });
     }
 
+    /**
+     * Gets event close to provided location
+     * @param location Location to search events from
+     * @param radius Radios of the search
+     * @param callback Returns an event within the radius, single null event if none
+     */
     public void getCloseEvents(GeoLocation location, double radius, EventLoadCallback callback) {
         GeoQuery geoQuery = geoFire.queryAtLocation(location, radius);
         final boolean[] eventsReturned = {false};
@@ -168,7 +202,10 @@ public class EventManagerService {
         });
     }
 
-
+    /**
+     * Get all upcoming events ordered by date
+     * @param callback Returns events within parameters
+     */
     public void getUpcomingEvents(EventLoadCallback callback) {
         firebaseDatabase.getReference("events").orderByChild("createdAt")
                 .addValueEventListener(new ValueEventListener() {
@@ -194,6 +231,10 @@ public class EventManagerService {
                 });
     }
 
+    /**
+     * Get logged user favourite events
+     * @param callback Returns a single favourite event
+     */
     public void getFavouriteEvents(EventLoadCallback callback) {
         DatabaseReference userEventsRef = firebaseDatabase.getReference("userEvents").child(firebaseUser.getUid());
         userEventsRef.keepSynced(true);
@@ -212,6 +253,10 @@ public class EventManagerService {
         });
     }
 
+    /**
+     * Get the keys of current users's favourite events
+     * @param callback Returns a single event within parameters
+     */
     public void getFavouriteKeys(KeysLoadCallback callback) {
         ArrayList<String> keys = new ArrayList<>();
         DatabaseReference userEventsRef = firebaseDatabase.getReference("userEvents").child(firebaseUser.getUid());
@@ -246,6 +291,11 @@ public class EventManagerService {
         });
     }
 
+    /**
+     * Get the users of an event
+     * @param eventId Key of the event
+     * @param loadCallback Called by every user of the event
+     */
     public void getEventUsers(String eventId, UserChangedCallback loadCallback) {
         firebaseDatabase.getReference("events").child(eventId).child("members")
                 .addChildEventListener(new ChildEventListener() {
@@ -276,6 +326,11 @@ public class EventManagerService {
                 });
     }
 
+    /**
+     * Checks if an event is favourite by the current user
+     * @param eventId Key of the event
+     * @param callback Returns true if the event is favourite
+     */
     public void isEventFavourite(String eventId, IsFavouriteCallback callback) {
         String userId = firebaseUser.getUid();
         firebaseDatabase.getReference("userEvents").child(userId)
@@ -292,12 +347,20 @@ public class EventManagerService {
                 });
     }
 
+    /**
+     * Sets the event as favourite by the current user
+     * @param eventId Key of the event
+     */
     public void setEventAsFavourite(String eventId) {
         String userId = firebaseUser.getUid();
         firebaseDatabase.getReference("events").child(eventId).child("members").child(userId).setValue(userId);
         firebaseDatabase.getReference("userEvents").child(userId).child(eventId).setValue(eventId);
     }
 
+    /**
+     * Deletes event as favourite
+     * @param eventId Key of the event
+     */
     public void deleteFavouriteEvent(String eventId) {
         String userId = firebaseUser.getUid();
         firebaseDatabase.getReference("events").child(eventId).child("members").child(userId).removeValue();

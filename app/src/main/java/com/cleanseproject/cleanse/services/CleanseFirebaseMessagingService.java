@@ -6,6 +6,10 @@ import android.support.v4.content.LocalBroadcastManager;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+/**
+ * Manages foreground notifications by using LocalBroadcasts
+ * @author Cleanse Project
+ */
 public class CleanseFirebaseMessagingService extends FirebaseMessagingService {
 
     public static final String NOTIFICATION = "com.cleanseproject.cleanse.NOTIFICATION";

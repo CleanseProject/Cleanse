@@ -20,6 +20,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * Manages chat objects
+ * Includes functions to create, delete and mange chats
+ * @author Cleanse Project
+ */
 public class ChatManagerService {
 
     private final FirebaseAuth firebaseAuth;

@@ -20,6 +20,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Manages chat instances
+ * Initializes opened chats,, sends messages and push notifications
+ * @author Cleanse Project
+ */
 public class ChatService {
 
     private Chat chat;
