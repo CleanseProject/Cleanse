@@ -4,27 +4,43 @@ import android.content.Context;
 import android.view.MotionEvent;
 import android.widget.FrameLayout;
 
+/**
+ * Map wrapper class
+ */
 public class MapWrapperLayout extends FrameLayout {
-
-    public interface OnDragListener {
-        void onDrag(MotionEvent motionEvent);
-    }
 
     private OnDragListener mOnDragListener;
 
+    /**
+     * Contructor calling super
+     * @param context Current context
+     */
     public MapWrapperLayout(Context context) {
         super(context);
     }
 
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (mOnDragListener != null) {
-            mOnDragListener.onDrag(ev);
-        }
-        return super.dispatchTouchEvent(ev);
+    /**
+     * Called when map is moved by user
+     */
+    public interface OnDragListener {
+        void onDrag(MotionEvent motionEvent);
     }
 
-    public void setOnDragListener(OnDragListener mOnDragListener) {
-        this.mOnDragListener = mOnDragListener;
+    /**
+     * Calls  super method when listener is set
+     */
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent motionEvent) {
+        if (mOnDragListener != null) {
+            mOnDragListener.onDrag(motionEvent);
+        }
+        return super.dispatchTouchEvent(motionEvent);
+    }
+
+    /**
+     * @param onDragListener OnDragListener to be set
+     */
+    public void setOnDragListener(OnDragListener onDragListener) {
+        this.mOnDragListener = onDragListener;
     }
 }
