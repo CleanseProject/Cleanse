@@ -58,5 +58,6 @@
     <string name="name">Nombre</string>
     <string name="surname">Surname</string>
     <string name="user_explain">Usuario:</string>
+    <string name="no_close_events">No close events</string>
 
 </resources>

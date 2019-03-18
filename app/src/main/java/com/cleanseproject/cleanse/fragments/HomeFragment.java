@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.cleanseproject.cleanse.R;
 import com.cleanseproject.cleanse.activities.AddEventActivity;
@@ -42,6 +43,7 @@ public class HomeFragment extends Fragment {
     private EventListAdapter eventListAdapter;
     private RecyclerView rvEventos;
     private ProgressBar progressBar;
+    private TextView lblNoevents;
     private FloatingActionButton fab;
     private ArrayList<Event> events;
 
@@ -62,6 +64,7 @@ public class HomeFragment extends Fragment {
         eventManagerService = new EventManagerService();
         locationService = new LocationService(getContext());
         rvEventos = view.findViewById(R.id.rv_Eventos);
+        lblNoevents = view.findViewById(R.id.lbl_no_events);
         progressBar = view.findViewById(R.id.home_fragment_pb);
         swipeRefresh = view.findViewById(R.id.swiperefresh);
         LinearLayoutManager llm = new GridLayoutManager(getActivity(), 1);
@@ -149,7 +152,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void rellenarEventos(Event event) {
-        if (!events.contains(event)) {
+        if (event == null) {
+            progressBar.setVisibility(View.GONE);
+            lblNoevents.setVisibility(View.VISIBLE);
+        } else if (!events.contains(event)) {
             Location location = new Location("");
             location.setLatitude(event.getLatitude());
             location.setLongitude(event.getLongitude());

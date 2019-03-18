@@ -136,9 +136,11 @@ public class EventManagerService {
 
     public void getCloseEvents(GeoLocation location, double radius, EventLoadCallback callback) {
         GeoQuery geoQuery = geoFire.queryAtLocation(location, radius);
+        final boolean[] eventsReturned = {false};
         geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
             @Override
             public void onKeyEntered(String key, GeoLocation location) {
+                eventsReturned[0] = true;
                 Log.d("event", key);
                 getEvent(key, callback);
             }
@@ -155,7 +157,8 @@ public class EventManagerService {
 
             @Override
             public void onGeoQueryReady() {
-
+                if (!eventsReturned[0])
+                    callback.onEventLoaded(null);
             }
 
             @Override
