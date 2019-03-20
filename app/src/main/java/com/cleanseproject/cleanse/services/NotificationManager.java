@@ -10,6 +10,10 @@ import com.tapadoo.alerter.Alerter;
 
 import java.util.HashSet;
 
+/**
+ * Manages foreground notifications, called by activities
+ * @author Cleanse Project
+ */
 public class NotificationManager {
 
     private final Context context;
@@ -20,11 +24,17 @@ public class NotificationManager {
         shownNotifications = new HashSet<>();
     }
 
+    /**
+     * Shows a foreground notification on the current activity
+     * @param intent Notification intent
+     */
     public void showNotification(Intent intent) {
         String title = intent.getStringExtra("title");
         String body = intent.getStringExtra("body");
         String chatId = intent.getStringExtra("chatuid");
         String notificationid = intent.getStringExtra("notificationid");
+        // Checks if notification has already been shown
+        // (since broadcast can be called more than once for the same notification)
         if (!shownNotifications.contains(notificationid)) {
             Alerter.create((Activity) context)
                     .setTitle(title)

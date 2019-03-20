@@ -13,6 +13,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/**
+ * Manages Firebase users data
+ * @author Cleanse Project
+ */
 public class UserManagerService {
 
     private final FirebaseUser firebaseUser;
@@ -24,6 +28,11 @@ public class UserManagerService {
         firebaseDatabase = FirebaseDatabase.getInstance();
     }
 
+    /**
+     * Returns the user
+     * @param userId Key of the user
+     * @param callback Called on user loaded
+     */
     public void getUser(String userId, UserLoadCallback callback) {
         DatabaseReference userRef = firebaseDatabase.getReference("users").child(userId);
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -39,14 +48,17 @@ public class UserManagerService {
         });
     }
 
-    public void updateUserData(String updated_name, String updated_surname) {
-
-        Log.v("Usuario", "Usuario cambiado");
+    /**
+     * Updates user data
+     * @param name Updated name of the user
+     * @param surname Updated surname
+     */
+    public void updateUserData(String name, String surname) {
         firebaseDatabase.getReference("users").child(firebaseUser.getUid()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                dataSnapshot.getRef().child("name").setValue(updated_name);
-                dataSnapshot.getRef().child("surname").setValue(updated_surname);
+                dataSnapshot.getRef().child("name").setValue(name);
+                dataSnapshot.getRef().child("surname").setValue(surname);
             }
 
             @Override
@@ -54,8 +66,6 @@ public class UserManagerService {
 
             }
         });
-
-         Log.v("USUARIOID", firebaseUser.getUid()+"");
     }
 
 }
