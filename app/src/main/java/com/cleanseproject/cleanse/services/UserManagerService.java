@@ -15,6 +15,7 @@ import com.google.firebase.database.ValueEventListener;
 
 /**
  * Manages Firebase users data
+ *
  * @author Cleanse Project
  */
 public class UserManagerService {
@@ -30,7 +31,7 @@ public class UserManagerService {
 
     /**
      * Returns the user
-     * @param userId Key of the user
+     * @param userId   Key of the user
      * @param callback Called on user loaded
      */
     public void getUser(String userId, UserLoadCallback callback) {
@@ -38,7 +39,9 @@ public class UserManagerService {
         userRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                callback.onUserLoad(dataSnapshot.getValue(User.class));
+                User user = dataSnapshot.getValue(User.class);
+                if (user != null)
+                    callback.onUserLoad(user);
             }
 
             @Override
@@ -50,7 +53,8 @@ public class UserManagerService {
 
     /**
      * Updates user data
-     * @param name Updated name of the user
+     *
+     * @param name    Updated name of the user
      * @param surname Updated surname
      */
     public void updateUserData(String name, String surname) {
